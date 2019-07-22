@@ -166,5 +166,19 @@ padding: .3em 1em;
     justify-content: space-between;
     position: absolute;
     width: 100%;
+    background-color: #e4f5ef ;
 }
+.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable{
+  height: 33px;
+}
+.fc-time{
+  position: relative;
+  float: none;
+}
+.fc-event .fc-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
 </style>
