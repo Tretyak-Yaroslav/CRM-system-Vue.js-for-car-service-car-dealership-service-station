@@ -48,7 +48,8 @@ export default {
                           title: 'Mazda 3 BP455AM',
                           date: '2019-07-22 12:10:00',
                           end: '2019-07-22 18:00:00',
-                          textColor:'white'
+                          textColor:'white',
+                          backgroundColor:'#42b983 '
                         },
                         {
                           id: '2',
@@ -56,7 +57,8 @@ export default {
                           title: 'Mazda 2 BP455AM',
                           date: '2019-07-22 08:00:00',
                           end: '2019-07-22 18:00:00',
-                          textColor:'white'
+                          textColor:'white',
+                           backgroundColor:'rgb(88, 218, 156) '
                         },
                         {
                           id: '3',
@@ -72,7 +74,8 @@ export default {
                           title: 'Mazda 2 BP455AM',
                           date: '2019-07-22 10:00:00',
                           end: '2019-07-22 14:00:00',
-                          textColor:'white'
+                          textColor:'white',
+                          backgroundColor:'rgb(255, 194, 10) '
                         },
                         {
                           id: '5',
@@ -80,7 +83,8 @@ export default {
                           title: 'Mazda 2 BP455AM',
                           date: '2019-07-22 14:30:00',
                           end: '2019-07-22 22:00:00',
-                          textColor:'white'
+                          textColor:'white',
+                           backgroundColor:'#ddd '
                         }
                       ]"
                       />
@@ -126,6 +130,9 @@ export default {
 }.fc-toolbar.fc-header-toolbar{
   position: relative;
   align-items:flex-start;
+}
+.fc-event{
+  border: none;
 }
 .fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus{
       border-bottom-width: 2px;
