@@ -1,6 +1,6 @@
 <template>
 <b-container fluid class="bv-example-row">
-<vue-cal selected-date="2018-11-19"
+<!-- <vue-cal selected-date="2018-11-19"
           small
          :time-from="9 * 60"
          :time-to="21 * 60"
@@ -62,13 +62,13 @@
       </ul>
     </v-card-text>  
   </v-card> 
-</b-modal > 
+</b-modal >  -->
 
 </b-container>    
 </template>
 
 <style>
-.vuecal__event {cursor: pointer;}
+/* .vuecal__event {cursor: pointer;}
 .vuecal__event-title {
   font-size: 1.2em;
   font-weight: bold;
@@ -105,12 +105,12 @@ background-color: #42b983 !important;
 .vuecal__title-bar {background-color: #e4f5ef !important;}
 .modal-backdrop {
     opacity: 0.5;
-}
+} */
 
 </style>
 
 <script>
-export default {
+/* export default {
   components: { 'vue-cal': vuecal },
   data: () => ({
   selectedEvent: {},
@@ -158,12 +158,11 @@ methods: {
     this.selectedEvent = event
     this.showDialog = true
 
-    // Prevent navigating to narrower view (default vue-cal behavior).
     e.stopPropagation()
   }
 }
 
-} 
+}  */
 </script>
 
 

@@ -5,7 +5,6 @@ import BootstrapVue from 'bootstrap-vue'
 import { TablePlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import 'vue-cal/dist/vuecal.css'
 
 Vue.use(TablePlugin)
 Vue.use(BootstrapVue)

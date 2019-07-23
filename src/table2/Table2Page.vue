@@ -1,7 +1,8 @@
 <script charset="utf-8">
 import FullCalendar from '@fullcalendar/vue'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
-import interactionPlugin from '@fullcalendar/interaction'
+
+
 export default {
   components: {
     FullCalendar

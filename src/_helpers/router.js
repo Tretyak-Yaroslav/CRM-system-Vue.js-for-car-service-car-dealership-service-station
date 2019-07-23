@@ -6,7 +6,8 @@ import LoginPage from '@/login/LoginPage';
 import UserPage from '@/form_user/UserPage';
 import DispositionPage from '@/disposition/DispositionPage';
 import Detailtable from '@/detailtable/Detailtable';
-import Table2 from '@/table2/Table2Page'
+import Apitest from '@/table2/apitest';
+import Table2Page from '@/table2/Table2Page';
 
 Vue.use(Router);
 
@@ -22,6 +23,10 @@ export const router = new Router({
             component: Detailtable 
         },
         { 
+            path: '/api', 
+            component: Apitest, 
+        },
+        { 
             path: '/user', 
             component: UserPage, 
         },
@@ -31,7 +36,7 @@ export const router = new Router({
         },
         {
             path: '/table2',
-            component: Table2,
+            component: Table2Page,
         },
         
 
