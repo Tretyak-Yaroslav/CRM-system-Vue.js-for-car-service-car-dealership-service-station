@@ -97,7 +97,6 @@ background-color: #42b983 !important;
   display: none !important;
 }
 .vuecal__menu li.active{
- 
       color: white;
 }
 .vuecal__event-content {
@@ -112,7 +111,6 @@ background-color: #42b983 !important;
 
 <script>
 export default {
- 
   components: { 'vue-cal': vuecal },
   data: () => ({
   selectedEvent: {},
