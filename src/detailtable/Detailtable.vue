@@ -42,8 +42,8 @@
       :sort-direction="sortDirection"
       @filtered="onFiltered"
     >
-      <template slot="name" slot-scope="row">
-        {{ row.value.first }} {{ row.value.last }}
+      <template slot="eName" slot-scope="row">
+        {{ row.value.vehiclmployeeFirstName }} {{ row.value.employeeLastName }}
       </template>
 
       <template slot="isActive" slot-scope="row">
@@ -92,26 +92,14 @@
     data() {
       return {
         items: [
-        { number:1, time:'17:35', phone:+380960547933, name: { last: ' Васильович ',  first: 'Петро'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:2, time:'14:30', phone:+380960540000, name: { last: 'Васильович', first: 'Василь'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:3, time:'11:05', phone:+380960547777, name: { last: 'Васильович', first: 'Андрій'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:4, time:'9:05',  phone:+3809609654484, name: { last: 'Васильович', first: 'Сергій'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:5, time:'12:35', phone:+380930004544, name: { last: 'Васильович', first: 'Василь'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-
-        { number:2, time:'17:35', phone:+380960547933, name: { last: ' Васильович ',  first: 'Петро'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:2, time:'14:30', phone:+380960540000, name: { last: 'Васильович', first: 'Василь'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:3, time:'11:05', phone:+380960547777, name: { last: 'Васильович', first: 'Андрій'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:4, time:'9:05',  phone:+3809609654484, name: { last: 'Васильович', first: 'Сергій'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-        { number:5, time:'12:35', phone:+380930004544, name: { last: 'Васильович', first: 'Василь'  }, locksmith:{ last_two:'Сторожук', first_two: 'Васильович'} },
-
+        { orderID:'', startTime:'', customerPhoneNumber:"", name: { last: ' Васильович ',  first: 'Петро'  }, eName:{ vehiclmployeeFirstName:'', employeeLastName: ''} },
         ],
         fields: [
-         { key: 'number', label: 'Номер', sortable: true, sortDirection: 'desc' },
-         { key: 'time', label: 'Час запису', sortable: true, sortDirection: 'desc' },
-         { key: 'phone', label: 'Телефон', sortable: true, sortDirection: 'desc' },
+         { key: 'orderID', label: 'Номер', sortable: true, sortDirection: 'desc' },
+         { key: 'startTime', label: 'Час запису', sortable: true, sortDirection: 'desc' },
+         { key: 'customerPhoneNumber', label: 'Телефон', sortable: true, sortDirection: 'desc' },
           { key: 'name', label: 'Майстер-приймальник', sortable: true, sortDirection: 'desc' },
-          { key: 'locksmith ', label: 'Механік', sortable: true, sortDirection: 'desc' },
-          
+          { key: 'eName ', label: 'Механік', sortable: true, sortDirection: 'desc' },
           { key: 'actions', label: 'Показати деталі' }
         ],
         totalRows: 1,
