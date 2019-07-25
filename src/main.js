@@ -6,7 +6,7 @@ import { TablePlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-    
+
 Vue.use(VueAxios, axios)
 
 Vue.use(TablePlugin)
@@ -14,10 +14,10 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 new Vue({
-    el: '#app',
-    router,
-    render: h => h(App),
-    data: {
-        showModal: false
-      }
+  el: '#app',
+  router,
+  render: h => h(App),
+  data: {
+    showModal: false
+  }
 });

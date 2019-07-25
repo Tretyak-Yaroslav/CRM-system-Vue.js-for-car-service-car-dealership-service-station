@@ -1,7 +1,6 @@
 <script charset="utf-8">
-import FullCalendar from '@fullcalendar/vue'
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
-
+import FullCalendar from "@fullcalendar/vue";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 
 export default {
   components: {
@@ -9,39 +8,39 @@ export default {
   },
   data() {
     return {
-      calendarPlugins: [ resourceTimelinePlugin ],
+      calendarPlugins: [resourceTimelinePlugin],
       selectable: true
-    }
+    };
   }
-}
+};
 </script>
 <template>
-    <div style="margin:0px 10px;">
-        <FullCalendar
-                      :plugins="calendarPlugins"
-                      defaultView="resourceTimelineDay"
-                      locale="uk"
-                      nowIndicator="true"
-                      :header="{
+  <div style="margin:0px 10px;">
+    <FullCalendar
+      :plugins="calendarPlugins"
+      defaultView="resourceTimelineDay"
+      locale="uk"
+      nowIndicator="true"
+      :header="{
                         left: 'prev,next today',
                         center: 'title',
                         right: 'resourceTimelineDay,resourceTimelineWeek'
                       }"
-                      displayEventTime="true"
-                      displayEventEnd="true"
-                      selectable= "true"
-                      :eventTimeFormat="{
+      displayEventTime="true"
+      displayEventEnd="true"
+      selectable="true"
+      :eventTimeFormat="{
                         hour: 'numeric',
                         minute: '2-digit',
                         meridiem: false
                       }"
-                      :resources="[
+      :resources="[
                         {id:'a', title: 'Підйомник 1' },
                         {id:'b', title: 'Підйомник 2' },
                         {id:'c', title: 'Підйомник 3' },
                         {id:'d', title: 'Підйомник 4' }
                       ]"
-                      :events="[
+      :events="[
                         {
                           id: '1',
                           resourceId: 'a',
@@ -87,95 +86,98 @@ export default {
                            backgroundColor:'#ddd '
                         }
                       ]"
-                  />
-    </div>
+    />
+  </div>
 </template>
 
 <style lang='scss'>
-    @import '~@fullcalendar/core/main.css';
-    @import '~@fullcalendar/timeline/main.css';
-    @import '~@fullcalendar/resource-timeline/main.css';
-    .fc-license-message{
-      display: none;
-    }
-    .fc-divider.fc-col-resizer.fc-widget-header
-    {
-      height: auto;
-    }
-    .fc-scroller{
-      height: auto !important;
-    }
-    .fc-timeline .fc-cell-text{
-      color: #999;
-    padding-right: 2px;
-    font-size: .9em;
-    }
-    .fc-button-primary {
-    color: #fff;
-    background-color: #42b983 !important;
-    border-color: #42b983 !important;
-    }
- .fc-center{
- text-align: center;
-} 
-.fc-button-primary:focus{
-   border-bottom-width: 2px;
-    background: hsla(0,0%,100%,.15);
-    color: white;
-    box-shadow:none;
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/timeline/main.css";
+@import "~@fullcalendar/resource-timeline/main.css";
+.fc-license-message {
+  display: none;
 }
-.fc-event{
+.fc-divider.fc-col-resizer.fc-widget-header {
+  height: auto;
+}
+.fc-scroller {
+  height: auto !important;
+}
+.fc-timeline .fc-cell-text {
+  color: #999;
+  padding-right: 2px;
+  font-size: 0.9em;
+}
+.fc-button-primary {
+  color: #fff;
+  background-color: #42b983 !important;
+  border-color: #42b983 !important;
+}
+.fc-center {
+  text-align: center;
+}
+.fc-button-primary:focus {
+  border-bottom-width: 2px;
+  background: hsla(0, 0%, 100%, 0.15);
+  color: white;
+  box-shadow: none;
+}
+.fc-event {
   border: none;
 }
-.fc-button-primary:not(:disabled):active:focus, .fc-button-primary:not(:disabled).fc-button-active:focus{
-    box-shadow:none;
+.fc-button-primary:not(:disabled):active:focus,
+.fc-button-primary:not(:disabled).fc-button-active:focus {
+  box-shadow: none;
 }
-.fc-toolbar.fc-header-toolbar{
+.fc-toolbar.fc-header-toolbar {
   height: 50px;
   padding: 0 15px;
 }
-.fc-resourceTimelineDay-button{
+.fc-resourceTimelineDay-button {
   margin-right: 1px;
 }
 .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
-.fc-button-primary:hover{
+.fc-button-primary:hover {
   border: 1px solid white !important;
-  -webkit-transition: .1s;
-    transition: .1s;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
 }
-.fc-resourceTimelineDay-button , .fc-resourceTimelineWeek-button{
-    padding: .3em 1em;
-    height: 2.2em;
-    font-size: 1.2em;
+.fc-resourceTimelineDay-button,
+.fc-resourceTimelineWeek-button {
+  padding: 0.3em 1em;
+  height: 2.2em;
+  font-size: 1.2em;
 }
- .fc-center{
-    display: flex;
-    justify-content: center;
+.fc-center {
+  display: flex;
+  justify-content: center;
 }
-.fc-toolbar.fc-header-toolbar .fc-center h2{
-    font-size: 1.4em ;
-    line-height: 1.3 ;
-    font-weight: 400 ;
-    color:  #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+.fc-toolbar.fc-header-toolbar .fc-center h2 {
+  font-size: 1.4em;
+  line-height: 1.3;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-.fc-toolbar.fc-header-toolbar{
-    background-color: #42b983 ;
-} 
-.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable{
+.fc-toolbar.fc-header-toolbar {
+  background-color: #42b983;
+}
+.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
   height: 33px;
 }
-.fc-time{
+.fc-time {
   position: relative;
 }
 .fc-event .fc-content {
-    display: flex;
-    height: 100%;
-    align-items: center;
+  display: flex;
+  height: 100%;
+  align-items: center;
 }
 .fc-button-primary:focus {
-    box-shadow:none;
+  box-shadow: none;
 }
 </style>
