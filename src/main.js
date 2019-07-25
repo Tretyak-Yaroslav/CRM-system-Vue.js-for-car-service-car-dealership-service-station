@@ -4,6 +4,10 @@ import { router } from './_helpers'
 import BootstrapVue from 'bootstrap-vue'
 import { TablePlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+    
+Vue.use(VueAxios, axios)
 
 Vue.use(TablePlugin)
 Vue.use(BootstrapVue)
