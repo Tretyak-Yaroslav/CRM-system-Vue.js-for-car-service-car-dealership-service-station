@@ -20,18 +20,18 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="brand" label="Марка:" label-for="brand">
+      <b-form-group id="vehicleBrandName" label="Марка:" label-for="vehicleBrandName">
         <b-form-select
-          id="brand"
-          v-model="form.brand"
-          :options="brands"
+          id="vehicleBrandName"
+          v-model="form.vehicleBrandName"
+          :options="vehicleBrandNames"
           required
         ></b-form-select>
       </b-form-group>
-       <b-form-group id="model" label="Модель:" label-for="model">
+       <b-form-group id="vehicleModelName" label="Модель:" label-for="model">
         <b-form-select
-          id="model"
-          v-model="form.model"
+          id="vehicleModelName"
+          v-model="form.vehicleModelName"
           :options="model"
           required
         ></b-form-select>
@@ -45,22 +45,22 @@
         ></b-form-input>
       </b-form-group>
 
- <b-form-group id="servise" label="Послуга:" label-for="servise">
+ <b-form-group id="serviseName" label="Послуга:" label-for="serviseName">
         <b-form-select
-          id="servise"
-          v-model="form.servise"
-          :options="servise"
+          id="serviseName"
+          v-model="form.serviseName"
+          :options="serviseName"
           required
         ></b-form-select>
       </b-form-group>
- <b-form-textarea id="textarea"  placeholder="Короткий опис роботи" >
+ <b-form-orderDescription id="orderDescription"  placeholder="Короткий опис роботи" >
    <b-form-select
-      id="textarea"
-      v-model="form.textarea"
-          :options="textarea"
+      id="orderDescription"
+      v-model="form.orderDescription"
+          :options="orderDescription"
           required
       ></b-form-select>
-    </b-form-textarea >
+    </b-form-orderDescription >
 
     <pre class="mt-3 mb-0 ">{{ text }}</pre>
       <b-col  md="8" offset-md="6">
@@ -95,15 +95,15 @@ form{
         form: {
           CustomerPhoneNumber: '',
           CustomerFullName: '',
-          model: '',
+          vehicleModelName: '',
           VehicleRegistrationNumber: '',
-          brand: null,
-          servise:'',
-          textarea :'',
+          vehicleBrandName: null,
+          serviseName:'',
+          orderDescription :'',
         },
-        brands: [{ text: '', value: null }, 'Range Rover', 'Ravon', 'Acura', 'Alfa Romeo','Audi','BMW','Brilliance','Buick','BYD','Cadillac','Chery','Chevrolet','Citroen','Daewoo','Daihatsu','Fiat','Ford','Geely','GMC','Great Wall','Honda','Hummer','Hyundai','Infiniti','JAC','Jeep','Kia','Lancia','Land Rover','Lexus','Mazda','Mercedes-Benz','Mercury','MG','Mini','Mitsubishi','Nissan','Opel','Peugeot','Porsche','Renault','SEAT','Skoda','Smart','SsangYong','Subaru','Suzuki','Toyota','Vauxhall','Volkswagen','Volvo',],
+        vehicleBrandNames: [{ text: '', value: null }, 'Range Rover', 'Ravon', 'Acura', 'Alfa Romeo','Audi','BMW','Brilliance','Buick','BYD','Cadillac','Chery','Chevrolet','Citroen','Daewoo','Daihatsu','Fiat','Ford','Geely','GMC','Great Wall','Honda','Hummer','Hyundai','Infiniti','JAC','Jeep','Kia','Lancia','Land Rover','Lexus','Mazda','Mercedes-Benz','Mercury','MG','Mini','Mitsubishi','Nissan','Opel','Peugeot','Porsche','Renault','SEAT','Skoda','Smart','SsangYong','Subaru','Suzuki','Toyota','Vauxhall','Volkswagen','Volvo',],
         show: true,
-        servise: [{ text: '', value: null }, 'Замена прокладки ГБЦ ','Ремонт стартера','Чистка дроссельной заслонки','Замена сальников','Замена стартера','Чистка впускного коллектора','Замена термомуфты','Замена помпы ','Диагностика бензинового двигателя','Промывка топливной системы','Замена подушки двигателя'],
+        serviseName: [{ text: '', value: null }, 'Замена прокладки ГБЦ ','Ремонт стартера','Чистка дроссельной заслонки','Замена сальников','Замена стартера','Чистка впускного коллектора','Замена термомуфты','Замена помпы ','Диагностика бензинового двигателя','Промывка топливной системы','Замена подушки двигателя'],
         show: true
       }
     },
@@ -116,12 +116,12 @@ form{
         evt.preventDefault()
         // Reset our form values
         this.form.CustomerFullName = ''
-        this.form.tel = ''
-        this.form.model = ''
-        this.form.number_car = ''
-        this.form.brand = null
-        this.form.service = ''
-        this.form.textarea=''
+        this.form.CustomerPhoneNumber = ''
+        this.form.vehicleModelName = ''
+        this.form.vehicleRegistrationNumber = ''
+        this.form.vehicleBrandName = null
+        this.form.serviseName = ''
+        this.form.orderDescription=''
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {

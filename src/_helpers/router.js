@@ -3,14 +3,12 @@ import Router from 'vue-router';
 
 import { authenticationService } from '@/_services';
 import LoginPage from '@/login/LoginPage';
-import UserPage from '@/form_user/UserPage';
-import DispositionPage from '@/disposition/DispositionPage';
-import Detailtable from '@/detailtable/Detailtable';
-import Apitest from '@/table2/apitest';
-import Table2Page from '@/table2/Table2Page';
+import UserFormPage from '@/UserFormPage/UserForm';
+import Detailtable from '@/TableDetails/DetailsTable';
+import Apitest from '@/Disposition/apitest';
+import Disposition from '@/Disposition/DispositionPage';
 
 Vue.use(Router);
-
 export const router = new Router({
     mode: 'history',
     routes: [
@@ -20,7 +18,7 @@ export const router = new Router({
         },
         { 
             path: '/table', 
-            component: Detailtable 
+            component: Detailtable, 
         },
         { 
             path: '/api', 
@@ -28,15 +26,11 @@ export const router = new Router({
         },
         { 
             path: '/user', 
-            component: UserPage, 
-        },
-        { 
-            path: '/disposition', 
-            component: DispositionPage, 
+            component: UserFormPage, 
         },
         {
-            path: '/table2',
-            component: Table2Page,
+            path: '/disposition',
+            component: Disposition,
         },
         
 

@@ -9,7 +9,6 @@
               <b-button :disabled="!filter" @click="filter = ''">Очистити</b-button>
             </b-input-group-append>
           </b-input-group>
-        
       </b-col>
 
       <b-col md="6" class="my-1">
@@ -22,7 +21,7 @@
         </b-form-group>
       </b-col>
       <b-col md="6" class="my-1">
-        <b-form-group label-cols-sm="3" label="Показати" class="mb-0">
+    <b-form-group label-cols-sm="3" label="Показати" class="mb-0">
           <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
         </b-form-group>
       </b-col>
@@ -42,10 +41,12 @@
       :sort-direction="sortDirection"
       @filtered="onFiltered"
     >
-      <template slot="eName" slot-scope="row">
-        {{ row.value.vehiclmployeeFirstName }} {{ row.value.employeeLastName }}
+      <template slot="employeeID" slot-scope="row">
+        {{ row.value.employeeFirstName }} {{ row.value.employeeLastName }}
       </template>
-
+      <template slot="employeeCreateOrderID" slot-scope="row">
+        {{ row.value.employeeCreateFirstName }} {{ row.value.employeeCreateLastName }}
+      </template>
       <template slot="isActive" slot-scope="row">
         {{ row.value ? 'Yes :)' : 'No :(' }}
       </template>
@@ -92,14 +93,14 @@
     data() {
       return {
         items: [
-        { orderID:'', startTime:'', customerPhoneNumber:"", name: { last: ' Васильович ',  first: 'Петро'  }, eName:{ vehiclmployeeFirstName:'', employeeLastName: ''} },
+        { orderID:'', startTime:'', customerPhoneNumber:"", employeeCreateOrderID :{ employeeCreateLastName: '',  employeeCreateFirstName: '' }, employeeID :{ employeeFirstName:'', employeeLastName: ''} },
         ],
         fields: [
          { key: 'orderID', label: 'Номер', sortable: true, sortDirection: 'desc' },
          { key: 'startTime', label: 'Час запису', sortable: true, sortDirection: 'desc' },
          { key: 'customerPhoneNumber', label: 'Телефон', sortable: true, sortDirection: 'desc' },
-          { key: 'name', label: 'Майстер-приймальник', sortable: true, sortDirection: 'desc' },
-          { key: 'eName ', label: 'Механік', sortable: true, sortDirection: 'desc' },
+          { key: 'employeeCreateOrderID', label: 'Майстер-приймальник', sortable: true, sortDirection: 'desc' },
+          { key: 'employeeID ', label: 'Механік', sortable: true, sortDirection: 'desc' },
           { key: 'actions', label: 'Показати деталі' }
         ],
         totalRows: 1,
