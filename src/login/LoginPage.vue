@@ -1,19 +1,18 @@
 <template>
   <b-container class="bv-example-row bv-example-row-flex-cols">
-   <b-row align-v="center" >
+  <b-row align-v="center" >
   <div class="login col-md-8 offset-md-2">
-   <div v-if="loading" class="container-loading">
-            <img src="/loading.gif" alt="Loading Icon" class="loader-img">
+  <div v-if="loading" class="container-loading">
+  <img src="/loading.gif" alt="Loading Icon" class="loader-img">
   </div>
-      <p class="errorMsg">{{ error }}</p>
-
+    <p class="errorMsg">{{ error }}</p>
   <form @submit.prevent="onSubmit" >
             <input type="text" class="form-control" placeholder="User Name" v-model="username">
             <input type="password" class="form-control" placeholder="Password" v-model="password">
             <button type="submit" class="btn btn-primary offset-md-10 ">Login</button>
         </form>
     </div>
-     </b-row>
+  </b-row>
   </b-container>
   <!-- <section class="form-elegant">
     <mdb-row>
@@ -60,13 +59,10 @@
     </mdb-row>
   </section> -->
 </template>
-
-
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { router } from '@/_helpers';
 import { authenticationService } from '@/_services';
-
 export default {
     data () {
         return {

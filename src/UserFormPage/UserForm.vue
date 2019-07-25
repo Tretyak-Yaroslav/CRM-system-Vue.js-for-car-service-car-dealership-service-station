@@ -53,14 +53,20 @@
             required
           ></b-form-select>
         </b-form-group>
-        <b-form-orderDescription id="orderDescription" placeholder="Короткий опис роботи">
+     <!--    <b-form-group  placeholder="Текст">
           <b-form-select
             id="orderDescription"
-            v-model="form.orderDescription"
+            v-model="form.message"
             :options="orderDescription"
             required
           ></b-form-select>
-        </b-form-orderDescription>
+      </b-form-group> -->
+    <b-form-textarea id="orderDescription" placeholder="Коментар">
+      id="orderDescription"
+      v-model="text"
+      rows="3"
+      max-rows="6"
+    ></b-form-textarea>
 
         <pre class="mt-3 mb-0">{{ text }}</pre>
         <b-col md="8" offset-md="6">

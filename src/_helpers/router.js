@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
 import { authenticationService } from '@/_services';
 import LoginPage from '@/login/LoginPage';
 import UserFormPage from '@/UserFormPage/UserForm';
@@ -32,12 +31,9 @@ export const router = new Router({
             path: '/disposition',
             component: Disposition,
         },
-        
-
         { path: '*', redirect: '/' }
     ]
 });
-
 router.beforeEach((to, from, next) => {
     const { authorize } = to.meta;
     const currentUser = authenticationService.currentUserValue;
@@ -47,6 +43,5 @@ router.beforeEach((to, from, next) => {
             return next({ path: '/login', query: { returnUrl: to.path } });
         }
     }
-
     next();
 })

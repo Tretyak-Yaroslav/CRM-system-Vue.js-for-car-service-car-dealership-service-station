@@ -12,7 +12,7 @@ export const authenticationService = {
 };
 
 function login(username, password) {
-    return fetch(`http://localhost:49730/api/user/login`, requestOptions.post({ username, password }))
+    return fetch(`http://garage.eso.local/api​/Auth​/Login`, requestOptions.post({ username, password }))
         .then(handleResponse)
         .then(response => {
             if (response.ok) {

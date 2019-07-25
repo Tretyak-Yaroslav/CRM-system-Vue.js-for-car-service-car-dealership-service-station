@@ -5,7 +5,7 @@ export const userService = {
 };
 
 function findStation(name) {
-    return fetch('http://localhost:49730/api/station/find?name=' + name, requestOptions.get())
+    return fetch('http://garage.eso.local/api​/Auth​/Login/find?name=' + name, requestOptions.get())
         .then(response => {
             return response;
         });
