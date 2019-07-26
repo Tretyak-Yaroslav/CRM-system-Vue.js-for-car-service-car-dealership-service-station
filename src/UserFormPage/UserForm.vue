@@ -28,12 +28,11 @@
             required
           ></b-form-select>
         </b-form-group>
-        <b-form-group id="vehicleModelName" label="Модель:" label-for="model">
+        <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
           <b-form-select
             id="vehicleModelName"
             v-model="form.vehicleModelName"
-            :options="model"
-            required
+            :options="vehicleModelNames"
           ></b-form-select>
         </b-form-group>
         <b-form-group id="VehicleRegistrationNumber" label="Номер автомобіля:" label-for="number">
@@ -95,7 +94,7 @@ form {
 
 <script>
 import axios from "axios";
-
+import { orderService } from '@/_services';
 export default {
   data() {
     return {
@@ -104,7 +103,7 @@ export default {
         CustomerFullName: "",
         vehicleModelName: "",
         VehicleRegistrationNumber: "",
-        vehicleBrandName: null,
+        vehicleBrandName: "",
         serviseName: "",
         orderDescription: ""
       },
@@ -114,7 +113,13 @@ export default {
             "http://garage.eso.local/api/order/GetOrder?from=2019-01-01&to=2020-01-01&workShopID=1"
           )
           .then(response => (this.info = response));
-      },
+      }, 
+       vehicleModelNames: [
+        { text: "", value: null },
+         "TT",
+        "X5",
+       ],
+        show: true,
       vehicleBrandNames: [
         { text: "", value: null },
         "Range Rover",
@@ -183,14 +188,15 @@ export default {
         "Диагностика бензинового двигателя",
         "Промывка топливной системы",
         "Замена подушки двигателя"
-      ],
-      show: true
+      ]
     };
   },
   methods: {
     onSubmit(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
+        evt.preventDefault();
+
+        orderService.setShortOrder(1, this.CustomerFullName, this.CustomerPhoneNumber, 1, this.orderDescription, 1, 1);
+        alert(JSON.stringify(this.form));
     },
     onReset(evt) {
       evt.preventDefault();
