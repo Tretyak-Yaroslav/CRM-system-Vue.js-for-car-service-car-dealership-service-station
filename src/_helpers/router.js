@@ -4,7 +4,6 @@ import { authenticationService } from '@/_services';
 import LoginPage from '@/login/LoginPage';
 import UserFormPage from '@/UserFormPage/UserForm';
 import Detailtable from '@/TableDetails/DetailsTable';
-import Apitest from '@/Disposition/apitest';
 import Disposition from '@/Disposition/DispositionPage';
 
 Vue.use(Router);
@@ -19,10 +18,7 @@ export const router = new Router({
             path: '/table', 
             component: Detailtable, 
         },
-        { 
-            path: '/api', 
-            component: Apitest, 
-        },
+       
         { 
             path: '/user', 
             component: UserFormPage, 

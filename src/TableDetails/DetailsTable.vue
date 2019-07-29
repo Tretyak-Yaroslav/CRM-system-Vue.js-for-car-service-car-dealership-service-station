@@ -64,7 +64,7 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
+            <li v-for="(value, key) in row.item" :key="key">{{ }} {{ }}</li>
           </ul>
         </b-card>
       </template>

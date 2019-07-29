@@ -1,7 +1,6 @@
 <script charset="utf-8">
 import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-
 export default {
   components: {
     FullCalendar
@@ -13,7 +12,15 @@ export default {
     };
   }
 };
+/* $('#FullCalendar').fullCalendar({
+  dayClick: function(date, jsEvent, view) {
+    alert('Clicked on: ' + date.format());
+    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+    alert('Current view: ' + view.name);
+  }
+}); */
 </script>
+
 <template>
   <div style="margin:0px 10px;">
     <FullCalendar
@@ -29,6 +36,7 @@ export default {
       displayEventTime="true"
       displayEventEnd="true"
       selectable="true"
+      eventClick ="on"
       :eventTimeFormat="{
                         hour: 'numeric',
                         minute: '2-digit',
@@ -45,51 +53,55 @@ export default {
                           id: '1',
                           resourceId: 'a',
                           title: 'Mazda 3 BP455AM',
-                          date: '2019-07-22 12:10:00',
-                          end: '2019-07-22 18:00:00',
+                          date: '2019-07-29 12:10:00',
+                          end: '2019-07-29 18:00:00',
                           textColor:'white',
-                          backgroundColor:'#42b983 '
+                          class:'ready',
+                          backgroundColor:'#42b983',
                         },
                         {
                           id: '2',
                           resourceId: 'b',
                           title: 'Mazda 2 BP455AM',
-                          date: '2019-07-22 08:00:00',
-                          end: '2019-07-22 18:00:00',
+                          date: '2019-07-29 08:00:00',
+                          end: '2019-07-29 18:00:00',
                           textColor:'white',
-                           backgroundColor:'rgb(88, 218, 156) '
+                          class:'in_work',
+                          backgroundColor:'rgb(88, 218, 156) ',
                         },
                         {
                           id: '3',
                           resourceId: 'c',
                           title: 'Mazda 2 BP455AM',
-                          date: '2019-07-22 09:00:00',
-                          end: '2019-07-22 23:00:00',
-                          textColor:'white'
+                          date: '2019-07-29 09:00:00',
+                          end: '2019-07-29 23:00:00',
+                          textColor:'white',
+
                         },
                         {
                           id: '4',
                           resourceId: 'd',
                           title: 'Mazda 2 BP455AM',
-                          date: '2019-07-22 10:00:00',
-                          end: '2019-07-22 14:00:00',
+                          date: '2019-07-29 10:00:00',
+                          end: '2019-07-29 14:00:00',
                           textColor:'white',
-                          backgroundColor:'rgb(255, 194, 10) '
+                          backgroundColor:'rgb(255, 194, 10) ',
+                          class:'abolition',
                         },
                         {
                           id: '5',
                           resourceId: 'd',
                           title: 'Mazda 2 BP455AM',
-                          date: '2019-07-22 14:30:00',
-                          end: '2019-07-22 22:00:00',
+                          date: '2019-07-29 14:30:00',
+                          end: '2019-07-29 22:00:00',
                           textColor:'white',
-                           backgroundColor:'#ddd '
+                           backgroundColor:'#ddd ',
+                           class:'not_verified',
                         }
                       ]"
     />
   </div>
 </template>
-
 <style lang='scss'>
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/timeline/main.css";
@@ -112,6 +124,18 @@ export default {
   color: #fff;
   background-color: #42b983 !important;
   border-color: #42b983 !important;
+}
+.ready {
+  background-color: #42b983 !important;
+}
+.in work {
+  background-color: rgb(88, 218, 156);
+}
+.abolition {
+  background-color: rgb(255, 194, 10);
+}
+.not_verified {
+  background-color: #ddd;
 }
 .fc-center {
   text-align: center;

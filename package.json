@@ -30,6 +30,7 @@
     "vue2-datepicker": "^2.12.0",
     "vuelidate": "^0.7.4",
     "vuex": "^3.0.1",
+    "vuex-rest-api": "^2.10.0",
     "willvalidate": "^1.0.1"
   },
   "devDependencies": {
