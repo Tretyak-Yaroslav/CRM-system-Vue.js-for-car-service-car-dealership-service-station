@@ -7,9 +7,9 @@
   </div>
     <p class="errorMsg">{{ error }}</p>
   <form @submit.prevent="onSubmit" >
-            <input type="text" class="form-control mr-15" placeholder="User Name" v-model="username">
-            <input type="password" class="form-control mr-15" placeholder="Password" v-model="password">
-            <button type="submit" class="btn btn-primary offset-md-10 mr-15">Login</button>
+            <input type="text" class="form-control mr-15" placeholder="Ім'я користувача" v-model="username">
+            <input type="password" class="form-control mr-15" placeholder="Пароль" v-model="password">
+            <button type="submit" class="btn btn-primary offset-md-10 mr-15">Вхід</button>
   </form>
     </div>
   </b-row>
@@ -49,7 +49,7 @@ export default {
                 .then(
                     user => router.push(this.returnUrl),
                     error => {
-                        this.error = "Somethsomething went wrong!";
+                        this.error = "Щось пішло не так!";
                         this.loading = false;
                     }
                 );
@@ -58,7 +58,7 @@ export default {
 }; 
 </script>
 
-<style>
+<style lang="scss" scoped>
 .form-elegant .font-small {
   font-size: 0.8rem;
 }
@@ -80,5 +80,8 @@ export default {
 .mr-15{
   margin-top: 15px;
   
+}
+form{
+  max-width: 600px;
 }
 </style>

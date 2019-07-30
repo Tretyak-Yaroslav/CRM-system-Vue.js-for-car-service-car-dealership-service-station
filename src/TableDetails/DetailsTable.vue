@@ -184,3 +184,24 @@ export default {
   }
 };
 </script>
+ <style lang="scss" scoped>
+@media screen and (max-width: 600px){
+.table{
+  font-size: 0.7em;
+}
+.btn-sm, .btn-group-sm > .btn {
+    padding: 0.25rem 0.2rem;
+    font-size: 0.875rem;
+    
+}
+.table th {
+    text-align: center;
+    padding: 0.5rem !important;
+}
+
+.table.b-table.b-table-stacked-md{
+ overflow: scroll;
+  min-width: 443px;
+}
+}
+</style>

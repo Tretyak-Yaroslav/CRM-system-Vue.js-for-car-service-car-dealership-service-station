@@ -68,7 +68,7 @@
     ></b-form-textarea>
 
         <pre class="mt-3 mb-0">{{ text }}</pre>
-        <b-col md="8" offset-md="6">
+        <b-col md="12" >
           <b-button type="submit" variant="success">Cтворити заявку</b-button>
         </b-col>
       </b-form>
@@ -78,19 +78,7 @@
     </b-row>
   </b-container>
 </template>
-<style scoped>
-form {
-  padding: 15px;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #999;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
-  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-  outline: 0;
-}
-</style>
+
 
 <script>
 import axios from "axios";
@@ -217,3 +205,29 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+
+form {
+  padding: 15px;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  outline: 0;
+}
+@media screen and (max-width: 600px){
+.form-group {
+    margin-bottom: 0.3rem;
+}
+label {
+    margin-bottom: 0.2rem;
+}
+.btn.btn-success {
+ float: right; 
+}
+}
+
+</style>

@@ -204,4 +204,19 @@ export default {
 .fc-button-primary:focus {
   box-shadow: none;
 }
+@media screen and (max-width: 600px){
+  .fc-toolbar.fc-header-toolbar{
+    
+    padding: 0;
+  }
+body .fc {
+    font-size: .7em;
+}
+.fc-toolbar.fc-header-toolbar {
+    height: 60px;
+}
+.fc-toolbar > * > :not(:first-child) {
+    margin-left: 1em;
+}
+}
 </style>
