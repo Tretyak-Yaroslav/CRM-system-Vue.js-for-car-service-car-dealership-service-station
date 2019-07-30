@@ -22,9 +22,10 @@
 
         <b-form-group id="vehicleBrandName" label="Марка:" label-for="vehicleBrandName">
           <b-form-select
-            id="vehicleBrandName"
+            id="vehicleBrandName" 
             v-model="form.vehicleBrandName"
             :options="vehicleBrandNames"
+            vehicleBrandName =1;
             required
           ></b-form-select>
         </b-form-group>
@@ -117,8 +118,7 @@ import axios from "axios";
       }, 
        vehicleModelNames: [
         { text: "", value: null },
-         "TT",
-        "X5",
+         
        ],
         show: true,
       vehicleBrandNames: [],
