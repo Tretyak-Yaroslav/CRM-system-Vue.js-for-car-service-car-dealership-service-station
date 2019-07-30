@@ -4,7 +4,7 @@ import { authenticationService } from '@/_services';
 import LoginPage from '@/login/LoginPage';
 import UserFormPage from '@/UserFormPage/UserForm';
 import Detailtable from '@/TableDetails/DetailsTable';
-import Disposition from '@/Disposition/DispositionPage';
+import Disposition from '@/disposition/DispositionPage';
 
 Vue.use(Router);
 export const router = new Router({
