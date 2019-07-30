@@ -1,0 +1,18 @@
+Request URL
+http://garage.eso.local/api/Catalogue/GetVehicleModel?vehicleBrandID=1
+
+	
+Response body
+
+[
+    {
+      "vehicleModelID": 1,
+      "vehicleModelName": "X5",
+      "vehicleBrandID": 1,
+      "vehicleBrandName": "BMV"
+    }
+  ]
+
+
+
+  curl -X POST "http://garage.eso.local/api/Catalogue/GetVehicleModel?vehicleBrandID=1" -H "accept: text/plain" 

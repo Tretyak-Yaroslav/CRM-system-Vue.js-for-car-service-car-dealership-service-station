@@ -1,0 +1,12 @@
+Request URL
+http://garage.eso.local/api/Catalogue/GetVendor?vendorID=1
+
+
+[
+    {
+      "vehicleBrandID": 1,
+      "vehicleBrandName": "BMV"
+    }
+  ]
+
+  curl -X POST "http://garage.eso.local/api/Catalogue/GetVendor?vendorID=1" -H "accept: text/plain"
