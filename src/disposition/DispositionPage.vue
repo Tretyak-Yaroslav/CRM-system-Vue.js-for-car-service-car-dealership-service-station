@@ -1,55 +1,10 @@
-<script charset="utf-8">
-import FullCalendar from "@fullcalendar/vue";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid'
-import { METHODS } from 'http';
 
-export default {
-  components: {
-    FullCalendar
-  },
-  data() {
-    return {
-      calendarPlugins: [resourceTimelinePlugin,
-      dayGridPlugin, 
-         timeGridPlugin, 
-        interactionPlugin
-        ],
-      selectable: true,
-       calendarEvents: [ // initial event data
-        { title: 'Event Now', start: new Date() }
-      ]
-    };
-  },
-  methods:{
-     toggleWeekends() {
-      this.calendarWeekends = !this.calendarWeekends // update a property
-    },
-    gotoPast() {
-      let calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
-      calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
-    },
-    handleDateClick(arg) {
-      if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
-        this.calendarEvents.push({ // add new event data
-          title: 'New Event',
-          start: arg.date,
-          /* allDay: arg.allDay */
-        })
-      }
-}
-}
-}
-</script>
 
 <template>
   <div style="margin:0px 10px;">
     <FullCalendar
       :plugins="calendarPlugins"
       defaultView="resourceTimelineDay"
-      
       locale="uk"
       nowIndicator="true"
       :header="{
@@ -60,7 +15,6 @@ export default {
       displayEventTime="true"
       displayEventEnd="true"
       selectable="true"
-      
       :eventTimeFormat="{
                         hour: 'numeric',
                         minute: '2-digit',
@@ -123,11 +77,59 @@ export default {
                            class:'not_verified',
                         }
                       ]"
-                   
+                      
                       @dateClick="handleDateClick"
+                      
     />
   </div>
 </template>
+
+<script charset="utf-8">
+import FullCalendar from "@fullcalendar/vue";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+ import interactionPlugin from '@fullcalendar/interaction'; 
+ /* import dayGridPlugin from '@fullcalendar/daygrid';*/
+ import timeGridPlugin from '@fullcalendar/timegrid' 
+import { METHODS } from 'http';
+
+export default {
+  components: {
+    FullCalendar
+  },
+  data() {
+    return {
+      calendarPlugins: [resourceTimelinePlugin,
+      /* dayGridPlugin,  */
+         timeGridPlugin,  
+       interactionPlugin 
+        ],
+      selectable: true,
+       calendarEvents: [ // initial event data
+        { title: 'Event Now', start: new Date() }
+      ]
+    };
+  },
+  methods:{
+     toggleWeekends() {
+      this.calendarWeekends = !this.calendarWeekends // update a property
+    },
+    gotoPast() {
+      let calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
+      calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+    },
+    handleDateClick(arg) {
+      if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
+        this.calendarEvents.push({ // add new event data
+          title: 'New Event',
+          start: arg.date,
+          /* allDay: arg.allDay */
+        })
+      }
+}
+}
+}
+</script>
+
 <style lang='scss'>
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/timeline/main.css";
