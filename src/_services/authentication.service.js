@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { requestOptions, handleResponse } from '@/_helpers';
+import { requestOptions } from '@/_helpers';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -12,17 +12,17 @@ export const authenticationService = {
 };
 
 function login(username, password) {
-    return fetch(`http://garage.eso.local/api​/Auth​/Login`, requestOptions.post({ username, password }))
-        .then(handleResponse)
-        .then(response => {
-            if (response.ok) {
-                localStorage.setItem('currentUser', JSON.stringify(response));
-                currentUserSubject.next(response);
-                return response;
-            } else {
-                return new error();
-            }
-        });
+    //return fetch(`http://garage.eso.local/api​/Auth​/Login`, requestOptions.post({ username, password }))
+    //    .then(handleResponse)
+    //    .then(response => {
+    //        if (response.ok) {
+    //            localStorage.setItem('currentUser', JSON.stringify(response));
+    //            currentUserSubject.next(response);
+    //            return response;
+    //        } else {
+    //            return new error();
+    //        }
+    //    });
 }
 
 function logout() {

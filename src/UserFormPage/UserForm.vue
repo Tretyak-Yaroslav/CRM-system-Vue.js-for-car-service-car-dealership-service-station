@@ -82,8 +82,21 @@
 
 <script>
 import axios from "axios";
-import { orderService } from '@/_services';
-export default {
+    export default {
+        created() {
+            console.log(this.$store);
+            this.$store.dispatch('getVendor', { params: { id: 0 } })
+                .then(res => {
+                    var vendorsData = JSON.parse(JSON.stringify(res.data))
+                    this.vehicleBrandNames = vendorsData.map(function (i) {
+                        return {
+                            text: i["vehicleBrandName"],
+                            value: i["vehicleBrandID"]
+                        }
+                    });
+                })
+                .catch(error => { });
+        },
   data() {
     return {
       form: {
@@ -108,61 +121,7 @@ export default {
         "X5",
        ],
         show: true,
-      vehicleBrandNames: [
-        { text: "", value: null },
-        "Range Rover",
-        "Ravon",
-        "Acura",
-        "Alfa Romeo",
-        "Audi",
-        "BMW",
-        "Brilliance",
-        "Buick",
-        "BYD",
-        "Cadillac",
-        "Chery",
-        "Chevrolet",
-        "Citroen",
-        "Daewoo",
-        "Daihatsu",
-        "Fiat",
-        "Ford",
-        "Geely",
-        "GMC",
-        "Great Wall",
-        "Honda",
-        "Hummer",
-        "Hyundai",
-        "Infiniti",
-        "JAC",
-        "Jeep",
-        "Kia",
-        "Lancia",
-        "Land Rover",
-        "Lexus",
-        "Mazda",
-        "Mercedes-Benz",
-        "Mercury",
-        "MG",
-        "Mini",
-        "Mitsubishi",
-        "Nissan",
-        "Opel",
-        "Peugeot",
-        "Porsche",
-        "Renault",
-        "SEAT",
-        "Skoda",
-        "Smart",
-        "SsangYong",
-        "Subaru",
-        "Suzuki",
-        "Toyota",
-        "Vauxhall",
-        "Volkswagen",
-        "Volvo"
-      ],
-      show: true,
+      vehicleBrandNames: [],
       serviseName: [
         { text: "", value: null },
         "Замена прокладки ГБЦ ",
@@ -182,9 +141,9 @@ export default {
   methods: {
     onSubmit(evt) {
         evt.preventDefault();
-
-        orderService.setShortOrder(1, this.CustomerFullName, this.CustomerPhoneNumber, 1, this.orderDescription, 1, 1);
-        alert(JSON.stringify(this.form));
+        
+        //orderService.setShortOrder(1, this.CustomerFullName, this.CustomerPhoneNumber, 1, this.orderDescription, 1, 1);
+        //alert(JSON.stringify(this.form));
     },
     onReset(evt) {
       evt.preventDefault();
