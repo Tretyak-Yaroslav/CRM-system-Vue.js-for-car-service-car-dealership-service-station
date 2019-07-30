@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+/* import { BehaviorSubject } from 'rxjs';
 import { requestOptions, handleResponse } from '@/_helpers';
 
 export const orderService = {
@@ -23,3 +23,4 @@ function setShortOrder(workShopID, customerFullName, customerPhoneNumber, servic
             return response;
         });
 }
+ */

@@ -28,7 +28,7 @@
     </b-row>
 
     <!-- Main table element -->
-    <b-table
+    <b-table style="overflow: auto;"
       show-empty
       stacked="md"
       :items="items"
@@ -57,8 +57,8 @@
         </b-button>-->
         <b-button
           size="sm"
-          @click="row.toggleDetails"
-        >{{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
+          @click="row.toggleDetails">
+          {{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
       </template>
 
       <template slot="row-details" slot-scope="row">
@@ -68,6 +68,7 @@
           </ul>
         </b-card>
       </template>
+
     </b-table>
 
     <b-row>
