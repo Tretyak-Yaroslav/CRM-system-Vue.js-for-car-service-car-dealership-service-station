@@ -5,7 +5,7 @@ import Vapi from "vuex-rest-api"
 Vue.use(Vuex)
 
 const posts = new Vapi({
-    baseURL: "http://localhost:49730/api",
+    baseURL: "http://garage.eso.local:80/api",
     state: {
         posts: []
     }
