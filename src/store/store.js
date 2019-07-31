@@ -10,7 +10,7 @@ const posts = new Vapi({
         posts: []
     }
 })
-    .get({
+    .post({
         action: "getVendor",
         property: "vendor",
         path: ({ id }) => `/Catalogue/GetVendor?vendorID=${id}`

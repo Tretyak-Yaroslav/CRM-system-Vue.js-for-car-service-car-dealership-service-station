@@ -25,6 +25,7 @@
             id="vehicleBrandName"
             v-model="form.vehicleBrandName"
             :options="vehicleBrandNames"
+            v-on:change="getSelectedBrand"
             required
           ></b-form-select>
         </b-form-group>
@@ -67,7 +68,7 @@
       max-rows="6"
     ></b-form-textarea>
 
-        <pre class="mt-3 mb-0">{{ text }}</pre>
+        <!--<pre class="mt-3 mb-0">{{ text }}</pre>-->
         <b-col md="12" >
           <b-button type="submit" variant="success">Cтворити заявку</b-button>
         </b-col>
@@ -84,7 +85,6 @@
 import axios from "axios";
     export default {
         created() {
-            console.log(this.$store);
             this.$store.dispatch('getVendor', { params: { id: 0 } })
                 .then(res => {
                     var vendorsData = JSON.parse(JSON.stringify(res.data))
@@ -160,7 +160,10 @@ import axios from "axios";
       this.$nextTick(() => {
         this.show = true;
       });
-    }
+      },
+    getSelectedBrand(evt) {
+        alert(evt);
+   }
   }
 };
 </script>
