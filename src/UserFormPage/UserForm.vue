@@ -26,7 +26,6 @@
             v-model="form.vehicleBrandName"
             :options="vehicleBrandNames"
             v-on:change="getSelectedBrand"
-            vehicleBrandName =1;
             required
           ></b-form-select>
         </b-form-group>
@@ -54,20 +53,16 @@
             required
           ></b-form-select>
         </b-form-group>
-     <!--    <b-form-group  placeholder="Текст">
-          <b-form-select
-            id="orderDescription"
-            v-model="form.message"
-            :options="orderDescription"
-            required
-          ></b-form-select>
-      </b-form-group> -->
-    <b-form-textarea id="orderDescription" placeholder="Коментар">
+ 
+<b-form-textarea
       id="orderDescription"
-      v-model="text"
+      v-model="form.orderDescription"
+      placeholder="Коментар"
       rows="3"
       max-rows="6"
-    ></b-form-textarea>
+      :options="orderDescription"
+    >
+    </b-form-textarea>
 
         <!--<pre class="mt-3 mb-0">{{ text }}</pre>-->
         <b-col md="12" >
@@ -138,6 +133,16 @@ import axios from "axios";
       ]
     };
   },
+
+  //////test
+  methods:{
+    getIdElement(){
+
+    }
+  },
+
+
+  //////test
   methods: {
     onSubmit(evt) {
         evt.preventDefault();
