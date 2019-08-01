@@ -34,6 +34,7 @@
             id="vehicleModelName"
             v-model="form.vehicleModelName"
             :options="vehicleModelNames"
+             required
           ></b-form-select>
         </b-form-group>
         <b-form-group id="VehicleRegistrationNumber" label="Номер автомобіля:" label-for="number">

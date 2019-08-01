@@ -29,6 +29,7 @@
     "vue-cal": "^1.62.1",
     "vue-ctk-date-time-picker": "^2.1.1",
     "vue-datetime": "^1.0.0-beta.10",
+    "vue-i18n": "^8.12.0",
     "vue-md-date-picker": "^1.0.16",
     "vue-router": "^3.0.6",
     "vue2-datepicker": "^2.12.0",
