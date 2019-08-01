@@ -1,5 +1,3 @@
-
-
 <template>
   <div style="margin:0px 10px;">
     <FullCalendar
@@ -83,13 +81,11 @@
     />
   </div>
 </template>
-
 <script charset="utf-8">
 import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
- import interactionPlugin from '@fullcalendar/interaction'; 
- /* import dayGridPlugin from '@fullcalendar/daygrid';*/
- import timeGridPlugin from '@fullcalendar/timegrid' 
+import interactionPlugin from '@fullcalendar/interaction'; 
+import timeGridPlugin from '@fullcalendar/timegrid' 
 import { METHODS } from 'http';
 
 export default {
@@ -99,7 +95,6 @@ export default {
   data() {
     return {
       calendarPlugins: [resourceTimelinePlugin,
-      /* dayGridPlugin,  */
          timeGridPlugin,  
        interactionPlugin 
         ],
@@ -134,6 +129,7 @@ export default {
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/timeline/main.css";
 @import "~@fullcalendar/resource-timeline/main.css";
+
 .fc-license-message {
   display: none;
 }
@@ -247,5 +243,4 @@ body .fc {
     margin-left: 1em;
 }
 }
-
 </style>
