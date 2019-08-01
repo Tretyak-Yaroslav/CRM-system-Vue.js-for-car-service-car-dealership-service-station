@@ -5,6 +5,7 @@ import LoginPage from '@/login/LoginPage';
 import UserFormPage from '@/UserFormPage/UserForm';
 import Detailtable from '@/TableDetails/DetailsTable';
 import Disposition from '@/disposition/DispositionPage';
+import ModalForm from '@/ModalFormDisposition/ModalForm';
 
 Vue.use(Router);
 export const router = new Router({
@@ -18,7 +19,10 @@ export const router = new Router({
             path: '/table', 
             component: Detailtable, 
         },
-       
+        { 
+            path: '/modal', 
+            component: ModalForm, 
+        },
         { 
             path: '/user', 
             component: UserFormPage, 

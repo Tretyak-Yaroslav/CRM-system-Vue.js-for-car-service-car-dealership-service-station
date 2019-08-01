@@ -8,7 +8,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { store } from './store'
+import Datetime from 'vue-datetime'
+import 'vue-datetime/dist/vue-datetime.css'
+import Vue from 'vue';
+import VeeValidate from 'vee-validate';
 
+Vue.use(VeeValidate);
+Vue.use(Datetime)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.use(TablePlugin)

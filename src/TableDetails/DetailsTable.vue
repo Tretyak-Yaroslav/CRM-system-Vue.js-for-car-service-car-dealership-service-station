@@ -199,7 +199,6 @@ export default {
     text-align: center;
     padding: 0.5rem !important;
 }
-
 .table.b-table.b-table-stacked-md{
  overflow: scroll;
   min-width: 443px;

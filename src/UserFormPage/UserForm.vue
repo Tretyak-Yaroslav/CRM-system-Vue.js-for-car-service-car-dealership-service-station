@@ -1,208 +1,214 @@
 <template>
-    <b-container class="bv-example-row bv-example-row-flex-cols">
-        <b-row align-v="center" align-h="center">
-            <b-form @submit="onSubmit" @reset="onReset" v-if="show" class="mx-auto">
-                <b-form-group id="CustomerPhoneNumber" label="Телефон:" label-for="phone">
-                    <b-form-input id="CustomerPhoneNumber"
-                                  v-model="form.CustomerPhoneNumber"
-                                  required
-                                  placeholder="+3809605478377"></b-form-input>
-                </b-form-group>
+  <b-container class="bv-example-row bv-example-row-flex-cols">
+    <b-row align-v="center" align-h="center">
+      <b-form @submit="onSubmit" @reset="onReset" v-if="show" class="mx-auto">
+        <b-form-group id="CustomerPhoneNumber" label="Телефон:" label-for="phone">
+          <b-form-input
+            id="CustomerPhoneNumber"
+            v-model="form.CustomerPhoneNumber"
+            required
+            placeholder="+3809605478377"
+          ></b-form-input>
+        </b-form-group>
 
-                <b-form-group id="CustomerFullName" label="Ім'я:" label-for="name">
-                    <b-form-input id="CustomerFullName"
-                                  v-model="form.CustomerFullName"
-                                  required
-                                  placeholder="Введіть ім'я"></b-form-input>
-                </b-form-group>
+        <b-form-group id="CustomerFullName" label="Ім'я:" label-for="name">
+          <b-form-input
+            id="CustomerFullName"
+            v-model="form.CustomerFullName"
+            required
+            placeholder="Введіть ім'я"
+          ></b-form-input>
+        </b-form-group>
 
-                <b-form-group id="vehicleBrandName" label="Марка:" label-for="vehicleBrandName">
-                    <b-form-select id="vehicleBrandName"
-                                   v-model="form.vehicleBrandName"
-                                   :options="vehicleBrandNames"
-                                   v-on:change="getSelectedBrand"
-                                   required></b-form-select>
-                </b-form-group>
-                <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
-                    <b-form-select id="vehicleModelName"
-                                   v-model="form.vehicleModelName"
-                                   :options="vehicleModelNames"></b-form-select>
-                </b-form-group>
-                <b-form-group id="VehicleRegistrationNumber" label="Номер автомобіля:" label-for="number">
-                    <b-form-input id="VehicleRegistrationNumber"
-                                  v-model="form.VehicleRegistrationNumber"
-                                  required
-                                  placeholder="Введіть номер автомобіля"></b-form-input>
-                </b-form-group>
+        <b-form-group id="vehicleBrandName" label="Марка:" label-for="vehicleBrandName">
+          <b-form-select
+            id="vehicleBrandName"
+            v-model="form.vehicleBrandName"
+            :options="vehicleBrandNames"
+            v-on:change="getSelectedBrand"
+            required
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
+          <b-form-select
+            id="vehicleModelName"
+            v-model="form.vehicleModelName"
+            :options="vehicleModelNames"
+          ></b-form-select>
+        </b-form-group>
+        <b-form-group id="VehicleRegistrationNumber" label="Номер автомобіля:" label-for="number">
+          <b-form-input
+            id="VehicleRegistrationNumber"
+            v-model="form.VehicleRegistrationNumber"
+            required
+            placeholder="Введіть номер автомобіля"
+          ></b-form-input>
+        </b-form-group>
 
-                <b-form-group id="serviseName" label="Послуга:" label-for="serviseName">
-                    <b-form-select id="serviseName"
-                                   v-model="form.serviseName"
-                                   :options="serviseName"
-                                   required></b-form-select>
-                </b-form-group>
+        <b-form-group id="serviseName" label="Послуга:" label-for="serviseName">
+          <b-form-select
+            id="serviseName"
+            v-model="form.serviseName"
+            :options="serviseName"
+            required
+          ></b-form-select>
+        </b-form-group>
 
-                <b-form-textarea id="orderDescription"
-                                 v-model="form.orderDescription"
-                                 placeholder="Коментар"
-                                 rows="2"
-                                 max-rows="4"
-                                 no-resize>
-                </b-form-textarea>
-
-
+        <b-form-textarea
+          id="orderDescription"
+          v-model="form.orderDescription"
+          placeholder="Коментар"
+          rows="2"
+          max-rows="2"
+         
+        ></b-form-textarea>
 
         <!--<pre class="mt-3 mb-0">{{ text }}</pre>-->
-                <b-col md="12">
-                    <b-button type="submit" variant="success">Cтворити заявку</b-button>
-                </b-col>
-            </b-form>
-            <b-card class="mt-3" header="Form Data Result">
-                <pre class="m-0">{{ form }}</pre>
-            </b-card>
-        </b-row>
-    </b-container>
+        <b-col md="12">
+          <b-button type="submit" variant="success">Cтворити заявку</b-button>
+        </b-col>
+      </b-form>
+      <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ form }}</pre>
+      </b-card>
+    </b-row>
+  </b-container>
 </template>
 
 
 <script>
-    import axios from "axios";
-    export default {
-        created() {
-            this.$store.dispatch('getVendor', { params: { id: 0 } })
-                .then(res => {
-                    var vendorsData = JSON.parse(JSON.stringify(res.data))
-                    this.vehicleBrandNames = vendorsData.map(function (i) {
-                        return {
-                            text: i["vehicleBrandName"],
-                            value: i["vehicleBrandID"]
-                        }
-                    });
-                })
-        },
-        data() {
-            return {
-                form: {
-                    CustomerPhoneNumber: "",
-                    CustomerFullName: "",
-                    vehicleModelName: "",
-                    VehicleRegistrationNumber: "",
-                    vehicleBrandName: "",
-                    serviseName: "",
-                    orderDescription: ""
-                },
-                mounted() {
-                    axios
-                        .get(
-                            "http://garage.eso.local/api/order/GetOrder?from=2019-01-01&to=2020-01-01&workShopID=1"
-                        )
-                        .then(response => (this.info = response));
-                },
-                vehicleModelNames: [],
-                show: true,
-                vehicleBrandNames: [],
-                serviseName: [
-                    { text: "", value: null },
-                    "Замена прокладки ГБЦ ",
-                    "Ремонт стартера",
-                    "Чистка дроссельной заслонки",
-                    "Замена сальников",
-                    "Замена стартера",
-                    "Чистка впускного коллектора",
-                    "Замена термомуфты",
-                    "Замена помпы ",
-                    "Диагностика бензинового двигателя",
-                    "Промывка топливной системы",
-                    "Замена подушки двигателя"
-                ]
-            };
-        },
+export default {
+  created() {
+    this.$store.dispatch("getVendor", { params: { id: 0 } }).then(res => {
+      var vendorsData = JSON.parse(JSON.stringify(res.data));
+      this.vehicleBrandNames = vendorsData.map(function(i) {
+        return {
+          text: i["vehicleBrandName"],
+          value: i["vehicleBrandID"]
+        };
+      });
+    });
+  },
+  data() {
+    return {
+      form: {
+        CustomerPhoneNumber: "",
+        CustomerFullName: "",
+        vehicleModelName: "",
+        VehicleRegistrationNumber: "",
+        vehicleBrandName: "",
+        serviseName: "",
+        orderDescription: ""
+      },
 
-
-        methods: {
-            onSubmit(evt) {
-                evt.preventDefault();
-                this.$store.dispatch('setShortOrder', {
-                    params:
-                    {
-                        workShopID: 1,
-                        customerFullName: this.form.CustomerFullName,
-                        customerPhoneNumber: this.form.CustomerPhoneNumber,
-                        serviceID: 1,
-                        orderDescription: this.form.orderDescription,
-                        vehicleModelID: this.form.vehicleModelName,
-                        vehicleBrandID: this.form.vehicleBrandName
-                    }
-                }).then(response => {
-                    alert(`Заявка № ${response.data} відправлена`);
-                }).catch(response => {
-                    alert('Error: ' + response.message);
-                });
-                this.clearForm();
-            },
-            onReset(evt) {
-                evt.preventDefault();
-                // Reset our form values
-                clearForm();
-                // Trick to reset/clear native browser form validation state
-                this.show = false;
-                this.$nextTick(() => {
-                    this.show = true;
-                });
-            },
-
-            clearForm() {
-                this.form.CustomerFullName = "";
-                this.form.CustomerPhoneNumber = "";
-                this.form.vehicleModelName = "";
-                this.form.vehicleRegistrationNumber = "";
-                this.form.vehicleBrandName = "";
-                this.form.serviseName = "";
-                this.form.orderDescription = "";
-                this.form.VehicleRegistrationNumber = "";
-            },
-            getSelectedBrand(id) {
-                console.log(id);
-
-                this.$store.dispatch('getVehicleModel', { params: { id: id } })
-                    .then(res => {
-                        var vendorsData = JSON.parse(JSON.stringify(res.data))
-                        this.vehicleModelNames = vendorsData.map(function (i) {
-                            return {
-                                text: i["vehicleModelName"],
-                                value: i["vehicleModelID"]
-                            }
-                        });
-                    })
-            }
-        }
+      vehicleModelNames: [],
+      show: true,
+      vehicleBrandNames: [],
+      serviseName: [
+        { text: "", value: null },
+        "Замена прокладки ГБЦ ",
+        "Ремонт стартера",
+        "Чистка дроссельной заслонки",
+        "Замена сальников",
+        "Замена стартера",
+        "Чистка впускного коллектора",
+        "Замена термомуфты",
+        "Замена помпы ",
+        "Диагностика бензинового двигателя",
+        "Промывка топливной системы",
+        "Замена подушки двигателя"
+      ]
     };
+  },
+
+  methods: {
+    onSubmit(evt) {
+      evt.preventDefault();
+      this.$store
+        .dispatch("setShortOrder", {
+          params: {
+            workShopID: 1,
+            customerFullName: this.form.CustomerFullName,
+            customerPhoneNumber: this.form.CustomerPhoneNumber,
+            serviceID: 1,
+            orderDescription: this.form.orderDescription,
+            vehicleModelID: this.form.vehicleModelName,
+            vehicleBrandID: this.form.vehicleBrandName
+          }
+        })
+        .then(response => {
+          alert(`Заявка № ${response.data} відправлена`);
+        })
+        .catch(response => {
+          alert("Error: " + response.message);
+        });
+      this.clearForm();
+    },
+    onReset(evt) {
+      evt.preventDefault();
+      // Reset our form values
+      clearForm();
+      // Trick to reset/clear native browser form validation state
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+
+    clearForm() {
+      this.form.CustomerFullName = "";
+      this.form.CustomerPhoneNumber = "";
+      this.form.vehicleModelName = "";
+      this.form.vehicleRegistrationNumber = "";
+      this.form.vehicleBrandName = "";
+      this.form.serviseName = "";
+      this.form.orderDescription = "";
+      this.form.VehicleRegistrationNumber = "";
+    },
+    getSelectedBrand(id) {
+      console.log(id);
+
+      this.$store
+        .dispatch("getVehicleModel", { params: { id: id } })
+        .then(res => {
+          var vendorsData = JSON.parse(JSON.stringify(res.data));
+          this.vehicleModelNames = vendorsData.map(function(i) {
+            return {
+              text: i["vehicleModelName"],
+              value: i["vehicleModelID"]
+            };
+          });
+        });
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
+form {
+  padding: 15px;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  outline: 0;
+}
+textarea #orderDescription{
+    overflow-y: auto;
+}
+@media screen and (max-width: 600px) {
+  .form-group {
+    margin-bottom: 0.3rem;
+  }
 
-    form {
-        padding: 15px;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #999;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 6px;
-        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-        box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-        outline: 0;
-    }
-
-    @media screen and (max-width: 600px) {
-        .form-group {
-            margin-bottom: 0.3rem;
-        }
-
-        label {
-            margin-bottom: 0.2rem;
-        }
-
-        .btn.btn-success {
-            float: right;
-        }
-    }
+  label {
+    margin-bottom: 0.2rem;
+  }
+}
+.btn.btn-success[data-v-44a775b7] {
+  float: right;
+  margin-top: 10px;
+}
 </style>
