@@ -81,7 +81,7 @@
       </div>
 
     </b-modal>
-    <p>{{ $t('message.hello', { msg: 'hello' }) }}</p>
+    
   </div>
 </template>
 
@@ -90,30 +90,6 @@ import { Datetime } from "vue-datetime";
 import { Settings } from "luxon";
 
 Settings.defaultLocale = "uk";
-const messages = {
-  en: {
-    message: {
-      hello: '{msg} world'
-    }
-  },
-
-  uk:{
-    message:{
-      hello:'{msg} світ'
-    }
-  }
-}
-// Create VueI18n instance with options
-const i18n = new VueI18n({
-  locale: 'uk', // set locale
-  messages, // set locale messages
-})
-
-
-// Create a Vue instance with `i18n` option
-new Vue({ i18n }).$mount('#app')
-
-// Now the app has started!
 export default {
   data() {
     return {
