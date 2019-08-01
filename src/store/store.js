@@ -10,12 +10,13 @@ const posts = new Vapi({
         posts: []
     }
 })
+
     .post({
         action: "getVendor",
         property: "vendor",
         path: ({ id }) => `/Catalogue/GetVendor?vendorID=${id}`
     })
-    .get({
+    .post({
         action: "getVehicleModel",
         property: "vendorModels",
         path: ({ id }) => `/Catalogue/GetVehicleModel?vehicleBrandID=${id}`
@@ -24,6 +25,20 @@ const posts = new Vapi({
         action: "getWorkPlace",
         property: "workPlaces",
         path: ({ id }) => `/Catalogue/GetWorkPlace?workPlaceID=${id}`
+    })
+    .post({
+        action: "setShortOrder",
+        property: "shortOrder",
+        path: ({ workShopID,
+            customerFullName,
+            customerPhoneNumber,
+            serviceID,
+            orderDescription,
+            vehicleModelID,
+            vehicleBrandID }) =>
+            `/Order/SetShortOrder?workShopID=${workShopID}&customerFullName=${customerFullName}
+                &customerPhoneNumber=${customerPhoneNumber}&serviceID=${serviceID}&orderDescription=${orderDescription}
+                &vehicleModelID=${vehicleModelID}&vehicleBrandID=${vehicleBrandID}`
     })
     .getStore()
 
