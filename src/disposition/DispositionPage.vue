@@ -36,6 +36,16 @@
                           backgroundColor:'#42b983',
                         },
                         {
+                          id: '1',
+                          resourceId: 'a',
+                          title: 'Mazda 3 BP455AM',
+                          date: '2019-07-29 12:10:00',
+                          end: '2019-07-29 18:00:00',
+                          textColor:'white',
+                          class:'ready',
+                          backgroundColor:'#42b983',
+                        },
+                        {
                           id: '2',
                           resourceId: 'b',
                           title: 'Mazda 2 BP455AM',
@@ -197,6 +207,10 @@ export default {
   padding: 0.3em 1em;
   height: 2.2em;
   font-size: 1.2em;
+}
+.fc-highlight {
+    background: #038eaa;
+    opacity: .3;
 }
 .fc-center {
   display: flex;

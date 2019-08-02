@@ -3,7 +3,7 @@ import { requestOptions, handleResponse } from '@/_helpers';
 
 export const orderService = {
     getOrders,
-    setOrder
+    setShortOrder
 };
 
 function getOrders(from, to, workShopID, shortOrder) {
@@ -14,8 +14,8 @@ function getOrders(from, to, workShopID, shortOrder) {
 };
 
 
-function setOrder(workShopID, customerFullName, customerPhoneNumber, itemCategoryID, orderDescription, vehicleModelID, vendorID) {
-    return fetch('http://garage.eso.local/api/order/setOrder', requestOptions.post({
+function setShortOrder(workShopID, customerFullName, customerPhoneNumber, itemCategoryID, orderDescription, vehicleModelID, vendorID) {
+    return fetch('http://garage.eso.local/api/order/setShortOrder', requestOptions.post({
             workShopID, customerFullName, customerPhoneNumber, itemCategoryID, orderDescription, vehicleModelID, vendorID
         }))
         .then(handleResponse)

@@ -121,7 +121,7 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       this.$store
-        .dispatch("setOrder", {
+        .dispatch("setShortOrder", {
           params: {
             workShopID: 1,
             customerFullName: this.form.CustomerFullName,
