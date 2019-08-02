@@ -46,11 +46,11 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="itemCategoryID" label="Послуга:" label-for="itemCategoryID">
+        <b-form-group id="itemCategory" label="Послуга:" label-for="itemCategory">
           <b-form-select
-            id="itemCategoryID"
-            v-model="form.itemCategoryID"
-            :options="itemCategoryIDs"
+            id="itemCategory"
+            v-model="form.itemCategory"
+            :options="itemCategorys"
             required
           ></b-form-select>
         </b-form-group>
@@ -87,10 +87,18 @@ export default {
           text: i["vendorName"],
           value: i["vendorID"]
         };
+        });
+      });
+      this.$store.dispatch("getItem", { params: { id: 0 } }).then(res => {
+      var vendorsData = JSON.parse(JSON.stringify(res.data));
+      this.itemCategorys = vendorsData.map(function(i) {
+        return {
+          text: i["itemName"],
+          value: i["itemID"]
+        };
       });
     });
   },
-  
   data() {
     return {
       form: {
@@ -99,14 +107,13 @@ export default {
         vehicleModelName: "",
         VehicleRegistrationNumber: "",
         vendorName: "",
-        itemCategoryID: "",
         orderDescription: ""
       },
 
       vehicleModelNames: [],
       show: true,
       vendorNames: [],
-      itemCategoryIDs: [],
+      itemCategorys: []
     };
   },
 
@@ -122,7 +129,9 @@ export default {
             serviceID: 1,
             orderDescription: this.form.orderDescription,
             vehicleModelID: this.form.vehicleModelName,
+            itemID: this.form.itemCategory,
             vendorID: this.form.vendorName
+
           }
         })
         .then(response => {

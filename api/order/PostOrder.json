@@ -32,7 +32,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workPlaceTypeName": "Подемник",
       "workShopID": 1,
       "workShopName": "СТО1",
-      "serviceID": 2,
+      "itemCategoryID": 2,
       "itemCategoryID": "Замена масла"
     },
     {
@@ -65,7 +65,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workPlaceTypeName": "Подемник",
       "workShopID": 1,
       "workShopName": "СТО1",
-      "serviceID": 3,
+      "itemCategoryID": 3,
       "itemCategoryID": "Замена фильтра"
     },
     {
@@ -98,7 +98,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workPlaceTypeName": "Спец. стенд",
       "workShopID": 1,
       "workShopName": "СТО1",
-      "serviceID": 4,
+      "itemCategoryID": 4,
       "itemCategoryID": "Сервис 1"
     }
   ]

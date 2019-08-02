@@ -32,12 +32,12 @@ const posts = new Vapi({
         path: ({ workShopID,
             customerFullName,
             customerPhoneNumber,
-            serviceID,
+            itemID,
             orderDescription,
             vehicleModelID,
             vendorID }) =>
-            `/Order/SetShortOrder?workShopID=${workShopID}&customerFullName=${customerFullName}
-                &customerPhoneNumber=${customerPhoneNumber}&serviceID=${serviceID}&orderDescription=${orderDescription}
+            `/Order/SetOrder?workShopID=${workShopID}&customerFullName=${customerFullName}
+                &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}&orderDescription=${orderDescription}
                 &vehicleModelID=${vehicleModelID}&vendorID=${vendorID}`
     })
     .post({
