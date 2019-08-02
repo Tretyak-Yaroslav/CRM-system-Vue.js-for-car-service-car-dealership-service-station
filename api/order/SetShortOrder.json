@@ -1,7 +1,7 @@
-http://garage.eso.local/api/Order/SetShortOrder?workShopID=1&customerFullName=addfvfv&customerPhoneNumber=51561561561&itemCategoryID=1&orderDescription=gdgd&vehicleModelID=1&vendorID=1
+http://garage.eso.local/api/Order/setOrder?workShopID=1&customerFullName=addfvfv&customerPhoneNumber=51561561561&itemCategoryID=1&orderDescription=gdgd&vehicleModelID=1&vendorID=1
 
 	
 Response body
 59
 
-curl -X POST "http://garage.eso.local/api/Order/SetShortOrder?workShopID=1&customerFullName=addfvfv&customerPhoneNumber=51561561561&itemCategoryID=1&orderDescription=gdgd&vehicleModelID=1&vendorID=1" -H "accept: text/plain"
+curl -X POST "http://garage.eso.local/api/Order/setOrder?workShopID=1&customerFullName=addfvfv&customerPhoneNumber=51561561561&itemCategoryID=1&orderDescription=gdgd&vehicleModelID=1&vendorID=1" -H "accept: text/plain"

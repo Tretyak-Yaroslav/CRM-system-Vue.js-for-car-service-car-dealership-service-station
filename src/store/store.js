@@ -27,7 +27,7 @@ const posts = new Vapi({
         path: ({ id }) => `/Catalogue/GetWorkPlace?workPlaceID=${id}`
     })
     .post({
-        action: "setShortOrder",
+        action: "setOrder",
         property: "shortOrder",
         path: ({ workShopID,
             customerFullName,
