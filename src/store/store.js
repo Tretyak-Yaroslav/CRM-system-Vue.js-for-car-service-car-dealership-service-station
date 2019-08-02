@@ -19,7 +19,7 @@ const posts = new Vapi({
     .post({
         action: "getVehicleModel",
         property: "vendorModels",
-        path: ({ id }) => `/Catalogue/GetVehicleModel?vehicleBrandID=${id}`
+        path: ({ id }) => `/Catalogue/GetVehicleModel?vendorID=${id}`
     })
     .post({
         action: "getWorkPlace",
@@ -35,10 +35,15 @@ const posts = new Vapi({
             serviceID,
             orderDescription,
             vehicleModelID,
-            vehicleBrandID }) =>
+            vendorID }) =>
             `/Order/SetShortOrder?workShopID=${workShopID}&customerFullName=${customerFullName}
                 &customerPhoneNumber=${customerPhoneNumber}&serviceID=${serviceID}&orderDescription=${orderDescription}
-                &vehicleModelID=${vehicleModelID}&vehicleBrandID=${vehicleBrandID}`
+                &vehicleModelID=${vehicleModelID}&vendorID=${vendorID}`
+    })
+    .post({
+        action: "getItem",
+        property: "itemCategory",
+        path: ({ id }) => `/Catalogue/GetItem?itemCategoryID=${id}`
     })
     .getStore()
 

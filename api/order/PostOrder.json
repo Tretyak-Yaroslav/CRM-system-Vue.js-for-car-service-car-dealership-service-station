@@ -21,8 +21,8 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "vehicleVinNumber": "dsfs4534345fds",
       "vehicleModelID": 0,
       "vehicleModelName": null,
-      "vehicleBrandID": 0,
-      "vehicleBrandName": null,
+      "vendorID": 0,
+      "vendorName": null,
       "customerID": 1,
       "customerFullName": "ФИО Клиента",
       "customerPhoneNumber": "380974567123",
@@ -33,7 +33,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workShopID": 1,
       "workShopName": "СТО1",
       "serviceID": 2,
-      "serviseName": "Замена масла"
+      "itemCategoryID": "Замена масла"
     },
     {
       "orderID": 8,
@@ -54,8 +54,8 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "vehicleVinNumber": "sfs345kjkj45kjk",
       "vehicleModelID": 0,
       "vehicleModelName": null,
-      "vehicleBrandID": 0,
-      "vehicleBrandName": null,
+      "vendorID": 0,
+      "vendorName": null,
       "customerID": 2,
       "customerFullName": "ФИО Клиента1",
       "customerPhoneNumber": "380945090423",
@@ -66,7 +66,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workShopID": 1,
       "workShopName": "СТО1",
       "serviceID": 3,
-      "serviseName": "Замена фильтра"
+      "itemCategoryID": "Замена фильтра"
     },
     {
       "orderID": 10,
@@ -87,8 +87,8 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "vehicleVinNumber": "dsf8989sdf989",
       "vehicleModelID": 0,
       "vehicleModelName": null,
-      "vehicleBrandID": 0,
-      "vehicleBrandName": null,
+      "vendorID": 0,
+      "vendorName": null,
       "customerID": 3,
       "customerFullName": "ФИО Клиента2",
       "customerPhoneNumber": "123123123213",
@@ -99,7 +99,7 @@ http://garage.eso.local/api/Order/PostOrder?from=2019-05-22&to=2020-05-23&workSh
       "workShopID": 1,
       "workShopName": "СТО1",
       "serviceID": 4,
-      "serviseName": "Сервис 1"
+      "itemCategoryID": "Сервис 1"
     }
   ]
 

@@ -1,5 +1,5 @@
 Request URL
-http://garage.eso.local/api/Catalogue/GetVehicleModel?vehicleBrandID=1
+http://garage.eso.local/api/Catalogue/GetVehicleModel?vendorID=1
 
 	
 Response body
@@ -8,11 +8,11 @@ Response body
     {
       "vehicleModelID": 1,
       "vehicleModelName": "X5",
-      "vehicleBrandID": 1,
-      "vehicleBrandName": "BMV"
+      "vendorID": 1,
+      "vendorName": "BMV"
     }
   ]
 
 
 
-  curl -X POST "http://garage.eso.local/api/Catalogue/GetVehicleModel?vehicleBrandID=1" -H "accept: text/plain" 
+  curl -X POST "http://garage.eso.local/api/Catalogue/GetVehicleModel?vendorID=1" -H "accept: text/plain" 

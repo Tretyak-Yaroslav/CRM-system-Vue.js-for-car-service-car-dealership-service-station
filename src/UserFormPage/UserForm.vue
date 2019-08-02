@@ -20,11 +20,11 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="vehicleBrandName" label="Марка:" label-for="vehicleBrandName">
+        <b-form-group id="vendorName" label="Марка:" label-for="vendorName">
           <b-form-select
-            id="vehicleBrandName"
-            v-model="form.vehicleBrandName"
-            :options="vehicleBrandNames"
+            id="vendorName"
+            v-model="form.vendorName"
+            :options="vendorNames"
             v-on:change="getSelectedBrand"
             required
           ></b-form-select>
@@ -46,11 +46,11 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="serviseName" label="Послуга:" label-for="serviseName">
+        <b-form-group id="itemCategoryID" label="Послуга:" label-for="itemCategoryID">
           <b-form-select
-            id="serviseName"
-            v-model="form.serviseName"
-            :options="serviseName"
+            id="itemCategoryID"
+            v-model="form.itemCategoryID"
+            :options="itemCategoryIDs"
             required
           ></b-form-select>
         </b-form-group>
@@ -82,14 +82,15 @@ export default {
   created() {
     this.$store.dispatch("getVendor", { params: { id: 0 } }).then(res => {
       var vendorsData = JSON.parse(JSON.stringify(res.data));
-      this.vehicleBrandNames = vendorsData.map(function(i) {
+      this.vendorNames = vendorsData.map(function(i) {
         return {
-          text: i["vehicleBrandName"],
-          value: i["vehicleBrandID"]
+          text: i["vendorName"],
+          value: i["vendorID"]
         };
       });
     });
   },
+  
   data() {
     return {
       form: {
@@ -97,28 +98,15 @@ export default {
         CustomerFullName: "",
         vehicleModelName: "",
         VehicleRegistrationNumber: "",
-        vehicleBrandName: "",
-        serviseName: "",
+        vendorName: "",
+        itemCategoryID: "",
         orderDescription: ""
       },
 
       vehicleModelNames: [],
       show: true,
-      vehicleBrandNames: [],
-      serviseName: [
-        { text: "", value: null },
-        "Замена прокладки ГБЦ ",
-        "Ремонт стартера",
-        "Чистка дроссельной заслонки",
-        "Замена сальников",
-        "Замена стартера",
-        "Чистка впускного коллектора",
-        "Замена термомуфты",
-        "Замена помпы ",
-        "Диагностика бензинового двигателя",
-        "Промывка топливной системы",
-        "Замена подушки двигателя"
-      ]
+      vendorNames: [],
+      itemCategoryIDs: [],
     };
   },
 
@@ -134,7 +122,7 @@ export default {
             serviceID: 1,
             orderDescription: this.form.orderDescription,
             vehicleModelID: this.form.vehicleModelName,
-            vehicleBrandID: this.form.vehicleBrandName
+            vendorID: this.form.vendorName
           }
         })
         .then(response => {
@@ -161,8 +149,8 @@ export default {
       this.form.CustomerPhoneNumber = "";
       this.form.vehicleModelName = "";
       this.form.vehicleRegistrationNumber = "";
-      this.form.vehicleBrandName = "";
-      this.form.serviseName = "";
+      this.form.vendorName = "";
+      this.form.itemCategoryID = "";
       this.form.orderDescription = "";
       this.form.VehicleRegistrationNumber = "";
     },

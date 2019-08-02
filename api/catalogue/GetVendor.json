@@ -4,8 +4,8 @@ http://garage.eso.local/api/Catalogue/GetVendor?vendorID=1
 
 [
     {
-      "vehicleBrandID": 1,
-      "vehicleBrandName": "BMV"
+      "vendorID": 1,
+      "vendorName": "BMV"
     }
   ]
 

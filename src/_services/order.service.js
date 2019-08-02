@@ -14,9 +14,9 @@ function getOrders(from, to, workShopID, shortOrder) {
 };
 
 
-function setShortOrder(workShopID, customerFullName, customerPhoneNumber, serviceID, orderDescription, vehicleModelID, vehicleBrandID) {
+function setShortOrder(workShopID, customerFullName, customerPhoneNumber, serviceID, orderDescription, vehicleModelID, vendorID) {
     return fetch('http://garage.eso.local/api/order/setShortOrder', requestOptions.post({
-            workShopID, customerFullName, customerPhoneNumber, serviceID, orderDescription, vehicleModelID, vehicleBrandID
+            workShopID, customerFullName, customerPhoneNumber, serviceID, orderDescription, vehicleModelID, vendorID
         }))
         .then(handleResponse)
         .then(response => {
