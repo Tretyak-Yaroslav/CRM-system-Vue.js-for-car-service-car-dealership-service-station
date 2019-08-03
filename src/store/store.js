@@ -45,6 +45,12 @@ const posts = new Vapi({
         property: "itemCategory",
         path: ({ id }) => `/Catalogue/GetItem?itemCategoryID=${id}`
     })
+    .get({
+        action:"getOrder",
+        property:"getOrdertable",
+        path:({from , to, workShopID, orderStatusID, notShortOrder}) =>`/Order/GetOrder?from=${from}&to=${to}&workShopID=
+    ${workShopID}&orderStatusID=${orderStatusID}
+    &notShortOrder=${notShortOrder}`})
     .getStore()
 
 export const store = new Vuex.Store(posts)

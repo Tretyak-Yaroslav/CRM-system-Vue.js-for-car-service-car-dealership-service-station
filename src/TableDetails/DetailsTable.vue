@@ -49,12 +49,10 @@
         slot="employeeCreateOrderID"
         slot-scope="row"
       >{{ row.value.employeeCreateFirstName }} {{ row.value.employeeCreateLastName }}</template>
+
       <template slot="isActive" slot-scope="row">{{ row.value ? 'Yes :)' : 'No :(' }}</template>
 
       <template slot="actions" slot-scope="row">
-        <!-- <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
-          Info modal
-        </b-button>-->
         <b-button
           size="sm"
           @click="row.toggleDetails">
@@ -64,7 +62,7 @@
       <template slot="row-details" slot-scope="row">
         <b-card>
           <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{ }} {{ }}</li>
+            <li v-for="(value, key) in row.item" :key="key">{{changeName(key)}} {{value }}</li>
           </ul>
         </b-card>
       </template>
@@ -92,6 +90,34 @@
 
 <script>
 export default {
+  created(){
+    this.$store.dispatch("getOrder",{params:{
+      from:"2019-07-20",
+      to:"2019-08-03",
+      workShopID:1,
+      orderStatusID: 1,
+      notShortOrder: 0,
+    }}).then(res =>{
+      var orders = JSON.parse(JSON.stringify(res.data));
+      console.log(orders);
+      this.items=orders.map(function(i){
+        return{
+          orderID:i["orderID"],
+          startTime:i["createDate"],
+          customerPhoneNumber: i["customerPhoneNumber"],
+          employeeCreateOrderID:{
+            employeeCreateLastName: i["employeeCreateLastName"],
+            employeeCreateFirstName: i["employeeCreateFirstName"]
+          },
+          employeeID: {
+            employeeFirstName: i["employeeFirstName"],
+            employeeLastName: i["employeeLastName"]
+          },
+          vehicleModelName:i["vehicleModelName"]
+        }
+      })
+    })
+  },
   data() {
     return {
       items: [
@@ -103,7 +129,11 @@ export default {
             employeeCreateLastName: "",
             employeeCreateFirstName: ""
           },
-          employeeID: { employeeFirstName: "", employeeLastName: "" }
+          employeeID: { 
+            employeeFirstName: "", 
+            employeeLastName: "" 
+          },
+          vehicleModelName:""
         }
       ],
       fields: [
@@ -132,7 +162,7 @@ export default {
           sortDirection: "desc"
         },
         {
-          key: "employeeID ",
+          key: "employeeID",
           label: "Механік",
           sortable: true,
           sortDirection: "desc"
@@ -181,6 +211,13 @@ export default {
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    changeName(name){
+      console.log(name);
+      if(name === "orderID") {
+        return "Номер замовлення:";
+      }
+      return "blala";
     }
   }
 };
