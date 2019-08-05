@@ -93,7 +93,7 @@ export default {
   created(){
     this.$store.dispatch("getOrder",{params:{
       from:"2019-07-20",
-      to:"2019-08-03",
+      to:"2019-08-05",
       workShopID:1,
       orderStatusID: 1,
       notShortOrder: 0,
@@ -104,6 +104,7 @@ export default {
         return{
           orderID:i["orderID"],
           startTime:i["createDate"],
+            orderStatusName: i["orderStatusName"],
           customerPhoneNumber: i["customerPhoneNumber"],
           employeeCreateOrderID:{
             employeeCreateLastName: i["employeeCreateLastName"],
@@ -113,7 +114,11 @@ export default {
             employeeFirstName: i["employeeFirstName"],
             employeeLastName: i["employeeLastName"]
           },
-          vehicleModelName:i["vehicleModelName"]
+          vendorName:i["vendorName"],
+          vehicleModelName:i["vehicleModelName"],
+          vehicleRegistrationNumber:i["vehicleRegistrationNumber"],
+          itemName:i["itemName"],
+          orderDescription:i["orderDescription"],
         }
       })
     })
@@ -124,6 +129,7 @@ export default {
         {
           orderID: "",
           startTime: "",
+          orderStatusName:"",
           customerPhoneNumber: "",
           employeeCreateOrderID: {
             employeeCreateLastName: "",
@@ -133,8 +139,13 @@ export default {
             employeeFirstName: "", 
             employeeLastName: "" 
           },
-          vehicleModelName:""
-        }
+          vendorName:"",
+          vehicleModelName:"",
+          vehicleRegistrationNumber:"",
+          itemName:"",
+          orderDescription: ""
+
+          }
       ],
       fields: [
         {
@@ -213,14 +224,40 @@ export default {
       this.currentPage = 1;
     },
     changeName(name){
-      console.log(name);
+     
       if(name === "orderID") {
         return "Номер замовлення:";
       };
       if (name=="startTime"){
-        return "Час створення замовлення"
+        return "Час створення замовлення :"
+      };
+      if (name=="customerPhoneNumber"){
+        return "Номер телефону :"
+      };
+      if (name=="employeeCreateOrderID"){
+        return "Майстер-приймальник :"
+      };
+      if (name=="employeeID"){
+        return "Механік:"
+      };
+      if (name =="vehicleModelName"){
+        return "Модель :"
+      };
+      if (name=="orderDescription"){
+         return "Коментар :"
+      };
+      if (name=="orderStatusName"){
+        return "Статус заявки :"
       }
-      return "blala";
+      if (name=="vehicleRegistrationNumber"){
+        return "Номер автомобіля :"
+      }
+     if(name=="vendorName"){
+       return "Марка :"
+     }
+     if(name=="itemName"){
+       return "Послуга :"
+     }
     }
   }
 };
@@ -243,5 +280,8 @@ export default {
  overflow: scroll;
   min-width: 443px;
 }
+}
+li:last-child{
+display: none;
 }
 </style>
