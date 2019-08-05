@@ -40,6 +40,20 @@ const posts = new Vapi({
                 &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}&orderDescription=${orderDescription}
                 &vehicleModelID=${vehicleModelID}&vendorID=${vendorID}`
     })
+    //output of masters
+    .post({
+        action:"GetEmployees ",
+        property:"employees ",
+        path:({workShopID,employeePostID  }) =>`/Catalogue/GetEmployees?workShopID=${workShopID}&employeePostID=${employeePostID}`
+    })
+   /*  .post({
+        action:"GetWorkPlace",
+        property:"workplace",
+        path:({
+            workShopeID
+        }) =>
+        `/Catalogue/GetWorkPlace?workShopeID=${workShopeID}`
+    }) */
     .post({
         action: "getItem",
         property: "itemCategory",

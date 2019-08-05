@@ -79,7 +79,13 @@
           <datetime type="datetime" v-model="datetimeto" format="yyyy-MM-dd HH:mm:ss"></datetime>
         </div>
       </div>
-
+      
+      <b-form-textarea
+        id="textarea-default"
+        size="lg"
+        placeholder="Коментар"
+      ></b-form-textarea>
+    
     </b-modal>
   </div>
 </template>
@@ -140,6 +146,7 @@ export default {
 .datatime {
   width: 49%;
   padding: 0 15px;
+  margin-bottom: 15px;
 }
 input.vdatetime-input {
   padding: 5px 10px;

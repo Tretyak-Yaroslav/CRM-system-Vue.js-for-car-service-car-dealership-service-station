@@ -40,6 +40,8 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       @filtered="onFiltered"
+      striped
+          pagination
     >
       <template
         slot="employeeID"
@@ -92,8 +94,8 @@
 export default {
   created(){
     this.$store.dispatch("getOrder",{params:{
-      from:"2019-07-20",
-      to:"2019-08-05",
+      from:"2019-08-02",
+      to:"2019-08-08",
       workShopID:1,
       orderStatusID: 1,
       notShortOrder: 0,
@@ -157,8 +159,8 @@ export default {
         {
           key: "startTime",
           label: "Час запису",
-          sortable: true,
-          sortDirection: "desc"
+          sortable: false,
+         /*  sortDirection: "desc" */
         },
         {
           key: "customerPhoneNumber",
@@ -227,25 +229,25 @@ export default {
      
       if(name === "orderID") {
         return "Номер замовлення:";
-      };
+      }
       if (name=="startTime"){
         return "Час створення замовлення :"
-      };
+      }
       if (name=="customerPhoneNumber"){
         return "Номер телефону :"
-      };
+      }
       if (name=="employeeCreateOrderID"){
         return "Майстер-приймальник :"
-      };
+      }
       if (name=="employeeID"){
         return "Механік:"
-      };
+      }
       if (name =="vehicleModelName"){
         return "Модель :"
-      };
+      }
       if (name=="orderDescription"){
          return "Коментар :"
-      };
+      }
       if (name=="orderStatusName"){
         return "Статус заявки :"
       }
@@ -265,7 +267,7 @@ export default {
  <style lang="scss" scoped>
 @media screen and (max-width: 600px){
 .table{
-  font-size: 0.7em;
+  font-size: 0.9em;
 }
 .btn-sm, .btn-group-sm > .btn {
     padding: 0.25rem 0.2rem;

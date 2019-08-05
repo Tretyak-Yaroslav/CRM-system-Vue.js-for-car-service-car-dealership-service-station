@@ -96,7 +96,6 @@ import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import interactionPlugin from '@fullcalendar/interaction'; 
 import timeGridPlugin from '@fullcalendar/timegrid' 
-import { METHODS } from 'http';
 
 export default {
   components: {
