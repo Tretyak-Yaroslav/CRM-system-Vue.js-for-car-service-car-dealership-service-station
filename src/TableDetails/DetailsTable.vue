@@ -216,6 +216,9 @@ export default {
       console.log(name);
       if(name === "orderID") {
         return "Номер замовлення:";
+      };
+      if (name=="startTime"){
+        return "Час створення замовлення"
       }
       return "blala";
     }
