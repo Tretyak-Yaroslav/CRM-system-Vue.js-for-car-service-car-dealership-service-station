@@ -28,7 +28,7 @@
     </b-row>
 
     <!-- Main table element -->
-    <b-table 
+    <b-table
       show-empty
       stacked="md"
       :items="items"
@@ -40,7 +40,6 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       @filtered="onFiltered"
-      
     >
       <template
         slot="employeeID"
@@ -56,8 +55,8 @@
       <template slot="actions" slot-scope="row">
         <b-button
           size="sm"
-          @click="row.toggleDetails">
-          {{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
+          @click="row.toggleDetails"
+        >{{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
       </template>
 
       <template slot="row-details" slot-scope="row">
@@ -67,7 +66,6 @@
           </ul>
         </b-card>
       </template>
-
     </b-table>
 
     <b-row>
@@ -91,38 +89,50 @@
 
 <script>
 export default {
-  created(){
-    this.$store.dispatch("getOrder",{params:{
-      from:"2019-08-02",
-      to:"2019-08-08",
-      workShopID:1,
-      orderStatusID: 1,
-      notShortOrder: 0,
-    }}).then(res =>{
-      var orders = JSON.parse(JSON.stringify(res.data));
-      console.log(orders);
-      this.items=orders.map(function(i){
-        return{
-          orderID:i["orderID"],
-          startTime:i["createDate"],
-            orderStatusName: i["orderStatusName"],
-          customerPhoneNumber: i["customerPhoneNumber"],
-          employeeCreateOrderID:{
-            employeeCreateLastName: i["employeeCreateLastName"],
-            employeeCreateFirstName: i["employeeCreateFirstName"]
-          },
-          employeeID: {
-            employeeFirstName: i["employeeFirstName"],
-            employeeLastName: i["employeeLastName"]
-          },
-          vendorName:i["vendorName"],
-          vehicleModelName:i["vehicleModelName"],
-          vehicleRegistrationNumber:i["vehicleRegistrationNumber"],
-          itemName:i["itemName"],
-          orderDescription:i["orderDescription"],
+  created() {
+    var date1 = new Date();
+    date1.setDate(date1.getDate() -3);
+
+    var date2 = new Date();
+    date2.setDate(date2.getDate() + 3);
+
+    console.log('Date1: ' + date1.toISOString().slice(0,10));
+    console.log('Date2: ' + date2.toISOString().slice(0,10));
+    this.$store
+      .dispatch("getOrder", {
+        params: {
+          from: date1.toISOString().slice(0,10),
+          to: date2.toISOString().slice(0,10),
+          workShopID: 1,
+          orderStatusID: 1,
+          notShortOrder: 0
         }
       })
-    })
+      .then(res => {
+        var orders = JSON.parse(JSON.stringify(res.data));
+        console.log(orders);
+        this.items = orders.map(function(i) {
+          return {
+            orderID: i["orderID"],
+            startTime: i["createDate"],
+            orderStatusName: i["orderStatusName"],
+            customerPhoneNumber: i["customerPhoneNumber"],
+            employeeCreateOrderID: {
+              employeeCreateLastName: i["employeeCreateLastName"],
+              employeeCreateFirstName: i["employeeCreateFirstName"]
+            },
+            employeeID: {
+              employeeFirstName: i["employeeFirstName"],
+              employeeLastName: i["employeeLastName"]
+            },
+            vendorName: i["vendorName"],
+            vehicleModelName: i["vehicleModelName"],
+            vehicleRegistrationNumber: i["vehicleRegistrationNumber"],
+            itemName: i["itemName"],
+            orderDescription: i["orderDescription"]
+          };
+        });
+      });
   },
   data() {
     return {
@@ -130,23 +140,22 @@ export default {
         {
           orderID: "",
           startTime: "",
-          orderStatusName:"",
+          orderStatusName: "",
           customerPhoneNumber: "",
           employeeCreateOrderID: {
             employeeCreateLastName: "",
             employeeCreateFirstName: ""
           },
-          employeeID: { 
-            employeeFirstName: "", 
-            employeeLastName: "" 
+          employeeID: {
+            employeeFirstName: "",
+            employeeLastName: ""
           },
-          vendorName:"",
-          vehicleModelName:"",
-          vehicleRegistrationNumber:"",
-          itemName:"",
+          vendorName: "",
+          vehicleModelName: "",
+          vehicleRegistrationNumber: "",
+          itemName: "",
           orderDescription: ""
-
-          }
+        }
       ],
       fields: [
         {
@@ -158,8 +167,8 @@ export default {
         {
           key: "startTime",
           label: "Час запису",
-          sortable: false,
-         /*  sortDirection: "desc" */
+          sortable: false
+          /*  sortDirection: "desc" */
         },
         {
           key: "customerPhoneNumber",
@@ -224,65 +233,69 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
-    changeName(name){
-     
-      if(name === "orderID") {
+    changeName(name) {
+      if (name === "orderID") {
         return "Номер замовлення:";
       }
-      if (name=="startTime"){
-        return "Час створення замовлення :"
+      if (name == "startTime") {
+        return "Час створення замовлення :";
       }
-      if (name=="customerPhoneNumber"){
-        return "Номер телефону :"
+      if (name == "customerPhoneNumber") {
+        return "Номер телефону :";
       }
-      if (name=="employeeCreateOrderID"){
-        return "Майстер-приймальник :"
+      if (name == "employeeCreateOrderID") {
+        return "Майстер-приймальник :";
       }
-      if (name=="employeeID"){
-        return "Механік:"
+      if (name == "employeeID") {
+        return "Механік:";
       }
-      if (name =="vehicleModelName"){
-        return "Модель :"
+      if (name == "vehicleModelName") {
+        return "Модель :";
       }
-      if (name=="orderDescription"){
-         return "Коментар :"
+      if (name == "orderDescription") {
+        return "Коментар :";
       }
-      if (name=="orderStatusName"){
-        return "Статус заявки :"
+      if (name == "orderStatusName") {
+        return "Статус заявки :";
       }
-      if (name=="vehicleRegistrationNumber"){
-        return "Номер автомобіля :"
+      if (name == "vehicleRegistrationNumber") {
+        return "Номер автомобіля :";
       }
-     if(name=="vendorName"){
-       return "Марка :"
-     }
-     if(name=="itemName"){
-       return "Послуга :"
-     }
-    }
+      if (name == "vendorName") {
+        return "Марка :";
+      }
+      if (name == "itemName") {
+        return "Послуга :";
+      }
+    },
+     addDays(days) {
+        var result = new Date();
+        result.setDate(result.getDate() + days);
+        return result;
+      }
   }
 };
 </script>
  <style lang="scss" scoped>
-@media screen and (max-width: 600px){
-.table{
-  font-size: 0.9em;
-}
-.btn-sm, .btn-group-sm > .btn {
+@media screen and (max-width: 600px) {
+  .table {
+    font-size: 0.9em;
+  }
+  .btn-sm,
+  .btn-group-sm > .btn {
     padding: 0.25rem 0.2rem;
     font-size: 0.875rem;
-    
-}
-.table th {
+  }
+  .table th {
     text-align: center;
     padding: 0.5rem !important;
+  }
+  .table.b-table.b-table-stacked-md {
+    overflow: scroll;
+    min-width: 443px;
+  }
 }
-.table.b-table.b-table-stacked-md{
- overflow: scroll;
-  min-width: 443px;
-}
-}
-li:last-child{
-display: none;
+li:last-child {
+  display: none;
 }
 </style>
