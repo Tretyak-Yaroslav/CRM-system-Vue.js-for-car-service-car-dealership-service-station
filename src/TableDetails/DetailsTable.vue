@@ -28,7 +28,7 @@
     </b-row>
 
     <!-- Main table element -->
-    <b-table style="overflow: auto;"
+    <b-table 
       show-empty
       stacked="md"
       :items="items"
@@ -40,8 +40,7 @@
       :sort-desc.sync="sortDesc"
       :sort-direction="sortDirection"
       @filtered="onFiltered"
-      striped
-          pagination
+      
     >
       <template
         slot="employeeID"

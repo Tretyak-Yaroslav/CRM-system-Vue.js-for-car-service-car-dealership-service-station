@@ -42,9 +42,9 @@ const posts = new Vapi({
     })
     //output of masters
     .post({
-        action:"GetEmployees ",
+        action:"getEmployees ",
         property:"employees ",
-        path:({workShopID,employeePostID  }) =>`/Catalogue/GetEmployees?workShopID=${workShopID}&employeePostID=${employeePostID}`
+        path:({ workShopID , employeePostID}) =>`/Catalogue/GetEmployees?workShopID=${workShopID}&employeePostID=${employeePostID}`
     })
    /*  .post({
         action:"GetWorkPlace",
