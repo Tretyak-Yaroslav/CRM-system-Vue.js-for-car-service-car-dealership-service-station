@@ -18,12 +18,7 @@
                         minute: '2-digit',
                         meridiem: false
                       }"
-      :resources="[
-                        {id:'a', title: 'Підйомник 1' },
-                        {id:'b', title: 'Підйомник 2' },
-                        {id:'c', title: 'Підйомник 3' },
-                        {id:'d', title: 'Підйомник 4' }
-                      ]"
+      :resources="resources"
       :events="[
                         {
                           id: '1',
@@ -98,6 +93,18 @@ import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid' 
 
 export default {
+  created() {
+      this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
+      var resourcesData = JSON.parse(JSON.stringify(res.data));
+      this.resources = resourcesData.map(function(i) {
+        return {
+          id: i["workPlaceID"],
+          title: i["workPlaceName"]
+        };
+        });
+        console.log(this.resources);
+      });
+  },
   components: {
     FullCalendar
   },
@@ -110,7 +117,8 @@ export default {
       selectable: true,
        calendarEvents: [ // initial event data
         { title: 'Event Now', start: new Date() }
-      ]
+      ],
+      resources:[]
     };
   },
   methods:{
