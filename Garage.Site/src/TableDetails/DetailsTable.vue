@@ -108,7 +108,7 @@ export default {
           from: date1.toISOString().slice(0,10),
           to: date2.toISOString().slice(0,10),
           workShopID: 1,
-          orderStatusID: 1,
+          orderStatusID: 0,
           notShortOrder: 0
         }
       })
@@ -197,8 +197,8 @@ export default {
       ],
       totalRows: 1,
       currentPage: 1,
-      perPage: 5,
-      pageOptions: [5, 10, 15],
+      perPage: 50,
+      pageOptions: [5, 10, 15, 50],
       sortBy: null,
       sortDesc: false,
       sortDirection: "asc",

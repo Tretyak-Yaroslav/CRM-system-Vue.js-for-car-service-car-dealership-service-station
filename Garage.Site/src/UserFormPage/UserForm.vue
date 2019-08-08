@@ -37,10 +37,10 @@
              required
           ></b-form-select>
         </b-form-group>
-        <b-form-group id="VehicleRegistrationNumber" label="Номер автомобіля:" label-for="number">
+        <b-form-group id="vehicleRegistrationNumber" label="Номер автомобіля:" label-for="vehicleRegistrationNumber">
           <b-form-input
-            id="VehicleRegistrationNumber"
-            v-model="form.VehicleRegistrationNumber"
+            id="vehicleRegistrationNumber"
+            v-model="form.vehicleRegistrationNumber"
             required
             placeholder="Введіть номер автомобіля"
           ></b-form-input>
@@ -105,7 +105,7 @@ export default {
         CustomerPhoneNumber: "",
         CustomerFullName: "",
         vehicleModelName: "",
-        VehicleRegistrationNumber: "",
+        vehicleRegistrationNumber: "",
         vendorName: "",
         orderDescription: ""
       },
@@ -113,7 +113,7 @@ export default {
       vehicleModelNames: [],
       show: true,
       vendorNames: [],
-      itemCategorys: []
+      itemCategorys: [],
     };
   },
 
@@ -130,10 +130,12 @@ export default {
             orderDescription: this.form.orderDescription,
             vehicleModelID: this.form.vehicleModelName,
             itemID: this.form.itemCategory,
-            vendorID: this.form.vendorName
-
+            vendorID: this.form.vendorName,
+            vehicleRegistrationNumber: this.form.vehicleRegistrationNumber
           }
+          
         })
+        
         .then(response => {
           alert(`Заявка № ${response.data} відправлена`);
         })
@@ -161,7 +163,6 @@ export default {
       this.form.vendorName = "";
       this.form.itemCategoryID = "";
       this.form.orderDescription = "";
-      this.form.VehicleRegistrationNumber = "";
     },
     getSelectedBrand(id) {
       console.log(id);

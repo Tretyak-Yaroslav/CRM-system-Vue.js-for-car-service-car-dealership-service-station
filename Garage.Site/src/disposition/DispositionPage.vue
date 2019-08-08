@@ -1,7 +1,7 @@
 <template>
   <div style="margin:0px 10px;">
     <div class="logo">
-      <img src="../../src/assets/logo_ad.png" alt="logo">
+      <img src="../../src/assets/logo_ad.png" alt="logo" />
     </div>
     <FullCalendar
       :plugins="calendarPlugins"
@@ -23,59 +23,40 @@
                       }"
       :resources="resources"
       :events="events"
-      @dateClick="handleDateClick"                
+      @dateClick="handleDateClick"
     />
 
- <b-button v-b-modal.modal-center>Open Modal</b-button>
+    <b-button v-b-modal.modal-center>Open Modal</b-button>
     <b-modal id="modal-center" ref="modal" title="Опрацювання заявки :">
       <div class="form-group">
         <label class="control-label">Статус</label>
-        <select class="form-control order-status" name="order[status]">
-          <option selected="selected" value="1">Нова</option>
-          <option value="2">Прийнята</option>
-          <option value="3">В роботі </option>
-        <option value="4">Виконана</option>
-        <option value="5">Відмова</option>
-        </select>
+        <b-form-select id="orderStatusName" v-modal="form.orderStatusName" :options="orderStatusNames"></b-form-select>
       </div>
-            <div class="form-group">
+      <div class="form-group">
         <label class="control-label">Перелік заявок:</label>
-        <select
-          name="application"
-          id="application"
-          class="form-control slot-select"
-        >
-          <option value label=""></option>
-        </select>
+        <b-form-select id="status" v-modal="form.orderstatus" :options="requestStatus"></b-form-select>
+      </div>
+      <div class="form-group">
+        <label class="control-label">Підйомник:</label>
+        <b-form-select id=" workplace" v-modal="form.workplace" :options="workplace"></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Мастер</label>
-        <b-form-select
-            id="master"
-            v-model="form.master"
-            :options="masters"
-             required
-          ></b-form-select>
+        <b-form-select id="master" v-model="form.master" :options="masters" required></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Механік</label>
-        <b-form-select
-            id="mechanic"
-            v-model="form.mechanic"
-            :options="mechanics"
-             required
-          ></b-form-select>
+        <b-form-select id="mechanic" v-model="form.mechanic" :options="mechanics" required></b-form-select>
       </div>
-      
-       <div class="form-group">
+
+      <div class="form-group">
         <label class="control-label">Послуга</label>
-        <select
-          name="service"
-          id="service"
-          class="form-control slot-select"
-        >
-          <option value label=""></option>
-        </select>
+        <b-form-select
+          id="itemCategory"
+          v-model="form.itemCategory"
+          :options="itemCategorys"
+          required
+        ></b-form-select>
       </div>
       <div class="row">
         <div class="col-6 if-available left">
@@ -104,16 +85,11 @@
         <div class="datatime">
           <label class="control-label">Закінчення роботи</label>
           <!-- v-model="datetimeto" -->
-          <datetime type="datetime"  format="yyyy-MM-dd HH:mm:ss"></datetime>
+          <datetime type="datetime" format="yyyy-MM-dd HH:mm:ss"></datetime>
         </div>
       </div>
-      
-      <b-form-textarea
-        id="textarea-default"
-        size="md"
-        placeholder="Коментар"
-      ></b-form-textarea>
-    
+
+      <b-form-textarea id="textarea-default" size="md" placeholder="Коментар"></b-form-textarea>
     </b-modal>
   </div>
 </template>
@@ -121,23 +97,69 @@
 <script charset="utf-8">
 import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import interactionPlugin from '@fullcalendar/interaction'; 
-import timeGridPlugin from '@fullcalendar/timegrid' ;
-
-
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
 
 export default {
   created() {
-      this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
-        var resourcesData = JSON.parse(JSON.stringify(res.data));
-        this.resources = resourcesData.map(function(i) {
-          return {
-            id: i["workPlaceID"],
-            title: i["workPlaceName"]
-          };});
+    this.$store.dispatch("getOrderStatus", { params: { id: 0 } }).then(res => {
+      var statusData = JSON.parse(JSON.stringify(res.data));
+      this.orderStatusNames = statusData.map(function(i) {
+        return {
+          text: i["orderStatusName"],
+          value: i["orderStatusID"]
+        };
+        });
       });
+    var date1 = new Date();
+    date1.setDate(date1.getDate() - 3);
 
-      this.$store.dispatch("getEmployees", { params: { workShopID : 1, employeePostID : 1 } }).then(res => {
+    var date2 = new Date();
+    date2.setDate(date2.getDate() + 3);
+
+    this.$store
+      .dispatch("postOrder", {
+        params: {
+          from: date1.toISOString().slice(0, 10),
+          to: date2.toISOString().slice(0, 10),
+          workShopID: 1,
+          orderStatusID: 0, 
+          notShortOrder: 0
+        }
+      })
+      .then(res => {
+        var statusData = JSON.parse(JSON.stringify(res.data));
+        /*   console.log(status); */
+        this.requestStatus = statusData.map(function(i) {
+          return {
+            text: i["orderID"],
+            value: i["orderStatusID"]
+          };
+        });
+      });
+    this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
+      var resourcesData = JSON.parse(JSON.stringify(res.data));
+      this.resources = resourcesData.map(function(i) {
+        return {
+          id: i["workPlaceID"],
+          title: i["workPlaceName"]
+        };
+      });
+    });
+    this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
+      var workplaceData = JSON.parse(JSON.stringify(res.data));
+      this.workplace = workplaceData.map(function(i) {
+        return {
+          value: i["workPlaceID"],
+          text: i["workPlaceName"]
+        };
+      });
+    });
+    this.$store
+      .dispatch("getEmployees", {
+        params: { workShopID: 1, employeePostID: 1 }
+      })
+      .then(res => {
         var vendorsData = JSON.parse(JSON.stringify(res.data));
         this.masters = vendorsData.map(function(i) {
           return {
@@ -147,88 +169,119 @@ export default {
         });
       });
 
-      this.$store.dispatch("getEmployees",{params:{ workShopID : 1, employeePostID : 2 }})
-        .then(res =>{
-          var mechanicData =JSON.parse(JSON.stringify(res.data));
-          console.log(mechanicData);
-          this.mechanics = mechanicData.map(function(i){
-            return{
-              text: i["employeeFirstName"] + i["employeeLastName"],
-              value: i["employeeID"]
-            }
+    this.$store
+      .dispatch("getEmployees", {
+        params: { workShopID: 1, employeePostID: 2 }
+      })
+      .then(res => {
+        var mechanicData = JSON.parse(JSON.stringify(res.data));
+        this.mechanics = mechanicData.map(function(i) {
+          return {
+            text: i["employeeFirstName"] + i["employeeLastName"],
+            value: i["employeeID"]
+          };
         });
       });
-      // this.$store.dispatch("getOrder", {params:{
-      //   from: "2019-08-01", 
-      //   to: "2019-08-09", 
-      //   workShopID: 1, 
-      //   orderStatusID: 0, 
-      //   notShortOrder:0
-      // }}).then(res=>{
-      //   var eventsData = JSON.parse(JSON.stringify(res.data));
-      //   console.log(eventsData);
-      //   this.events = eventsData.map(function(i){
-      //       return{
-      //         id: i["orderID"],
-      //         resourceId: i["workPlaceID"],
-      //         title: i["vendorName"],
-      //         date: '2019-08-07 08:00:00',
-      //         end: '2019-08-07 18:00:00',
-      //         textColor:'white',
-      //         class:'in_work',
-      //         backgroundColor:'rgb(88, 218, 156) '
-      //       }
-      //   });
-      // });
-                          
+    this.$store.dispatch("getItem", { params: { id: 0 } }).then(res => {
+      var vendorsData = JSON.parse(JSON.stringify(res.data));
+      this.itemCategorys = vendorsData.map(function(i) {
+        return {
+          text: i["itemName"],
+          value: i["itemID"]
+        };
+      });
+    });
+    // this.$store.dispatch("getOrder", {params:{
+    //   from: "2019-08-01",
+    //   to: "2019-08-09",
+    //   workShopID: 1,
+    //   orderStatusID: 0,
+    //   notShortOrder:0
+    // }}).then(res=>{
+    //   var eventsData = JSON.parse(JSON.stringify(res.data));
+    //   console.log(eventsData);
+    //   this.events = eventsData.map(function(i){
+    //       return{
+    //         id: i["orderID"],
+    //         resourceId: i["workPlaceID"],
+    //         title: i["vendorName"],
+    //         date: '2019-08-07 08:00:00',
+    //         end: '2019-08-07 18:00:00',
+    //         textColor:'white',
+    //         class:'in_work',
+    //         backgroundColor:'rgb(88, 218, 156) '
+    //       }
+    //   });
+    // });
   },
   components: {
     FullCalendar
   },
-  
+
   data() {
     return {
-      form:{
-        master:"",
-        mechanic:"",
-        employes:""
+      orderstatus: {
+        workShopID: "",
+        orderStatusID: "",
+        notShortOrder: ""
+      },
+      form: {
+        master: "",
+        mechanic: "",
+        employes: "",
+        status: "",
+        orderstatus: "",
+        orderStatusName:""
       },
       calendarPlugins: [
         resourceTimelinePlugin,
-        timeGridPlugin,  
-        interactionPlugin 
+        timeGridPlugin,
+        interactionPlugin
       ],
       selectable: true,
-      calendarEvents: [
-        { title: 'Event Now', start: new Date() }
-      ],
-      resources:[],
-      employes:[],
+      calendarEvents: [{ title: "Event Now", start: new Date() }],
+      resources: [],
+      workplace: [],
+      employes: [],
+      orderStatusNames:[],
       masters: [],
-      mechanics:[],
-      events:[]
+      mechanics: [],
+      requestStatus: [],
+      events: [],
+      itemCategorys: []
     };
   },
- 
-  methods:{
-     toggleWeekends() {
-      this.calendarWeekends = !this.calendarWeekends // update a property
+
+  methods: {
+   /*  onSubmit(evt) {
+      evt.preventDefault();
+      this.$store.dispatch("setOrder", {
+        params: {
+          workShopID: 1,
+          orderStatusID: this.form.orderstatus
+        }
+      });
+    }, */
+    toggleWeekends() {
+      this.calendarWeekends = !this.calendarWeekends; // update a property
     },
     gotoPast() {
-      let calendarApi = this.$refs.fullCalendar.getApi() // from the ref="..."
-      calendarApi.gotoDate('2000-01-01') // call a method on the Calendar object
+      let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
+      calendarApi.gotoDate("2000-01-01"); // call a method on the Calendar object
     },
+
     handleDateClick(arg) {
-      if (confirm('Would you like to add an event to ' + arg.dateStr + ' ?')) {
-        this.calendarEvents.push({ // add new event data
-          title: 'New Event',
-          start: arg.date,
+      if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
+        this.calendarEvents.push({
+          // add new event data
+          title: "New Event",
+          start: arg.date
           /* allDay: arg.allDay */
-        })
+        });
       }
-}
-}
-}
+    }
+  }
+};
 </script>
 
 <style lang='scss'>
@@ -305,8 +358,8 @@ export default {
   font-size: 1.2em;
 }
 .fc-highlight {
-    background: #038eaa;
-    opacity: .3;
+  background: #038eaa;
+  opacity: 0.3;
 }
 .fc-center {
   display: flex;
@@ -338,24 +391,23 @@ export default {
 .fc-button-primary:focus {
   box-shadow: none;
 }
-.logo{
-display: flex;
-justify-content: flex-end;
-height: 80px;
+.logo {
+  display: flex;
+  justify-content: flex-end;
+  height: 80px;
 }
-@media screen and (max-width: 600px){
-  .fc-toolbar.fc-header-toolbar{
-    
+@media screen and (max-width: 600px) {
+  .fc-toolbar.fc-header-toolbar {
     padding: 0;
   }
-body .fc {
-    font-size: .7em;
-}
-.fc-toolbar.fc-header-toolbar {
+  body .fc {
+    font-size: 0.7em;
+  }
+  .fc-toolbar.fc-header-toolbar {
     height: 60px;
-}
-.fc-toolbar > * > :not(:first-child) {
+  }
+  .fc-toolbar > * > :not(:first-child) {
     margin-left: 1em;
-}
+  }
 }
 </style>

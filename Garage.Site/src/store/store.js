@@ -12,11 +12,6 @@ const posts = new Vapi({
 })
 
     .post({
-        action: "getVendor",
-        property: "vendor",
-        path: ({ id }) => `/Catalogue/GetVendor?vendorID=${id}`
-    })
-    .post({
         action: "getVehicleModel",
         property: "vendorModels",
         path: ({ id }) => `/Catalogue/GetVehicleModel?vendorID=${id}`
@@ -35,6 +30,13 @@ const posts = new Vapi({
                                             
     })
     .post({
+        action: "postOrder",
+        property: "shortorder",
+        path: ({ from, to, workShopID, orderStatusID, notShortOrder }) => `Order/PostOrder?from=${from}&to=${to}&workShopID=
+        ${workShopID}&orderStatusID=${orderStatusID}&notShortOrder=${notShortOrder}`
+                                            
+    })
+    .post({
         action: "setShortOrder",
         property: "shortOrder",
         path: ({ workShopID,
@@ -43,12 +45,22 @@ const posts = new Vapi({
             itemID,
             orderDescription,
             vehicleModelID,
-            vendorID }) =>
+            vendorID,
+            vehicleRegistrationNumber }) =>
             `/Order/SetShortOrder?workShopID=${workShopID}&customerFullName=${customerFullName}
                 &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}&orderDescription=${orderDescription}
-                &vehicleModelID=${vehicleModelID}&vendorID=${vendorID}`
+                &vehicleModelID=${vehicleModelID}&vendorID=${vendorID}&vehicleRegistrationNumber=${vehicleRegistrationNumber}`
     })
-   
+    .post({
+        action: "getOrderStatus",
+        property: "requestStatus",
+        path: ({ id }) => `/Catalogue/GetOrderStatus?OrderStatusID=${id}`
+    })
+    .post({
+        action: "getVendor",
+        property: "vendor",
+        path: ({ id }) => `/Catalogue/GetVendor?vendorID=${id}`
+    })
     .post({
         action: "getItem",
         property: "itemCategory",
