@@ -29,4 +29,12 @@ namespace Garage.Data.Entities
         public DateTime EmployeeLastLogined { get; set; }
         public DateTime EmployeeCreatedDate { get; set; }
     }
+
+    public class Role
+    {
+        public int RoleID { get; set; }
+        public int RoleGroupID { get; set; }
+        public string RoleName { get; set; }
+
+    }
 }

@@ -23,14 +23,14 @@ namespace Garage.API.Controllers
         {
             UserService = userService;
         }
-        private ClaimsIdentity GetIdentity(EmployeeUser user)
+        private ClaimsIdentity GetIdentity(EmployeeUser user, IEnumerable<string> Role)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.EmployeeLogin),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType,"role"),
                 new Claim("WorkShopID", user.WorkShopID.ToString())
             };
+            claims.AddRange(Role.Select(x => new Claim(ClaimsIdentity.DefaultRoleClaimType, x)));
             var claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
             return claimsIdentity;
@@ -59,7 +59,10 @@ namespace Garage.API.Controllers
                     msg = "Your account is locked! Contact your manager.";
                     return BadRequest(msg);
                 }
-                var identity = GetIdentity(user);
+
+                var role = await UserService.GetRoleOneFildList(user.EmployeeID);
+
+                var identity = GetIdentity(user, role);
 
                 var now = DateTime.UtcNow;
                 // создаем JWT-токен
@@ -79,7 +82,8 @@ namespace Garage.API.Controllers
                     userName = identity.Name,
                     workShopID = user.WorkShopID,
                     employeeFirstName = user.EmployeeFirstName,
-                    employeeLastName =user.EmployeeLastName
+                    employeeLastName =user.EmployeeLastName,
+                    role
                 };
                 // сериализация ответа
 

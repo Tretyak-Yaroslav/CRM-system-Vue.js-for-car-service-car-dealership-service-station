@@ -70,8 +70,35 @@ const posts = new Vapi({
         action:"getOrder",
         property:"getOrdertable",
         path:({from , to, workShopID, orderStatusID, notShortOrder}) =>`/Order/GetOrder?from=${from}&to=${to}&workShopID=
-    ${workShopID}&orderStatusID=${orderStatusID}
-    &notShortOrder=${notShortOrder}`})
+            ${workShopID}&orderStatusID=${orderStatusID}
+            &notShortOrder=${notShortOrder}`})
+    
+    .post({
+        action: "setOrder",
+        property: "setOrder",
+        path: ({ orderID,
+            workShopID,
+            customerFullName,
+            customerPhoneNumber,
+            itemID,
+            orderDescription,
+            vehicleModelID,
+            vehicleModificationID,
+            vehicleRegistrationNumber,
+            employeeID,
+            employeeCreateOrderID,
+            workPlaceID,
+            startTime,
+            endTime,
+            orderStatusID }) => `/Order/SetOrder?orderID=${orderID}
+        &workShopID=${workShopID}&customerFullName=${customerFullName}
+        &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}
+        &orderDescription=${orderDescription}&vehicleModelID=${vehicleModelID}
+        &vehicleModificationID=${vehicleModificationID}&vehicleRegistrationNumber=${vehicleRegistrationNumber}
+        &employeeID=${employeeID}&employeeCreateOrderID=${employeeCreateOrderID}
+        &workPlaceID=${workPlaceID}&startTime=${startTime}&endTime=${endTime}
+        &orderStatusID=${orderStatusID}`
+    })
     .getStore()
 
 export const store = new Vuex.Store(posts)

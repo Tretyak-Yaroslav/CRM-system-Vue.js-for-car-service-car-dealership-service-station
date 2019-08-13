@@ -27,26 +27,49 @@
     />
 
     <b-button v-b-modal.modal-center>Open Modal</b-button>
-    <b-modal id="modal-center" ref="modal" title="Опрацювання заявки :">
+    <b-modal id="modal-center" ref="modal"  title="Опрацювання заявки :">
       <div class="form-group">
         <label class="control-label">Статус</label>
-        <b-form-select id="orderStatusName" v-modal="form.orderStatusName" :options="orderStatusNames"></b-form-select>
+        <b-form-select
+          id="orderStatusName"
+          v-modal="form.orderStatusName"
+          :options="orderStatusNames"
+          v-on:change="changeOrderStatusName"
+        ></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Перелік заявок:</label>
-        <b-form-select id="status" v-modal="form.orderstatus" :options="requestStatus"></b-form-select>
+        <b-form-select
+          id="status"
+          v-modal="form.orderstatus"
+          :options="requestStatus"
+          v-on:change="changeOrder"
+        ></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Підйомник:</label>
-        <b-form-select id=" workplace" v-modal="form.workplace" :options="workplace"></b-form-select>
+        <b-form-select
+        id="workplace" 
+        v-modal="form.workplace" 
+        :options="workplaces"
+        v-on:change="changeWorkPlace">
+        </b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Мастер</label>
-        <b-form-select id="master" v-model="form.master" :options="masters" required></b-form-select>
+        <b-form-select id="master" 
+        v-model="form.master" 
+        :options="masters" 
+        required>
+        </b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Механік</label>
-        <b-form-select id="mechanic" v-model="form.mechanic" :options="mechanics" required></b-form-select>
+        <b-form-select id="mechanic" 
+        v-model="form.mechanic" 
+        :options="mechanics" 
+        required>
+        </b-form-select>
       </div>
 
       <div class="form-group">
@@ -62,34 +85,42 @@
         <div class="col-6 if-available left">
           <div class="form-group">
             <label class="control-label">Ім'я:</label>
-            <input
-              placeholder="Введіть ім'я"
-              class="form-control"
-              type="text"
-              name="name"
-              id="CustomerFullName"
-            />
+            <b-form-input 
+              id ="customerFullName"
+              v-model="form.customerFullName"
+            ></b-form-input>
           </div>
         </div>
         <div class="col-6 if-available right">
           <div class="form-group">
             <label class="control-label">Телефон</label>
-            <input type="tel" class="form-control" name="phone" id placeholder="+380960547444" />
+            <b-form-input
+            id="customerPhoneNumber"
+            v-model="form.customerPhoneNumber"
+            ></b-form-input>
           </div>
         </div>
         <div class="datatime">
           <label class="control-label">Початок роботи</label>
           <!-- <datetime type="datetime" v-model="datetimefrom" format="yyyy-MM-dd HH:mm:ss"></datetime> -->
-          <datetime type="datetime" format="yyyy-MM-dd HH:mm:ss"></datetime>
+          <datetime type="datetime" v-model="form.startTime" format="yyyy-MM-dd HH:mm:ss"></datetime>
         </div>
         <div class="datatime">
           <label class="control-label">Закінчення роботи</label>
           <!-- v-model="datetimeto" -->
-          <datetime type="datetime" format="yyyy-MM-dd HH:mm:ss"></datetime>
+          <datetime type="datetime" v-model="form.endTime" format="yyyy-MM-dd HH:mm:ss"></datetime>
         </div>
       </div>
 
-      <b-form-textarea id="textarea-default" size="md" placeholder="Коментар"></b-form-textarea>
+      <b-form-textarea
+       id="orderDescription" 
+       v-model="form.orderDescription"
+       placeholder="Коментар">
+       </b-form-textarea>
+
+       <b-button class="mt-3" variant="outline-danger" block @click="saveOrder">Save</b-button>
+      <!-- <b-button class="mt-2" variant="outline-warning" block @click="toggleModal">Toggle Me</b-button> -->
+
     </b-modal>
   </div>
 </template>
@@ -99,6 +130,7 @@ import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
+
 
 export default {
   created() {
@@ -111,32 +143,8 @@ export default {
         };
         });
       });
-    var date1 = new Date();
-    date1.setDate(date1.getDate() - 3);
+    //this.updateOrderListByOrderType(0);
 
-    var date2 = new Date();
-    date2.setDate(date2.getDate() + 3);
-
-    this.$store
-      .dispatch("postOrder", {
-        params: {
-          from: date1.toISOString().slice(0, 10),
-          to: date2.toISOString().slice(0, 10),
-          workShopID: 1,
-          orderStatusID: 0, 
-          notShortOrder: 0
-        }
-      })
-      .then(res => {
-        var statusData = JSON.parse(JSON.stringify(res.data));
-        /*   console.log(status); */
-        this.requestStatus = statusData.map(function(i) {
-          return {
-            text: i["orderID"],
-            value: i["orderStatusID"]
-          };
-        });
-      });
     this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
       var resourcesData = JSON.parse(JSON.stringify(res.data));
       this.resources = resourcesData.map(function(i) {
@@ -148,12 +156,13 @@ export default {
     });
     this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
       var workplaceData = JSON.parse(JSON.stringify(res.data));
-      this.workplace = workplaceData.map(function(i) {
+      this.workplaces = workplaceData.map(function(i) {
         return {
           value: i["workPlaceID"],
           text: i["workPlaceName"]
         };
       });
+      console.log(this.workplaces);
     });
     this.$store
       .dispatch("getEmployees", {
@@ -191,28 +200,29 @@ export default {
         };
       });
     });
-    // this.$store.dispatch("getOrder", {params:{
-    //   from: "2019-08-01",
-    //   to: "2019-08-09",
-    //   workShopID: 1,
-    //   orderStatusID: 0,
-    //   notShortOrder:0
-    // }}).then(res=>{
-    //   var eventsData = JSON.parse(JSON.stringify(res.data));
-    //   console.log(eventsData);
-    //   this.events = eventsData.map(function(i){
-    //       return{
-    //         id: i["orderID"],
-    //         resourceId: i["workPlaceID"],
-    //         title: i["vendorName"],
-    //         date: '2019-08-07 08:00:00',
-    //         end: '2019-08-07 18:00:00',
-    //         textColor:'white',
-    //         class:'in_work',
-    //         backgroundColor:'rgb(88, 218, 156) '
-    //       }
-    //   });
-    // });
+    
+    this.$store.dispatch("getOrder", {params:{
+      from: "2019-08-01",
+      to: "2019-12-30",
+      workShopID: 1,
+      orderStatusID: 0,
+      notShortOrder:0
+    }}).then(res=>{
+      var eventsData = JSON.parse(JSON.stringify(res.data));
+      console.log(eventsData);
+      this.events = eventsData.map(function(i){
+          return{
+            id: i["orderID"],
+            resourceId: i["workPlaceID"],
+            title: i["vendorName"],
+            date: i["startTime"],
+            end: i["endTime"],
+            textColor:'white',
+            class:'in_work',
+            backgroundColor: i["calendarPluginsCode"]
+          }
+      });
+    });
   },
   components: {
     FullCalendar
@@ -231,7 +241,14 @@ export default {
         employes: "",
         status: "",
         orderstatus: "",
-        orderStatusName:""
+        orderStatusName:"",
+        itemCategory:"",
+        customerFullName:"",
+        customerPhoneNumber:"",
+        orderDescription:"",
+        workplace:"",
+        startTime:"",
+        endTime: ""
       },
       calendarPlugins: [
         resourceTimelinePlugin,
@@ -241,18 +258,105 @@ export default {
       selectable: true,
       calendarEvents: [{ title: "Event Now", start: new Date() }],
       resources: [],
-      workplace: [],
+      workplaces: [],
       employes: [],
       orderStatusNames:[],
       masters: [],
       mechanics: [],
       requestStatus: [],
       events: [],
-      itemCategorys: []
+      itemCategorys: [],
+      orders: [],
+      currentOrder:""
     };
   },
-
+  
   methods: {
+    changeOrderStatusName(id){
+      this.form.orderStatusName = id;
+      console.log(id);
+      this.updateOrderListByOrderType(id);
+    },
+    updateOrderListByOrderType(id){
+      var date1 = new Date();
+      date1.setDate(date1.getDate() - 30);
+
+      var date2 = new Date();
+      date2.setDate(date2.getDate() + 3);
+
+      this.$store
+      .dispatch("postOrder", {
+        params: {
+          from: date1.toISOString().slice(0, 10),
+          to: date2.toISOString().slice(0, 10),
+          workShopID: 1,
+          orderStatusID: id, 
+          notShortOrder: 0
+        }
+      })
+      .then(res => {
+        var statusData = JSON.parse(JSON.stringify(res.data));
+        this.orders = statusData;
+        this.requestStatus = statusData.map(function(i) {
+          return {
+            text: i["orderID"],
+            value: i["orderID"]
+          };
+        });
+      });
+    },
+    changeOrder(id){
+      console.log(id)
+      for(var i=0; i< this.orders.length; i++){
+        if(this.orders[i].orderID == id){
+          this.currentOrder = this.orders[i];
+          this.form.itemCategory = this.orders[i].itemID;
+          this.form.customerFullName  = this.orders[i].customerFullName;
+          this.form.customerPhoneNumber = this.orders[i].customerPhoneNumber;
+          this.form.orderDescription = this.orders[i].orderDescription;
+          this.form.workplace = this.orders[i].workPlaceID;     
+          this.form.master = this.orders[i].employeeID;   
+       }
+      }
+      // var order = this.orders.filter(i=>i.orderID == id);
+      // console.log(order);
+    },
+    changeWorkPlace(id){
+      console.log(id);
+    },
+    saveOrder(){
+      console.log('saved');
+      var orderId = this.form.orderstatus;
+      var vehicleModelID = this.currentOrder.vehicleModelID;
+      if(!vehicleModelID){
+        vehicleModelID =1;
+      }
+      var vehicleModificationID =this.currentOrder.vehicleModificationID;
+      if(!vehicleModificationID){
+        vehicleModificationID =1;
+      }
+
+      this.$store.dispatch("setOrder", {params:{
+        orderID: this.currentOrder.orderID,
+        workShopID: 1,
+        customerFullName: this.form.customerFullName,
+        customerPhoneNumber: this.form.customerPhoneNumber,
+        itemID: this.form.itemCategory,
+        orderDescription: this.form.orderDescription,
+        vehicleModelID: vehicleModelID,
+        vehicleModificationID :vehicleModificationID,
+        vehicleRegistrationNumber: this.currentOrder.vehicleRegistrationNumber,
+        employeeID: this.currentOrder.employeeID,
+        employeeCreateOrderID: this.currentOrder.employeeCreateOrderID,
+        workPlaceID:this.form.workplace,
+        startTime: this.form.startTime,
+        endTime: this.form.endTime,
+        orderStatusID:this.form.orderStatusName
+      }})
+      .then(res=>{
+        this.$bvModal.hide("modal-center");
+      })
+    },
    /*  onSubmit(evt) {
       evt.preventDefault();
       this.$store.dispatch("setOrder", {
@@ -271,17 +375,27 @@ export default {
     },
 
     handleDateClick(arg) {
-      if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
-        this.calendarEvents.push({
-          // add new event data
-          title: "New Event",
-          start: arg.date
-          /* allDay: arg.allDay */
-        });
-      }
+      this.form.startTime = arg.dateStr;
+      console.log(arg.dateStr);
+      var d1 = new Date(this.form.startTime),
+      endTime = new Date(d1);
+      endTime.setMinutes(d1.getMinutes() + 30);
+      this.form.endTime = endTime.toISOString();
+      console.log(this.form.endTime);
+      this.$bvModal.show("modal-center");
+      // if (confirm(" " + arg.dateStr + " ?")) {
+      //   this.calendarEvents.push({
+      
+      //     title: "New Event",
+      //     start: arg.date
+         
+      //   });
+      // }
     }
   }
 };
+
+
 </script>
 
 <style lang='scss'>

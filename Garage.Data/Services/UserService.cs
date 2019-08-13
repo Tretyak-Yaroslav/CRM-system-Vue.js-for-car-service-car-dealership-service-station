@@ -12,6 +12,7 @@ namespace Garage.Data.Services
     public interface IUserService
     {
         Task<EmployeeUser> GetEmployeeUserList(int workShopID, string employeeLogin, string employeePwd);
+        Task<IEnumerable<string>> GetRoleOneFildList(int employeeID);
     }
 
     public class UserService : IUserService
@@ -31,7 +32,15 @@ namespace Garage.Data.Services
                 }
             }
         }
- 
+        public async Task<IEnumerable<string>> GetRoleOneFildList(int employeeID)
+        {
+            {
+                using (IDbConnection db = new SqlConnection(connStr))
+                {
+                    return await db.QueryAsync<string>("spGetRoleOneFild", new { employeeID }, commandType: CommandType.StoredProcedure);
+                }
+            }
+        }
     }
 
 }

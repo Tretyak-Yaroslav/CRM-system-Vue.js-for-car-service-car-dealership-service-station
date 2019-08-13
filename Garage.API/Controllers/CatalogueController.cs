@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Garage.API.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CatalogueController : ControllerBase
@@ -82,6 +84,18 @@ namespace Garage.API.Controllers
             try
             {
                 return Ok(await СatalogueService.GetEmployees(workShopID,employeePostID));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> GetOrderStatus(int OrderStatusID)
+        {
+            try
+            {
+                return Ok(await СatalogueService.GetOrderStatusList(OrderStatusID));
             }
             catch (Exception e)
             {

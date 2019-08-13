@@ -115,12 +115,13 @@ namespace Garage.API
         {
             public const string ISSUER = "Garage"; // издатель токена
             public static string AUDIENCE => "address site"; // потребитель токена
-            private const string KEY = "B377G16AB7A9811E";   // ключ для шифрации 
+            private const string KEY = "FAF609C68BCD4B61";   // ключ для шифрации 
             public const int LIFETIME = 4 * 60; // время жизни токена (в минутах)
             public static SymmetricSecurityKey GetSymmetricSecurityKey()
             {
                 return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
             }
         }
+
     }
 }

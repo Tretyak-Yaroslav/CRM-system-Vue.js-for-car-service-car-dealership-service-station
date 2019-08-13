@@ -2,6 +2,7 @@ CREATE TABLE [dbo].[Order]
 (
 [OrderID] [int] NOT NULL IDENTITY(1, 1),
 [VehicleID] [int] NOT NULL,
+[WorkShopID] [int] NULL,
 [StartTime] [datetime] NULL,
 [EndTime] [datetime] NULL,
 [CreateDate] [datetime] NULL,
@@ -17,4 +18,6 @@ GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [fk_OrderStatus] FOREIGN KEY ([OrderStatusID]) REFERENCES [dbo].[OrderStatus] ([OrderStatusID])
 GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [fk_OrderVehicle] FOREIGN KEY ([VehicleID]) REFERENCES [dbo].[Vehicle] ([VehicleID])
+GO
+ALTER TABLE [dbo].[Order] ADD CONSTRAINT [fk_OrderWorkShop] FOREIGN KEY ([WorkShopID]) REFERENCES [dbo].[WorkShop] ([WorkShopID])
 GO

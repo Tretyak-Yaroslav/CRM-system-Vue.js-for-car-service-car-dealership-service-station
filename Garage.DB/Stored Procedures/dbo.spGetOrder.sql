@@ -29,13 +29,14 @@ BEGIN
 								LEFT JOIN dbo.CustomerVehicleBind cvb ON cvb.VehicleID = v.VehicleID
 								LEFT JOIN dbo.Customer c ON c.CustomerID = cvb.CustumerID
 								LEFT JOIN dbo.WorkPlace wp ON wp.WorkPlaceID = od.WorkPlaceID 
-								LEFT JOIN dbo.WorkShop ws ON ws.WorkShopID = wp.WorkShopID
+								LEFT JOIN dbo.WorkShop ws ON ws.WorkShopID = o.WorkShopID
 								LEFT JOIN dbo.WorkPlaceType wpt ON wpt.WorkPlaceTypeID = wp.WorkPlaceTypeID
 								LEFT JOIN dbo.Employee e ON e.EmployeeID = od.EmployeeID
 								LEFT JOIN dbo.EmployeePost ep ON ep.EmployeePostID = e.EmployeePostID
 								LEFT JOIN dbo.ItemList il ON il.ItemID = od.ItemID
 								LEFT JOIN dbo.Employee ee ON ee.EmployeeID = o.EmployeeCreateOrderID
-			WHERE CAST(o.CreateDate AS DATE) BETWEEN @from AND @to AND wp.WorkShopID =  @WorkShopID 
+			WHERE ((CAST(o.CreateDate AS DATE) BETWEEN @from AND @to AND o.StartTime IS NULL) OR CAST(o.StartTime AS DATE) BETWEEN @from AND @to)
+			AND o.WorkShopID =  @WorkShopID 
 					AND (os.OrderStatusID = @orderStatusID OR @orderStatusID = 0 )
 					 AND (os.OrderStatusID != @notShortOrder)
 END

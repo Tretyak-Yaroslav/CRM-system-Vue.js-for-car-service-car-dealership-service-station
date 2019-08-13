@@ -65,11 +65,11 @@ namespace Garage.API.Controllers
         }
         // POST api/SetShortOrder 
         [HttpPost]
-        public async Task<ActionResult> SetShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID, int vendorID)
+        public async Task<ActionResult> SetShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, string vehicleRegistrationNumber, int vehicleModelID, int vendorID)
         {
             try
             {
-                return Ok(await OrderService.CreateShortOrder(workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID));
+                return Ok(await OrderService.CreateShortOrder(workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleRegistrationNumber, vehicleModelID));
             }
             catch (Exception e)
             {
@@ -85,7 +85,8 @@ namespace Garage.API.Controllers
         {
             try
             {
-                return Ok(await OrderService.CreateShortOrder(workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID));
+                return Ok(await OrderService.SetOrder(orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID, vehicleModificationID,
+                    vehicleRegistrationNumber, employeeID, employeeCreateOrderID, workPlaceID, startTime, endTime, orderStatusID));
             }
             catch (Exception e)
             {

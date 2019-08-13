@@ -17,7 +17,7 @@ namespace Garage.Data.Servises
         Task<IEnumerable<Order>> GetOrderList(DateTime from, DateTime to, int station, int orderStatusID, int notShortOrder);
 
         Task<int> CreateShortOrder(ShortOrderModel shortOrderModel);
-        Task<int> CreateShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID);
+        Task<int> CreateShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, string vehicleRegistrationNumber, int vehicleModelID);
         Task<int> SetOrder(int orderID, int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID, int vehicleModificationID,
             string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID, DateTime startTime, DateTime endTime, int orderStatusID);
 
@@ -49,11 +49,11 @@ namespace Garage.Data.Servises
                 return await db.ExecuteScalarAsync<int>("spSetShortOrder", shortOrderModel, commandType: CommandType.StoredProcedure);
             }
         }
-        public async Task<int> CreateShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID)
+        public async Task<int> CreateShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, string vehicleRegistrationNumber, int vehicleModelID)
         {
             using (IDbConnection db = new SqlConnection(connStr))
             {
-                return await db.ExecuteScalarAsync<int>("spSetOrder", new {workShopID, customerFullName,customerPhoneNumber, itemID, orderDescription,vehicleModelID}, commandType: CommandType.StoredProcedure);
+                return await db.ExecuteScalarAsync<int>("spSetOrder", new {workShopID, customerFullName,customerPhoneNumber, itemID, orderDescription, vehicleRegistrationNumber, vehicleModelID }, commandType: CommandType.StoredProcedure);
             }
         }
 

@@ -20,6 +20,7 @@ namespace Garage.Data.Servises
         Task<IEnumerable<Vendor>> GetVendorList(int vendorID);
         Task<IEnumerable<VehicleModification>> GetVehicleModificationList(int vehicleModificationID,int vehicleModelID);
         Task<IEnumerable<ItemList>> GetItemList(int itemCategoryID);
+        Task<IEnumerable<OrderStatus>> GetOrderStatusList(int OrderStatusID);
     }
 
     public class СatalogueService : IСatalogueService
@@ -82,6 +83,15 @@ namespace Garage.Data.Servises
                 using (IDbConnection db = new SqlConnection(connStr))
                 {
                     return await db.QueryAsync<ItemList>("spGetItemList", new { itemCategoryID }, commandType: CommandType.StoredProcedure);
+                }
+            }
+        }
+        public async Task<IEnumerable<OrderStatus>> GetOrderStatusList(int OrderStatusID)
+        {
+            {
+                using (IDbConnection db = new SqlConnection(connStr))
+                {
+                    return await db.QueryAsync<OrderStatus>("spGetOrderStatus", new { OrderStatusID }, commandType: CommandType.StoredProcedure);
                 }
             }
         }
