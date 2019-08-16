@@ -2,15 +2,17 @@
 import Vue from "vue"
 import Vapi from "vuex-rest-api"
 
-Vue.use(Vuex)
+import axios from 'axios'; 
 
+Vue.use(Vuex)
+Vue.use(axios)
 const posts = new Vapi({
     baseURL: "http://garage.eso.local:80/api",
+    //baseURL: "https://localhost:44346/api",
     state: {
-        posts: []
-    }
+    posts: []
+    },
 })
-
     .post({
         action: "getVehicleModel",
         property: "vendorModels",
@@ -99,6 +101,13 @@ const posts = new Vapi({
         &workPlaceID=${workPlaceID}&startTime=${startTime}&endTime=${endTime}
         &orderStatusID=${orderStatusID}`
     })
+    .post({
+        action: "Login",
+        property: "EmployeeUser",
+        path: ({ workShopID,employeeLogin,employeePwd }) => `/Auth/Login?workShopID=${workShopID}&employeeLogin=${employeeLogin}&employeePwd=${employeePwd}`
+    })
+    
     .getStore()
+
 
 export const store = new Vuex.Store(posts)

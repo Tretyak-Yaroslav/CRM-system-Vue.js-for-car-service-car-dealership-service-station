@@ -17,8 +17,9 @@
 </template>
 <script>
 import { required } from 'vuelidate/lib/validators';
-import { router } from '@/_helpers';
-import { authenticationService } from '@/_services';
+import axios from 'axios';
+//import { router } from '@/_helpers';
+//import { authenticationService } from '@/_services';
 export default {
     data () {
         return {
@@ -35,24 +36,49 @@ export default {
       password: { required }
     },
     created () {
-        if (authenticationService.currentUserValue) {
-            return router.push('/');
+        const token = 'Bearer ' + localStorage.getItem('currentUser')
+        if (token) {
+          axios.defaults.headers.common['Authorization'] =  token
+            //return router.push('/disposition');
         }
-        this.returnUrl = this.$route.query.returnUrl || '/';
+        //this.returnUrl = this.$route.query.returnUrl || '/';
     },
     methods: {
         onSubmit () {
             this.submitted = true;
 
             this.loading = true;
-            authenticationService.login(this.username, this.password)
-                .then(
-                    user => router.push(this.returnUrl),
-                    error => {
-                        this.error = "Щось пішло не так!";
-                        this.loading = false;
-                    }
-                );
+            this.$store
+              .dispatch("Login", {
+                params: {
+                  workShopID: 1,
+                  employeeLogin: this.username,
+                  employeePwd: this.password
+                }                
+              }).then(res => {
+                if (res.status==200) {
+                    const token = res.data.token
+                    localStorage.setItem('currentUser', token);
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                    this.$router.push('/disposition')
+                    this.loading = false;
+                } else {
+                      this.loading = false;
+                      localStorage.removeItem('currentUser');
+                      delete axios.defaults.headers.common['Authorization']
+                      this.error = "Щось пішло не так!";
+                    return new error();
+                }
+              }).catch(error =>{
+                      this.loading = false;
+                      localStorage.removeItem('currentUser');
+                      this.error = "Щось пішло не так!";
+              })
+                //.then(
+                    //user => router.push(this.returnUrl),
+                    // error => {
+                    // }
+                //);
         }
     }
 }; 

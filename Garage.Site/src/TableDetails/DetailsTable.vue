@@ -1,6 +1,7 @@
+
 <template>
 
-  <b-container fluid>
+  <b-container fluid class="Detailtable" id="#Detailtable">
     <!-- User Interface controls -->
     <b-row>
       <b-col md="6" class="my-1">
@@ -93,6 +94,7 @@
 
 <script>
 export default {
+  name:'Detailtable',
   created() {
     var date1 = new Date();
     date1.setDate(date1.getDate() -3);
@@ -197,8 +199,8 @@ export default {
       ],
       totalRows: 1,
       currentPage: 1,
-      perPage: 50,
-      pageOptions: [5, 10, 15, 50],
+      perPage: 100,
+      pageOptions: [5, 10, 15, 50, 100],
       sortBy: null,
       sortDesc: false,
       sortDirection: "asc",

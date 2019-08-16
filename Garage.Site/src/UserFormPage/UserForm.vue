@@ -26,7 +26,7 @@
             v-model="form.vendorName"
             :options="vendorNames"
             v-on:change="getSelectedBrand"
-            required
+         
           ></b-form-select>
         </b-form-group>
         <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
@@ -69,9 +69,10 @@
           <b-button type="submit" variant="success">Cтворити заявку</b-button>
         </b-col>
       </b-form>
-      <b-card class="mt-3" header="Form Data Result">
-        <pre class="m-0">{{ form }}</pre>
+      <b-card class="mt-3 visibility" header="Form Data Result" >
+        <pre class="m-0"  >{{ form  }}</pre>
       </b-card>
+      <button @click="goTotable">goTotable</button>
     </b-row>
   </b-container>
 </template>
@@ -103,13 +104,13 @@ export default {
     return {
       form: {
         CustomerPhoneNumber: "",
+        CustomerPhoneNumber: "",
         CustomerFullName: "",
         vehicleModelName: "",
         vehicleRegistrationNumber: "",
         vendorName: "",
         orderDescription: ""
       },
-
       vehicleModelNames: [],
       show: true,
       vendorNames: [],
@@ -142,8 +143,12 @@ export default {
         .catch(response => {
           alert("Error: " + response.message);
         });
+  
       this.clearForm();
     },
+    goTotable() {
+    this.$router.push({name:'Detailtable'}) //navigate to the page table
+      },
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values
@@ -209,5 +214,8 @@ textarea #orderDescription{
 .btn.btn-success[data-v-44a775b7] {
   float: right;
   margin-top: 10px;
+}
+.visibility{
+  display: none;
 }
 </style>
