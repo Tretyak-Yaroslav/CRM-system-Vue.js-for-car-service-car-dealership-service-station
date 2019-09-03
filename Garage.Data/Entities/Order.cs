@@ -21,9 +21,9 @@ namespace Garage.Data.Entities
         public int VehicleID { get; set; }
         public string VehicleRegistrationNumber { get; set; }
         public string VehicleVinNumber { get; set; }
-        public int VehicleModificationID { get; set; }
-        public string TypeName { get; set; }
-        public string TypeRange { get; set; }
+        //public int VehicleModificationID { get; set; }
+        //public string TypeName { get; set; }
+        //public string TypeRange { get; set; }
         public int VehicleModelID { get; set; }
         public string VehicleModelName { get; set; }
         public string VehicleModelRange { get; set; }

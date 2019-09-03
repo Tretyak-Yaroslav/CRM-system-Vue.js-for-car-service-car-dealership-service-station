@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Garage.Data.Entities;
 using Garage.Data.Models;
 using Garage.Data.Servises;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Garage.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class OrderController : Controller
@@ -85,7 +87,7 @@ namespace Garage.API.Controllers
         {
             try
             {
-                return Ok(await OrderService.SetOrder(orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID, vehicleModificationID,
+                return Ok(await OrderService.SetOrder(orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID,
                     vehicleRegistrationNumber, employeeID, employeeCreateOrderID, workPlaceID, startTime, endTime, orderStatusID));
             }
             catch (Exception e)

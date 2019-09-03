@@ -18,13 +18,14 @@ BEGIN
 
 			SELECT o.OrderID, o.StartTime,o.EndTime,o.OrderStatusID, o.OrderDescription, o.CreateDate, os.OrderStatusName, e.EmployeeID, e.EmployeeLastName,e.EmployeeFirstName, 
 			o.EmployeeCreateOrderID, ee.EmployeeLastName AS EmployeeCreateLastName, ee.EmployeeFirstName AS EmployeeCreateFirstName, ep.EmployeePostName, 
-			v.VehicleID, v.VehicleRegistrationNumber,v.VehicleVinNumber, vmn.VehicleModificationID, vmn.TypeName, vmn.TypeRange, vm.VehicleModelID, vm.VehicleModelName, vm.VehicleModelRange, vr.VendorID,vr.VendorName,
+			v.VehicleID, v.VehicleRegistrationNumber,v.VehicleVinNumber,-- vmn.VehicleModificationID, vmn.TypeName, vmn.TypeRange,
+			vm.VehicleModelID, vm.VehicleModelName, vm.VehicleModelRange, vr.VendorID,vr.VendorName,
 			c.CustomerID,c.CustomerFullName, c.CustomerPhoneNumber, wp.WorkPlaceID, wp.WorkPlaceName, wp.CalendarPluginsCode, wpt.WorkPlaceTypeName, ws.WorkShopID, ws.WorkShopName, il.ItemID, il.ItemName
 			FROM dbo.[Order] o LEFT JOIN dbo.OrderDetail od ON od.OrderID = o.OrderID
 								LEFT JOIN dbo.OrderStatus os ON os.OrderStatusID = o.OrderStatusID
 								LEFT JOIN dbo.Vehicle v ON v.VehicleID = o.VehicleID
-								LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID = v.VehicleModificationID                               
-								LEFT JOIN dbo.VehicleModel vm ON vm.VehicleModelID = vmn.VehicleModelID
+								--LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID = v.VehicleModificationID                               
+								LEFT JOIN dbo.VehicleModel vm ON vm.VehicleModelID = v.VehicleModelID
 								LEFT JOIN dbo.Vendor vr ON vr.VendorID = vm.VendorID
 								LEFT JOIN dbo.CustomerVehicleBind cvb ON cvb.VehicleID = v.VehicleID
 								LEFT JOIN dbo.Customer c ON c.CustomerID = cvb.CustumerID

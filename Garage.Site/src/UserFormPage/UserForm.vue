@@ -1,16 +1,22 @@
 <template>
+<UserForm>
   <b-container class="bv-example-row bv-example-row-flex-cols">
     <b-row align-v="center" align-h="center">
       <b-form @submit="onSubmit" @reset="onReset" v-if="show" class="mx-auto">
-        <b-form-group id="CustomerPhoneNumber" label="Телефон:" label-for="phone">
-          <b-form-input
-            id="CustomerPhoneNumber"
-            v-model="form.CustomerPhoneNumber"
-            required
-            placeholder="+3809605478377"
-          ></b-form-input>
-        </b-form-group>
 
+      <b-form-group id="CustomerPhoneNumber" label="Телефон:" label-for="phone">
+            <masked-input
+              v-model="form.CustomerPhoneNumber"
+              id="CustomerPhoneNumber"
+              required
+              type="text"
+              name="phone"
+              class="form-control"
+              :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+              :guide="false"
+              placeholderChar="#"
+            />
+      </b-form-group>
         <b-form-group id="CustomerFullName" label="Ім'я:" label-for="name">
           <b-form-input
             id="CustomerFullName"
@@ -72,13 +78,15 @@
       <b-card class="mt-3 visibility" header="Form Data Result" >
         <pre class="m-0"  >{{ form  }}</pre>
       </b-card>
-      <button @click="goTotable">goTotable</button>
+    <!--   <button @click="goTotable">goTotable</button> -->
     </b-row>
   </b-container>
+  </UserForm>
 </template>
 
 
 <script>
+import MaskedInput from "vue-text-mask";
 export default {
   created() {
     this.$store.dispatch("getVendor", { params: { id: 0 } }).then(res => {
@@ -117,7 +125,9 @@ export default {
       itemCategorys: [],
     };
   },
-
+components: {
+    MaskedInput
+  },
   methods: {
     onSubmit(evt) {
       evt.preventDefault();
@@ -188,6 +198,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.container {
+    max-width: 550px;
+}
 form {
   padding: 15px;
   background-color: #fff;
@@ -201,6 +214,10 @@ form {
 }
 textarea #orderDescription{
     overflow-y: auto;
+}
+.btn-success {
+    float: right;
+    margin-top: 10px;
 }
 @media screen and (max-width: 600px) {
   .form-group {

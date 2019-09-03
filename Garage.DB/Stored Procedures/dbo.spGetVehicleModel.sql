@@ -15,6 +15,7 @@ AS BEGIN
     SELECT vm.VendorID, vm.VehicleModelID, vm.VehicleModelName, vm.VehicleModelRange
 	FROM dbo.VehicleModel vm
 	WHERE (vm.VendorID = @VendorID OR @VendorID = 0) AND ( vm.VehicleModelID = @VehicleModelID OR @VehicleModelID = 0)
+	ORDER BY vm.VehicleModelName ASC
 END
 
 --EXEC spGetVehicleModel 1

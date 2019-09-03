@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Garage.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CatalogueController : ControllerBase

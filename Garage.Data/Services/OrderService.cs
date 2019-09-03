@@ -18,7 +18,7 @@ namespace Garage.Data.Servises
 
         Task<int> CreateShortOrder(ShortOrderModel shortOrderModel);
         Task<int> CreateShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, string vehicleRegistrationNumber, int vehicleModelID);
-        Task<int> SetOrder(int orderID, int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID, int vehicleModificationID,
+        Task<int> SetOrder(int orderID, int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID,
             string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID, DateTime startTime, DateTime endTime, int orderStatusID);
 
 
@@ -59,7 +59,6 @@ namespace Garage.Data.Servises
 
         public async Task<int> SetOrder(int orderID, int workShopID, string customerFullName,
             string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID,
-            int vehicleModificationID,
             string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID,
             DateTime startTime, DateTime endTime, int orderStatusID)
         {
@@ -67,7 +66,7 @@ namespace Garage.Data.Servises
             {
                 return await db.ExecuteScalarAsync<int>("spSetOrder", new
                 {
-                    orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID, vehicleModificationID,
+                    orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID, 
                     vehicleRegistrationNumber, employeeID,employeeCreateOrderID, workPlaceID,startTime,endTime,orderStatusID
                 }, commandType: CommandType.StoredProcedure);
             }

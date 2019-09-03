@@ -1,6 +1,6 @@
-
 <template>
-<DetailsTable>  <b-container fluid class="Detailtable" id="Detailtable">
+
+    <b-container class="detailtable">
     <!-- User Interface controls -->
     <b-row>
       <b-col md="6" class="my-1">
@@ -11,10 +11,10 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
-
       <b-col md="6" class="my-1">
-        <b-form-group label-cols-sm="3" label="Сортувати" class="mb-0">
-          <b-input-group>
+
+          <b-form-group label-cols-sm="3" label="Сортувати" class="mb-0">
+              <b-input-group>
             <b-form-select v-model="sortBy" :options="sortOptions">
               <option slot="first" :value="null"></option>
             </b-form-select>
@@ -27,48 +27,63 @@
         </b-form-group>
       </b-col>
     </b-row>
-
     <!-- Main table element -->
     <b-table id="change"
-      show-empty
-      stacked="md"
-      :items="items"
-      :fields="fields"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :filter="filter"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      :sort-direction="sortDirection"
-      @filtered="onFiltered"
+        show-empty
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter"
+        @filtered="onFiltered"
     >
-      <template
-        slot="employeeID"
-        slot-scope="row"
-      >{{ row.value.employeeFirstName }}</template>
-      <template
-        slot="employeeCreateOrderID"
-          {{ row.item.time }}
-        slot-scope="row"
-      >{{ row.value.employeeCreateFirstName }} </template>
+            <template
+                slot="employeeID"
+                slot-scope="row"
+            >
+                {{ row.item.id }}</template>
+            <template
+                    slot="startTime"
+                    slot-scope="row"
+            >
+                 {{ row.item.time }}
+            </template>
+            <template
+                    slot="customerPhoneNumber"
+                    slot-scope="row"
+            >{{ row.item.telefone }}</template>
 
-      <template slot="isActive" slot-scope="row">{{ row.value ? 'Yes :)' : 'No :(' }}</template>
+            <template
+                    slot="employeeCreateOrderID"
+                    slot-scope="row"
+            >{{ row.item.employeeFirstName.slice(0, 17) }}</template>
+        <template
+                slot="employeeID"
+                slot-scope="row"
+        >{{ row.item.employeeCreateFirstName.slice(0, 14) }}</template>
 
-      <template slot="actions" slot-scope="row">
-        <b-button
-          size="sm"
-          @click="row.toggleDetails"
-        >{{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
+          <template slot="isActive" slot-scope="row">
+              {{ row.value ? 'Yes :)' : 'No :(' }}</template>
 
-    </template>
+          <template slot="actions" slot-scope="row">
+            <b-button
+              size="sm"
+              @click="row.toggleDetails"
+            >
+              {{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі
+          </b-button>
 
-      <template slot="row-details" slot-scope="row">
-        <b-card>
-          <ul>
-            <li v-for="(value, key) in row.item" :key="key">{{changeName(key)}} {{value }}</li>
-          </ul>
-        </b-card>
-      </template>
+          </template>
+            <template slot="row-details" slot-scope="row">
+                <b-card>
+                  <ul>
+                      <li v-for="(value, index, key) in row.item" :key="key">
+                          {{changeName(index)}} {{value}}
+                      </li>
+                  </ul>
+                </b-card>
+            </template>
     </b-table>
 
     <b-row>
@@ -82,28 +97,47 @@
       </b-col>
     </b-row>
 
+
     <!-- Info modal -->
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
       <pre>{{ infoModal.content }}</pre>
     </b-modal>
   </b-container>
-</DetailsTable>
 </template>
 
 
 <script>
 export default {
+  name:'Detailtable',
   created() {
-  /*    var infoTable = this.$store.getters.infoTable.reverse(); */
+    var items = this.$store.getters.items.reverse();
+      items
+          .map(
+              (dateFormat, index) => {
+                  let s = items[index].time;
+                  if (!(s instanceof Date)) {
+                      let orig = s;
+                      s = new Date(s);
+                      if (s == 'Invalid Date') return orig;
+                  }
+                  var dateFormat = new Intl.DateTimeFormat('us-RU', {
+                      year: 'numeric', month: 'numeric', day: 'numeric',
+                      hour: 'numeric', minute: 'numeric'
+                  }).format(s);
+                  items[index].time = dateFormat
+                return items
+              }
+          )
 
-    var date1 = new Date();
+      var date1 = new Date();
     date1.setDate(date1.getDate() -3);
 
     var date2 = new Date();
     date2.setDate(date2.getDate() + 3);
 
- /*    console.log('Date1: ' + date1.toISOString().slice(0,10));
-    console.log('Date2: ' + date2.toISOString().slice(0,10)); */
+    console.log('Date1: ' + date1.toISOString().slice(0,10));
+    console.log('Date2: ' + date2.toISOString().slice(0,10));
+
     this.$store
       .dispatch("getOrder", {
         params: {
@@ -116,10 +150,10 @@ export default {
       })
       .then(res => {
         var orders = JSON.parse(JSON.stringify(res.data));
-   /*      console.log(orders); */
+        // console.log(orders);
         this.items = orders.map(function(i) {
           return {
-            orderID: i["orderID"],
+            employeeID: i["employeeID"],
             startTime: i["createDate"],
             orderStatusName: i["orderStatusName"],
             customerPhoneNumber: i["customerPhoneNumber"],
@@ -139,33 +173,14 @@ export default {
           };
         });
       });
+
   },
   data() {
     return {
-      items: [
-        {
-          orderID: "",
-          startTime: "",
-          orderStatusName: "",
-          customerPhoneNumber: "",
-          employeeCreateOrderID: {
-            employeeCreateLastName: "",
-            employeeCreateFirstName: ""
-          },
-          employeeID: {
-            employeeFirstName: "",
-            employeeLastName: ""
-          },
-          vendorName: "",
-          vehicleModelName: "",
-          vehicleRegistrationNumber: "",
-          itemName: "",
-          orderDescription: ""
-        }
-      ],
+      items: this.items,
       fields: [
         {
-          key: "orderID",
+          key: "employeeID",
           label: "Номер",
           sortable: true,
           sortDirection: "desc"
@@ -199,7 +214,7 @@ export default {
       ],
       totalRows: 1,
       currentPage: 1,
-      perPage: 10,
+      perPage: 100,
       pageOptions: [5, 10, 15, 50, 100],
       sortBy: null,
       sortDesc: false,
@@ -209,32 +224,50 @@ export default {
         id: "info-modal",
         title: "",
         content: ""
-      }
+      },
     };
   },
   computed: {
     sortOptions() {
-      // Create an options list from our fields
-      return this.fields
+        // Create an options list from our fields
+        return this.fields
         .filter(f => f.sortable)
         .map(f => {
           return { text: f.label, value: f.key };
         });
-    }
-  },
-   sortItems() {
-			return this.items
-				.sort((a, b) => {
-					if (+a.orderID > +b.orderID) {
-						return -1;
-					}
-					if (+a.orderID < +b.orderID) {
-						return 1;
-					}
-					return 0;
-				});
     },
-  
+      items () {
+          console.log(this.$store.getters.items[0].id)
+          return this.$store.getters.items
+      },
+
+    // dateFormat() {
+    //     console.log(this.items[0].time)
+    //     const { time } = this.items
+    //     console.log('time->',time)
+    //     let s = this.items[0].time
+    //
+    //     return this.items
+    //         .map(
+    //             (dateFormat, index) => {
+    //                 s = this.items[0].time;
+    //                 if (!(s instanceof Date)) {
+    //                     let orig = s;
+    //                     s = new Date(s);
+    //                     if (s == 'Invalid Date') return orig;
+    //                 }
+    //                 var dateFormat = new Intl.DateTimeFormat('us-RU', {
+    //                     year: 'numeric', month: 'numeric', day: 'numeric',
+    //                     hour: 'numeric', minute: 'numeric'
+    //                 }).format(s);
+    //                 console.log(dateFormat)
+    //             }
+    //         )
+    //
+    //     return dateFormat
+    // }
+
+},
   mounted() {
     // Set the initial number of items
     this.totalRows = this.items.length;
@@ -254,19 +287,22 @@ export default {
       this.currentPage = 1;
     },
     changeName(name) {
-      if (name === "orderID") {
+      if (name === "id") {
         return "Номер замовлення:";
       }
-      if (name == "startTime") {
+      if (name == "time") {
         return "Час створення замовлення :";
       }
-      if (name == "customerPhoneNumber") {
+      if (name == "status") {
+        return "Статус заявки :";
+      }
+      if (name == "telefone") {
         return "Номер телефону :";
       }
-      if (name == "employeeCreateOrderID") {
+      if (name == "employeeFirstName") {
         return "Майстер-приймальник :";
       }
-      if (name == "employeeID") {
+      if (name == "employeeCreateFirstName") {
         return "Механік:";
       }
       if (name == "vehicleModelName") {
@@ -298,6 +334,9 @@ export default {
 
 </script>
  <style lang="scss" scoped>
+     .detailtable {
+         min-width: 1180px;
+     }
 @media screen and (max-width: 600px) {
   .table {
     font-size: 0.9em;

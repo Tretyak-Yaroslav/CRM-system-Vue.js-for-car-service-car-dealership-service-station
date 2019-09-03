@@ -11,13 +11,16 @@
             <input type="password" class="form-control mr-15" placeholder="Пароль" v-model="password">
             <button type="submit" class="btn btn-primary offset-md-10 mr-15">Вхід</button>
   </form>
+
     </div>
+   <!--    <button @click="goTouser">Створення заявки</button> -->
   </b-row>
   </b-container>
 </template>
 <script>
 import { required } from 'vuelidate/lib/validators';
 import axios from 'axios';
+import { store,authstore } from '../store'
 //import { router } from '@/_helpers';
 //import { authenticationService } from '@/_services';
 export default {
@@ -36,18 +39,20 @@ export default {
       password: { required }
     },
     created () {
-        const token = 'Bearer ' + localStorage.getItem('currentUser')
-        if (token) {
-          axios.defaults.headers.common['Authorization'] =  token
-            //return router.push('/disposition');
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        //this.$store.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + currentUser.token
+          return this.$router.push('/disposition');
         }
-        //this.returnUrl = this.$route.query.returnUrl || '/';
+
     },
     methods: {
         onSubmit () {
+          return new Promise ((resolve,reject) => {
             this.submitted = true;
-
             this.loading = true;
+            authstore.commit('auth_request');
             this.$store
               .dispatch("Login", {
                 params: {
@@ -57,30 +62,32 @@ export default {
                 }                
               }).then(res => {
                 if (res.status==200) {
-                    const token = res.data.token
-                    localStorage.setItem('currentUser', token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-                    this.$router.push('/disposition')
+                    localStorage.setItem('currentUser', JSON.stringify(res.data));
+                    authstore.commit('auth_success', JSON.stringify(res.data));
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.token
                     this.loading = false;
+                    this.$router.push('/disposition')
+                    resolve(res)
                 } else {
                       this.loading = false;
                       localStorage.removeItem('currentUser');
                       delete axios.defaults.headers.common['Authorization']
                       this.error = "Щось пішло не так!";
+                      authstore.commit('auth_error', error)
+                      reject(error)
                     return new error();
                 }
               }).catch(error =>{
                       this.loading = false;
+                      commit('auth_error', error)
                       localStorage.removeItem('currentUser');
                       this.error = "Щось пішло не так!";
+                      reject(error)
               })
-                //.then(
-                    //user => router.push(this.returnUrl),
-                    // error => {
-                    // }
-                //);
+          });
         }
     }
+   
 }; 
 </script>
 

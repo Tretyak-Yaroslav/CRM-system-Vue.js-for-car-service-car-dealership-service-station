@@ -9,8 +9,8 @@ GO
 -- =============================================
 
 CREATE PROCEDURE [dbo].[spSetOrder] @orderID INT=0, @workShopID INT, @customerFullName NVARCHAR(100), @customerPhoneNumber NVARCHAR(100), @itemID INT, @orderDescription NVARCHAR(1000),
-	@vehicleModelID INT, @vehicleModificationID INT = NULL, @vehicleRegistrationNumber NVARCHAR(100) = NULL, @employeeID INT = NULL, @EmployeeCreateOrderID INT = NULL,  @WorkPlaceID INT = NULL,
-	@startTime DATETIME = NULL, @endTime DATETIME = NULL, @OrderStatusID INT = NULL, @vendorID INT =NULL
+	@vehicleModelID INT, @vehicleModificationID INT = NULL, @vehicleRegistrationNumber NVARCHAR(100) = NULL, @employeeID INT = NULL, @employeeCreateOrderID INT = NULL,  @workPlaceID INT = NULL,
+	@startTime DATETIME = NULL, @endTime DATETIME = NULL, @orderStatusID INT = NULL, @vendorID INT =NULL
 AS BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
@@ -42,17 +42,17 @@ AS BEGIN
     FROM dbo.Customer c
          LEFT JOIN dbo.CustomerVehicleBind cvb ON cvb.CustumerID=c.CustomerID AND @createDate BETWEEN cvb.BindFrom AND cvb.BindTo
          LEFT JOIN dbo.Vehicle v ON v.VehicleID=cvb.VehicleID
-         LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID=v.VehicleModificationID
-    WHERE vmn.VehicleModelID=@vehicleModelID AND c.CustomerID=@customerID --AND v.VehicleRegistrationNumber = @vehicleRegistrationNumber 
+         --LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID=v.VehicleModificationID
+    WHERE v.VehicleModelID=@vehicleModelID AND c.CustomerID=@customerID AND v.VehicleRegistrationNumber = @vehicleRegistrationNumber 
     IF @vehicleID IS NULL BEGIN
-		IF @vehicleModificationID IS NULL 
-		BEGIN
-			SELECT TOP 1 @vehicleModificationID=vmn.VehicleModificationID
-			FROM dbo.VehicleModification vmn
-			WHERE vmn.VehicleModelID=@vehicleModelID;
-		END
-        INSERT INTO dbo.Vehicle(vehicleModificationID, VehicleVinNumber, VehicleRegistrationNumber, VehicleDescription)
-        VALUES(@vehicleModificationID, NULL, @vehicleRegistrationNumber, NULL);
+		--IF @vehicleModificationID IS NULL 
+		--BEGIN
+		--	SELECT TOP 1 @vehicleModificationID=vmn.VehicleModificationID
+		--	FROM dbo.VehicleModification vmn
+		--	WHERE vmn.VehicleModelID=@vehicleModelID;
+		--END
+        INSERT INTO dbo.Vehicle(VehicleModelID, VehicleVinNumber, VehicleRegistrationNumber, VehicleDescription)
+        VALUES(@VehicleModelID, NULL, @vehicleRegistrationNumber, NULL);
         SELECT @vehicleID=@@IDENTITY;
         INSERT INTO dbo.CustomerVehicleBind(CustumerID, VehicleID, BindFrom, BindTo)
         VALUES(@customerID, @vehicleID, DATEADD(DAY, -1, @createDate), DATEADD(YEAR, 25, @createDate));
@@ -61,10 +61,10 @@ AS BEGIN
 	IF @orderID = 0
 	BEGIN	
 		INSERT dbo.[Order](VehicleID, WorkShopID, StartTime, EndTime, CreateDate, OrderStatusID, EmployeeCreateOrderID, OrderDescription)
-		VALUES(@vehicleID, @WorkShopID, NULL, NULL, @createDate, 1, NULL, @orderDescription);
+		VALUES(@vehicleID, @WorkShopID, @startTime, @EndTime, @createDate, ISNULL(@orderStatusID,1), @employeeCreateOrderID, @orderDescription);
 		SELECT @orderID=@@IDENTITY;
 		INSERT INTO dbo.OrderDetail(OrderID, ItemID, UoM, Quantity, EmployeeID, WorkPlaceID)
-		VALUES(@orderID, @itemID, NULL, NULL, NULL, NULL);
+		VALUES(@orderID, @itemID, NULL, NULL, @employeeID, @workPlaceID);
 	END
 	ELSE
 	BEGIN

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Garage.Data\Garage.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

@@ -5,13 +5,68 @@ import Vapi from "vuex-rest-api"
 import axios from 'axios'; 
 
 Vue.use(Vuex)
-Vue.use(axios)
+
+export const authstore = new Vuex.Store({
+        state:{
+            status: '',
+                currentUser: JSON.parse(localStorage.getItem('currentUser'))            
+                // {
+                //     token: null,
+                //     userName: '',
+                //     workShopID: 0,
+                //     EmployeeID: 0,
+                //     employeeFirstName: '',
+                //     employeeLastName: '',
+                //     role: []
+                // }
+            },
+        mutations: {
+            auth_request(state){
+                state.status = 'loading'
+              },
+              auth_success(state, currentUser){
+                state.status = 'success'
+                state.currentUser = currentUser;
+                //state.user = user
+              },
+              auth_error(state){
+                state.status = 'error'
+              },
+              logout(state){
+                state.status = ''
+                state.currentUser = null;
+                // state.currentUser.token = null;
+                // state.currentUser.userName = '';
+                // state.currentUser.workShopID = 0;
+                // state.currentUser.EmployeeID = 0;
+                // state.currentUser.employeeFirstName = '';
+                // state.currentUser.employeeLastName = '';
+                // state.currentUser.role = [];
+              }
+        },
+        actions: {
+            logout({commit}){
+                return new Promise((resolve, reject) => {
+                  commit('logout')
+                  localStorage.removeItem('currentUser');
+                  delete axios.defaults.headers.common['Authorization']
+                  resolve()
+                })
+               }
+        },
+        getters : {
+            isLoggedIn: state => !!state.currentUser,
+            authStatus: state => state.status
+        },
+})
+
+
 const posts = new Vapi({
-    baseURL: "http://garage.eso.local:80/api",
-    //baseURL: "https://localhost:44346/api",
-    state: {
-    posts: []
-    },
+        baseURL: "http://garage.eso.local:80/api",
+        //baseURL: "https://localhost:44346/api",
+        state:{
+            posts: []
+        }
 })
     .post({
         action: "getVehicleModel",
@@ -75,6 +130,7 @@ const posts = new Vapi({
             ${workShopID}&orderStatusID=${orderStatusID}
             &notShortOrder=${notShortOrder}`})
     
+    
     .post({
         action: "setOrder",
         property: "setOrder",
@@ -106,7 +162,19 @@ const posts = new Vapi({
         property: "EmployeeUser",
         path: ({ workShopID,employeeLogin,employeePwd }) => `/Auth/Login?workShopID=${workShopID}&employeeLogin=${employeeLogin}&employeePwd=${employeePwd}`
     })
-    
+  /*   .get({
+        action:"getOrderOne",
+        property:"getOrderOne",
+        path:({from , to, workShopID, orderStatusID, notShortOrder, orderID}) =>`/Order/GetOrder?from=${from}&to=${to}&workShopID=
+            ${workShopID}&orderStatusID=${orderStatusID}
+            &notShortOrder=${notShortOrder}&orderID=${orderID}`}) */
+
+    .post({
+        action: "postOrder",
+        property: "shortorder",
+        path: ({ from, to, workShopID, orderStatusID, notShortOrder, orderID }) => `Order/PostOrder?from=${from}&to=${to}&workShopID=
+        ${workShopID}&orderStatusID=${orderStatusID}&notShortOrder=${notShortOrder} &orderID=${orderID}`                                         
+        })        
     .getStore()
 
 

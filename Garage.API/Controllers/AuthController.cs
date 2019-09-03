@@ -81,6 +81,7 @@ namespace Garage.API.Controllers
                     token = encodedJwt,
                     userName = identity.Name,
                     workShopID = user.WorkShopID,
+                    EmployeeID = user.EmployeeID,
                     employeeFirstName = user.EmployeeFirstName,
                     employeeLastName =user.EmployeeLastName,
                     role

@@ -1,15 +1,5 @@
 <template>
   <div style="margin:0px 10px;">
-    <b-container fluid>
-      <b-row>
-    <b-col class="logo " md="1">
-      <img src="../../src/assets/logo_ad.png" alt="logo" />
-    </b-col>
-    <b-col md="10" class="d-flex justify-content-center"><h2>Garage</h2></b-col>
-     
-      <b-col md="1"> <button v-on:click="logout" id="logout" class="btn btn-primary">Вихід</button></b-col>
-      </b-row>
-  </b-container>
     <FullCalendar
       :plugins="calendarPlugins"
       defaultView="resourceTimelineDay"
@@ -30,84 +20,83 @@
                         second: '2-digit',
                         meridiem: false
                       }"
-                    
       :resources="resources"
       :events="events"
-      :allDay= "false"
-    
+      :allDay="true"
+      :eventClick="true"
+      @eventClick="eventClick"
       @dateClick="handleDateClick"
-      @select="handleSelect" 
+      @select="handleSelect"
     />
-
     <b-button v-b-modal.modal-center class="visibility">Open Modal</b-button>
     <b-modal id="modal-center" ref="modal" title="Створення заявки :">
-        <!-- <b-form-group id="customerPhoneNumber" label="Телефон:" label-for="phone">
-          <b-form-input
-            id="customerPhoneNumber"
-            v-model="form.customerPhoneNumber"
-            required
-            placeholder="+3809605478377"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="customerFullName" label="Ім'я:" label-for="name">
-          <b-form-input
-            id="customerFullName"
-            v-model="form.customerFullName"
-            required
-            placeholder="Введіть ім'я"
-          ></b-form-input>
-        </b-form-group> -->
-
       <div class="row">
         <div class="col-6 if-available left">
           <div class="form-group">
             <label class="control-label">Ім'я:</label>
-            <b-form-input id="customerFullName" v-model="form.customerFullName"></b-form-input>
+            <b-form-input
+              placeholder="Введіть ім'я"
+              required
+              id="customerFullName"
+              v-model="form.customerFullName"
+            ></b-form-input>
           </div>
         </div>
         <div class="col-6 if-available right">
           <div class="form-group">
             <label class="control-label">Телефон</label>
-            <b-form-input id="customerPhoneNumber" v-model="form.customerPhoneNumber"></b-form-input>
+            <masked-input
+              v-model="form.customerPhoneNumber"
+              id="customerPhoneNumber"
+              required
+              type="text"
+              name="phone"
+              class="form-control"
+              :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+              :guide="false"
+              placeholderChar="#"
+            />
           </div>
         </div>
-      <div class="col-6 if-available left">
+        <div class="col-6 if-available left">
           <label class="control-label">Початок роботи</label>
-          <b-form-input type="datetime" class="mr-b" v-model="form.startTime" format="yyyy-MM-dd HH:mm:ss"></b-form-input>
+          <b-form-input id="time" type="datetime" class="mr-b" v-model="form.startTime"></b-form-input>
         </div>
         <div class="col-6 if-available right">
           <label class="control-label">Закінчення роботи</label>
-          <b-form-input type="datetime" class="mr-b" v-model="form.endTime" format="yyyy-MM-dd HH:mm:ss"></b-form-input>
-           
+          <b-form-input id="time" type="datetime" class="mr-b" v-model="form.endTime"></b-form-input>
         </div>
-      </div> 
-        <b-form-group id="vendorName" label="Марка:" label-for="vendorName">
-          <b-form-select
-            id="vendorName"
-            v-model="form.vendorName"
-            :options="vendorNames"
-            v-on:change="getSelectedBrand"
-            required
-          ></b-form-select>
-        </b-form-group>
-        <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
-          <b-form-select
-            id="vehicleModelName"
-            v-model="form.vehicleModelName"
-            :options="vehicleModelNames"
-             required
-          ></b-form-select>
-        </b-form-group>
-        <b-form-group id="vehicleRegistrationNumber" label="Номер автомобіля:" label-for="vehicleRegistrationNumber">
-          <b-form-input
-            id="vehicleRegistrationNumber"
-            v-model="form.vehicleRegistrationNumber"
-            required
-            placeholder="Введіть номер автомобіля"
-          ></b-form-input>
-        </b-form-group>
- <div class="form-group">
+      </div>
+      <b-form-group id="vendorName" label="Марка:" label-for="vendorName">
+        <b-form-select
+          id="vendorName"
+          v-model="form.vendorName"
+          :options="vendorNames"
+          v-on:change="getSelectedBrand"
+          required
+        ></b-form-select>
+      </b-form-group>
+      <b-form-group id="vehicleModelName" label="Модель:" label-for="vehicleModelName">
+        <b-form-select
+          id="vehicleModelName"
+          v-model="form.vehicleModelName"
+          :options="vehicleModelNames"
+          required
+        ></b-form-select>
+      </b-form-group>
+      <b-form-group
+        id="vehicleRegistrationNumber"
+        label="Номер автомобіля:"
+        label-for="vehicleRegistrationNumber"
+      >
+        <b-form-input
+          id="vehicleRegistrationNumber"
+          v-model="form.vehicleRegistrationNumber"
+          required
+          placeholder="Введіть номер автомобіля"
+        ></b-form-input>
+      </b-form-group>
+      <div class="form-group">
         <label class="control-label">Підйомник:</label>
         <b-form-select
           id="workplace"
@@ -116,100 +105,84 @@
           v-on:change="changeWorkPlace"
         ></b-form-select>
       </div>
+
       <div class="form-group">
         <label class="control-label">Мастер</label>
-        <b-form-select id="master"
-         v-model="form.master" 
-         :options="masters" 
-         required>
-         </b-form-select>
+        <b-form-select id="master" v-model="form.master" :options="masters" required></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Механік</label>
+        <b-form-select id="mechanic" v-model="form.mechanic" :options="mechanics" required></b-form-select>
+      </div>
+      <b-form-group id="itemCategory" label="Послуга:" label-for="itemCategory">
         <b-form-select
-          id="mechanic"
-          v-model="form.mechanic"
-          :options="mechanics"
-         
+          id="itemCategory"
+          v-model="form.itemCategory"
+          :options="itemCategorys"
           required
         ></b-form-select>
-      </div>
-        <b-form-group id="itemCategory" label="Послуга:" label-for="itemCategory">
-          <b-form-select
-            id="itemCategory"
-            v-model="form.itemCategory"
-            :options="itemCategorys"
-            required
-          ></b-form-select>
-        </b-form-group>
-
-        <b-form-textarea
-          id="orderDescription"
-          v-model="form.orderDescription"
-          placeholder="Коментар"
-          rows="2"
-          max-rows="2"
-         
-        ></b-form-textarea>
-
-        <!--<pre class="mt-3 mb-0">{{ text }}</pre>-->
-        <!-- <b-col class="submit_bt">
-          <b-button type="submit" variant="success">Cтворити заявку</b-button>
-        </b-col> -->
+      </b-form-group>
+      <b-form-textarea
+        id="orderDescription"
+        v-model="form.orderDescription"
+        placeholder="Коментар"
+        rows="2"
+        max-rows="2"
+      ></b-form-textarea>
       <b-button class="mt-3" variant="success" block @click="saveOrder">Cтворити заявку</b-button>
+    </b-modal>
 
-     <!-- Short statement selection - working version -->
-      <!-- <div class="form-group">
-        <label class="control-label">Статус</label>
-        <b-form-select
-          id="orderStatusName"
-          v-modal="form.orderStatusName"
-          :options="orderStatusNames"
-          v-on:change="changeOrderStatusName"
-        ></b-form-select>
-      </div>
-      <div class="form-group">
-        <label class="control-label">Перелік заявок:</label>
-        <b-form-select
-          id="status"
-          v-modal="form.orderstatus"
-          :options="requestStatus"
-          v-on:change="changeOrder"
-        ></b-form-select>
-      </div>
-      <div class="form-group">
-        <label class="control-label">Підйомник:</label>
-        <b-form-select
-          id="workplace"
-          v-modal="form.workplace"
-          :options="workplaces"
-          v-on:change="changeWorkPlace"
-        ></b-form-select>
+    <!-- Short statement selection - working version -->
+    <b-modal id="modal-editing" ref="modal" title="Редагування заявки:">
+      <div class="row">
+        <div class="col-6 if-available left">
+          <div class="form-group">
+            <label class="control-label">Статус</label>
+            <b-form-select
+              id="master"
+              v-model="form.orderStatusName"
+              :options="orderStatusNames"
+              required
+            ></b-form-select>
+          </div>
+        </div>
+        <div class="col-6 if-available right">
+          <div class="form-group">
+            <label class="control-label">Підйомник</label>
+            <b-form-select
+              id="workplace"
+              v-model="form.workplaceChange"
+              :options="workplaces"
+              required
+            ></b-form-select>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label class="control-label">Мастер</label>
-        <b-form-select id="master"
-         v-model="form.master" 
-         :options="masters" 
-         required>
-         </b-form-select>
+        <b-form-select id="master" v-model="form.masterChange" :options="masters" required></b-form-select>
       </div>
       <div class="form-group">
         <label class="control-label">Механік</label>
-        <b-form-select
-          id="mechanic"
-          v-model="form.mechanic"
-          :options="mechanics"
-         
-          required
-        ></b-form-select>
+        <b-form-select id="mechanic" v-model="form.mechanicChange" :options="mechanics" required></b-form-select>
       </div>
-
+      <b-form-group
+        id="vehicleRegistrationNumber"
+        label="Номер автомобіля:"
+        label-for="vehicleRegistrationNumber"
+      >
+        <b-form-input
+          id="vehicleRegistrationNumber"
+          v-model="form.vehicleRegistrationNumberChange"
+          required
+          placeholder="Введіть номер автомобіля"
+        ></b-form-input>
+      </b-form-group>
       <div class="form-group">
         <label class="control-label">Послуга</label>
         <b-form-select
           id="itemCategory"
-          v-model="form.itemCategory"
+          v-model="form.itemCategoryChange"
           :options="itemCategorys"
           required
         ></b-form-select>
@@ -218,76 +191,71 @@
         <div class="col-6 if-available left">
           <div class="form-group">
             <label class="control-label">Ім'я:</label>
-            <b-form-input id="customerFullName" v-model="form.customerFullName"></b-form-input>
+            <b-form-input
+              placeholder="Введіть ім'я"
+              required
+              id="customerFullName"
+              v-model="form.customerFullNameChange"
+            ></b-form-input>
           </div>
         </div>
         <div class="col-6 if-available right">
           <div class="form-group">
             <label class="control-label">Телефон</label>
-            <b-form-input id="customerPhoneNumber" v-model="form.customerPhoneNumber"></b-form-input>
+            <masked-input
+              v-model="form.customerPhoneNumberChange"
+              id="customerPhoneNumber"
+              required
+              type="text"
+              name="phone"
+              class="form-control"
+              :mask="['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]"
+              :guide="false"
+              placeholderChar="#"
+            />
           </div>
         </div>
-      <div class="col-6 if-available left">
+        <div class="col-6 if-available left">
           <label class="control-label">Початок роботи</label>
-          <b-form-input type="datetime" class="mr-b" v-model="form.startTime" format="yyyy-MM-dd HH:mm:ss"></b-form-input>
+          <b-form-input id="time" type="datetime" class="mr-b" v-model="form.startTimeChange"></b-form-input>
         </div>
         <div class="col-6 if-available right">
           <label class="control-label">Закінчення роботи</label>
-          <b-form-input type="datetime" class="mr-b" v-model="form.endTime" format="yyyy-MM-dd HH:mm:ss"></b-form-input>
-           
+          <b-form-input id="time" type="datetime" class="mr-b" v-model="form.endTimeChange"></b-form-input>
         </div>
-      </div> 
-   
-      <b-form-textarea id="orderDescription" v-model="form.orderDescription" placeholder="Коментар"></b-form-textarea>
-
-      <b-button class="mt-3" variant="outline-danger" block @click="saveOrder">Save</b-button>
-     -->
-     
+      </div>
+      <b-form-textarea
+        id="orderDescription"
+        v-model="form.orderDescriptionChange"
+        placeholder="Коментар"
+      ></b-form-textarea>
+      <b-button class="mt-3" variant="outline-success" block @click="changeOrder">Зберегти зміни</b-button>
     </b-modal>
-  
+    <DetailsTable></DetailsTable>
   </div>
-  
 </template>
-
 <script charset="utf-8">
 import FullCalendar from "@fullcalendar/vue";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import Detailtable from '@/TableDetails/DetailsTable';
-/* var calendar = new FullCalendar(FullCalendar, {
-  events: [
-    {
-      title:  'My Event',
-      start:  '2010-01-01T14:30:00',
-      allDay: false
-    }
-    // other events here...
-  ],
-  eventTimeFormat: { // like '14:30:00'
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  }
-}); */
+import MaskedInput from "vue-text-mask";
+import axios from "axios";
+import DetailsTable from "../TableDetails/DetailsTable";
+
 export default {
   created() {
-//<<<<<<< HEAD
-        const token = 'Bearer ' + localStorage.getItem('currentUser')
-        if (token) {
-          axios.defaults.headers.common['Authorization'] =  token
-            //return router.push('/disposition');
-        }    
-//=======
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser) {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + currentUser.token;
+    }
     var date1 = new Date();
-    date1.setDate(date1.getDate() -3);
-
+    date1.setDate(date1.getDate() - 3);
     var date2 = new Date();
     date2.setDate(date2.getDate() + 3);
-
-    console.log('Date1: ' + date1.toISOString().slice(0,10));
-    console.log('Date2: ' + date2.toISOString().slice(0,10));
-//>>>>>>> 0e0e15d81e933c6e8aeabf0ffdf0ebf94863045a
+   /*  console.log("Date1: " + date1.toISOString().slice(0, 10));
+    console.log("Date2: " + date2.toISOString().slice(0, 10)); */
     this.$store.dispatch("getOrderStatus", { params: { id: 0 } }).then(res => {
       var statusData = JSON.parse(JSON.stringify(res.data));
       this.orderStatusNames = statusData.map(function(i) {
@@ -297,8 +265,6 @@ export default {
         };
       });
     });
-    //this.updateOrderListByOrderType(0);
-
     this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
       var resourcesData = JSON.parse(JSON.stringify(res.data));
       this.resources = resourcesData.map(function(i) {
@@ -316,7 +282,7 @@ export default {
           text: i["workPlaceName"]
         };
       });
-      console.log(this.workplaces);
+   /*    console.log(this.workplaces); */
     });
     this.$store
       .dispatch("getEmployees", {
@@ -332,7 +298,11 @@ export default {
         });
       });
 
-    this.$store.dispatch("getEmployees", {params: { workShopID: 1, employeePostID: 2 }}).then(res => {
+    this.$store
+      .dispatch("getEmployees", {
+        params: { workShopID: 1, employeePostID: 2 }
+      })
+      .then(res => {
         var mechanicData = JSON.parse(JSON.stringify(res.data));
         this.mechanics = mechanicData.map(function(i) {
           return {
@@ -357,9 +327,9 @@ export default {
           text: i["vendorName"],
           value: i["vendorID"]
         };
-        });
       });
-      this.$store.dispatch("getItem", { params: { id: 0 } }).then(res => {
+    });
+    this.$store.dispatch("getItem", { params: { id: 0 } }).then(res => {
       var vendorsData = JSON.parse(JSON.stringify(res.data));
       this.itemCategorys = vendorsData.map(function(i) {
         return {
@@ -371,8 +341,8 @@ export default {
     this.$store
       .dispatch("getOrder", {
         params: {
-          from: date1.toISOString().slice(0,10),
-          to: date2.toISOString().slice(0,10),
+          from: date1.toISOString().slice(0, 10),
+          to: date2.toISOString().slice(0, 10),
           workShopID: 1,
           orderStatusID: 0,
           notShortOrder: 0
@@ -380,12 +350,13 @@ export default {
       })
       .then(res => {
         var eventsData = JSON.parse(JSON.stringify(res.data));
-        console.log(eventsData);
+       /*  console.log(eventsData); */
         this.events = eventsData.map(function(i) {
           return {
             id: i["orderID"],
             resourceId: i["workPlaceID"],
-            title: i["vendorName"]+ i["vehicleModelName"] + i["vehicleRegistrationNumber"] ,
+            title:
+            i["vehicleRegistrationNumber"],
             date: i["startTime"],
             end: i["endTime"],
             textColor: "white",
@@ -397,23 +368,22 @@ export default {
   },
   components: {
     FullCalendar,
-    Detailtable
+    MaskedInput,
+    DetailsTable
   },
-  
   data() {
     return {
       orderstatus: {
         workShopID: "",
         orderStatusID: "",
         notShortOrder: "",
-        Detailtable:""
+        phone: ""
       },
       form: {
         master: "",
         mechanic: "",
         employes: "",
         status: "",
-        orderstatus: "",
         orderStatusName: "",
         itemCategory: "",
         customerFullName: "",
@@ -422,11 +392,23 @@ export default {
         workplace: "",
         startTime: "",
         endTime: "",
-        customerFullName: "",
         vehicleModelName: "",
         vehicleRegistrationNumber: "",
         vendorName: "",
-        orderDescription: ""
+        itemCategoryChange: "",
+        customerFullNameChange: "",
+        customerPhoneNumberChange: "",
+        orderDescriptionChange: "",
+        masterChange: "",
+        startTimeChange: "",
+        endTimeChange: "",
+        mechanicChange: "",
+        orderStatusNameChange: "",
+        workplaceChange: "",
+        vendorNameChange: "",
+        vehicleModelNameChange: "",
+        vehicleRegistrationNumberChange: "",
+        id:""
       },
       calendarPlugins: [
         resourceTimelinePlugin,
@@ -439,7 +421,7 @@ export default {
       workplaces: [],
       employes: [],
       orderStatusNames: [],
-       vehicleModelNames: [],
+      vehicleModelNames: [],
       vendorNames: [],
       itemCategorys: [],
       masters: [],
@@ -448,24 +430,24 @@ export default {
       events: [],
       itemCategorys: [],
       orders: [],
-      currentOrder: ""
+      orderNumbers: [],
+      currentOrder: []
     };
   },
-
   methods: {
-    logout(){
-      localStorage.removeItem('currentUser');
-      delete axios.defaults.headers.common['Authorization']
-      this.$router.push('/')
+    logout() {
+      localStorage.removeItem("currentUser");
+      delete axios.defaults.headers.common["Authorization"];
+      this.$router.push("/");
     },
     changeOrderStatusName(id) {
       this.form.orderStatusName = id;
-      console.log(id);
+     /*  console.log(id); */
       this.updateOrderListByOrderType(id);
     },
     updateOrderListByOrderType(id) {
       var date1 = new Date();
-      date1.setDate(date1.getDate() - 30);
+      date1.setDate(date1.getDate() - 3);
 
       var date2 = new Date();
       date2.setDate(date2.getDate() + 3);
@@ -491,74 +473,196 @@ export default {
           });
         });
     },
+    handleSelect(arg) {
+      this.form.startTime = arg.startStr;
+      var handleStart = new Date(this.form.startTime);
+   /*    console.log(handleStart); */
+      this.form.endTime = arg.endStr;
+      var formated_handleStart =
+        (handleStart.getHours() < 10 ? "0" : "") +
+        handleStart.getHours() +
+        ":" +
+        (handleStart.getMinutes() < 10 ? "0" : "") +
+        handleStart.getMinutes() +
+        ":" +
+        (handleStart.getSeconds() < 10 ? "0" : "") +
+        handleStart.getSeconds();
+      this.form.startTime = formated_handleStart;
+      var handleEnd = new Date(this.form.endTime);
+      var formated_handleEnd =
+        (handleEnd.getHours() < 10 ? "0" : "") +
+        handleEnd.getHours() +
+        ":" +
+        (handleEnd.getMinutes() < 10 ? "0" : "") +
+        handleEnd.getMinutes() +
+        ":" +
+        (handleEnd.getSeconds() < 10 ? "0" : "") +
+        handleEnd.getSeconds();
+      this.form.endTime = formated_handleEnd;
+      this.$bvModal.show("modal-center");
+   /*    console.log("handleSelect");
+      console.log(arg.startStr); */
+    },
+
+    handleDateClick(arg) {
+      this.form.startTime = arg.dateStr;
+      var startDate = new Date(this.form.startTime);
+      var endDate = new Date(this.form.startTime);
+      endDate.setMinutes(endDate.getMinutes() + 60);
+      var formatted_date1 =
+        (startDate.getHours() < 10 ? "0" : "") +
+        startDate.getHours() +
+        ":" +
+        (startDate.getMinutes() < 10 ? "0" : "") +
+        startDate.getMinutes() +
+        ":" +
+        (startDate.getSeconds() < 10 ? "0" : "") +
+        startDate.getSeconds();
+
+      this.form.startTime = formatted_date1;
+      var formatted_date =
+        (endDate.getHours() < 10 ? "0" : "") +
+        endDate.getHours() +
+        ":" +
+        (endDate.getMinutes() < 10 ? "0" : "") +
+        endDate.getMinutes() +
+        ":" +
+        (endDate.getSeconds() < 10 ? "0" : "") +
+        endDate.getSeconds();
+      this.form.endTime = formatted_date;
+      this.$bvModal.show("modal-center");
+
+
+      this.form.startTimeChange = formatted_date1;
+      var startDate = new Date(this.form.startTimeChange);
+      var endDate = new Date(this.form.startTimeChange);
+      endDate.setMinutes(endDate.getMinutes() + 60);
+      var formatted_date1 =
+        (startDate.getHours() < 10 ? "0" : "") +
+        startDate.getHours() +
+        ":" +
+        (startDate.getMinutes() < 10 ? "0" : "") +
+        startDate.getMinutes() +
+        ":" +
+        (startDate.getSeconds() < 10 ? "0" : "") +
+        startDate.getSeconds();
+
+      this.form.startTimeChange = formatted_date1;
+      var formatted_date =
+        (endDate.getHours() < 10 ? "0" : "") +
+        endDate.getHours() +
+        ":" +
+        (endDate.getMinutes() < 10 ? "0" : "") +
+        endDate.getMinutes() +
+        ":" +
+        (endDate.getSeconds() < 10 ? "0" : "") +
+        endDate.getSeconds();
+      this.form.endTimeChange = formatted_date;
     
-    changeOrder(id) {
-      console.log(id);
-      for (var i = 0; i < this.orders.length; i++) {
-        if (this.orders[i].orderID == id) {
-          this.currentOrder = this.orders[i];
-          this.form.itemCategory = this.orders[i].itemID;
-          this.form.customerFullName = this.orders[i].customerFullName;
-          this.form.customerPhoneNumber = this.orders[i].customerPhoneNumber;
-          this.form.orderDescription = this.orders[i].orderDescription;
-          this.form.workplace = this.orders[i].workPlaceID;
-          this.form.master = this.orders[i].employeeID;
+    },
+    eventClick(arg) {
+      var id = arg.event._def.publicId;
+      var date1 = new Date();
+      date1.setDate(date1.getDate() - 3);
+      var date2 = new Date();
+      date2.setDate(date2.getDate() + 3);
+      this.$store
+        .dispatch("postOrder", {
+          params: {
+            from: date1.toISOString().slice(0, 10),
+            to: date2.toISOString().slice(0, 10),
+            workShopID: 1,
+            orderStatusID: 0,
+            notShortOrder: 0,
+            orderID: id
+          }
+        })
+        .then(res => {
+          var orderData = JSON.parse(JSON.stringify(res.data));
+          this.orderNumbers = orderData;
+
+          for (var i = 0; i < this.orderNumbers.length; i++) {
+            if (this.orderNumbers[i].orderID == id) {
+              this.currentOrder = this.orderNumbers[i];
+              this.form.id = id;
+              this.form.itemCategoryChange = this.orderNumbers[i].itemID;
+              this.form.customerFullNameChange = this.orderNumbers[i].customerFullName;
+              this.form.customerPhoneNumberChange = this.orderNumbers[i].customerPhoneNumber;
+              this.form.orderDescriptionChange = this.orderNumbers[i].orderDescription;
+              this.form.workplaceChange = this.orderNumbers[i].workPlaceID;
+              this.form.masterChange = this.orderNumbers[i].employeeCreateOrderID;
+              this.form.startTimeChange = this.orderNumbers[i].startTime;
+              this.form.endTimeChange = this.orderNumbers[i].endTime;
+              this.form.mechanicChange = this.orderNumbers[i].employeeID;
+              this.form.orderStatusName = this.orderNumbers[i].orderStatusID;
+              this.form.vendorNameChange = this.orderNumbers[i].vendorID;
+              this.form.vehicleModelNameChange = this.orderNumbers[i].vehicleModelID;
+              this.form.vehicleRegistrationNumberChange = this.orderNumbers[i].vehicleRegistrationNumber;
+            }
+          }
+
+          this.orderNumber = orderData.map(function(i) {
+            return {
+              orderID: i["orderID"]
+            };
+          });
+        });
+      this.$bvModal.show("modal-editing");
+    },
+    changeOrder(evt) {
+     /*   console.log("change");
+      console.log(this.form.id);  */
+      for (var i = 0; i < this.orderNumbers.length; i++) {
+        if (this.orderNumbers[i].orderID == this.form.id) {
+          /* this.currentOrder = this.orderNumbers[i];
+          this.form.itemCategoryChange = this.orderNumbers[i].itemID;
+          this.form.customerFullNameChange = this.orderNumbers[i].customerFullName;
+          this.form.customerPhoneNumberChange = this.orderNumbers[i].customerPhoneNumber;
+          this.form.orderDescriptionChange = this.orderNumbers[i].orderDescription;
+          this.form.workplaceChange = this.orderNumbers[i].workPlaceID;
+          this.form.masterChange = this.orderNumbers[i].employeeCreateOrderID;
+          this.form.startTimeChange = this.orderNumbers[i].startTime;
+          this.form.endTimeChange = this.orderNumbers[i].endTime;
+          this.form.mechanicChange = this.orderNumbers[i].employeeID;
+          this.form.orderStatusNameChange = this.orderNumbers[i].orderStatusName;
+          this.form.vendorNameChange = this.orderNumbers[i].vehicleID;
+          this.form.vehicleModelNameChange = this.orderNumbers[i].vehicleModelID;
+          this.form.vehicleRegistrationNumberChange = this.orderNumbers[i].vehicleRegistrationNumber; */
         }
       }
-      // var order = this.orders.filter(i=>i.orderID == id);
-      // console.log(order);
+     
+     this.$store
+        .dispatch("setOrder", {
+          params: {
+            orderID: this.form.id,
+            workShopID: 1,
+            customerFullName: this.form.customerFullNameChange,
+            customerPhoneNumber: this.form.customerPhoneNumberChange,
+            itemID: this.form.itemCategoryChange,
+            orderDescription: this.form.orderDescriptionChange,
+            vehicleModelID: this.form.vehicleModelNameChange,
+            vehicleModificationID: this.form.vehicleModelNameChange,
+            vehicleRegistrationNumber: this.form.vehicleRegistrationNumberChange,
+            employeeID: this.form.mechanicChange,
+            employeeCreateOrderID: this.form.masterChange,
+            workPlaceID: this.form.workplaceChange,
+            startTime: this.form.startTimeChange,
+            endTime: this.form.endTimeChange,
+            orderStatusID:  this.form.orderStatusName,
+            vendorID: this.form.vendorNameChange
+          }
+        })
+        
+        .then(res => {
+          this.$bvModal.hide("modal-editing");
+        });
+        
     },
-    handleSelect(arg){
-      this.form.startTime = arg.startStr;
-      this.form.endTime = arg.endStr;
-      this.$bvModal.show("modal-center");
-      console.log('handleSelect');
-    },
-     handleDateClick(arg) {
-       console.log('handleDateClick');
-      this.form.startTime = arg.dateStr;
-      var endDate = new Date(this.form.startTime);
-      console.log(endDate);
-      endDate.setMinutes(endDate.getMinutes() + 60);
-      console.log(endDate);
-      var formatted_date = endDate.getFullYear() + "-" + (endDate.getMonth() + 1) + "-" + endDate.getDate() + " " + endDate.getHours() + ":" + endDate.getMinutes() + ":" + endDate.getSeconds();
-      this.form.endTime = formatted_date;
-      console.log(this.form.endTime);
-      this.$bvModal.show("modal-center");
-       console.log(arg.dateStr);
-      // var d1 = new Date(this.form.startTime);
-      // console.log(d1);
-      // console.log(d1.toISOString());
-      // console.log('test');
-      // endTime = new Date(d1);
-      // endTime.setMinutes(d1.getMinutes() + 30);
-      // var d1= endTime.toISOString();
-      // this.form.endTime = endTime.toISOString; 
-
-      // console.log(this.form.endTime);
-      // this.$bvModal.show("modal-center");
-      // if (confirm(" " + arg.dateStr + " ?")) {
-      //   this.calendarEvents.push({
-      //     title: "New Event",
-      //    start: arg.date
-      //   });
-      // }
-    
-    /*  function two(num) { return ("0" + num).slice(-2);} */ // подставляет недостающий ноль 
-
-    // t - время в секундах из БД сервера
-    // mydate возвращает строку  в формате например 12.08.2015 19:03
-    /* function mydate(t) {
-      var d = new Date((t-time_zone*60)*1000);
-      return two(d.getUTCDate())+'.'+ two(d.getUTCMonth()+1)+'.'+d.getUTCFullYear()+' '+ two(d.getUTCHours())+':'+ two(d.getUTCMinutes());
-      console.log("two");
-} */
-     },
     changeWorkPlace(id) {
       this.form.workplace = id;
     },
     saveOrder() {
-      console.log("saved");
+     /*  console.log("saved"); */
       var orderId = this.form.orderstatus;
       var vehicleModelID = this.currentOrder.vehicleModelID;
       if (!vehicleModelID) {
@@ -568,12 +672,7 @@ export default {
       if (!vehicleModificationID) {
         vehicleModificationID = 1;
       }
-      // var employeeID = this.currentOrder.employeeID;
-      // if (!employeeID){
-      //   employeeID = id;
-      // }
-      // console.log (employeeID);
-
+     
       this.$store
         .dispatch("setOrder", {
           params: {
@@ -583,25 +682,25 @@ export default {
             customerPhoneNumber: this.form.customerPhoneNumber,
             itemID: this.form.itemCategory,
             orderDescription: this.form.orderDescription,
-            vehicleModelID:  this.form.vehicleModelName,
+            vehicleModelID: this.form.vehicleModelName,
             vehicleModificationID: this.form.vehicleModelName,
-            vehicleRegistrationNumber:this.form.vehicleRegistrationNumber,
+            vehicleRegistrationNumber: this.form.vehicleRegistrationNumber,
             employeeID: this.form.mechanic,
             employeeCreateOrderID: this.form.master,
             workPlaceID: this.form.workplace,
             startTime: this.form.startTime,
             endTime: this.form.endTime,
             orderStatusID: 2,
-             vendorID: this.form.vendorName,
+            vendorID: this.form.vendorName
           }
         })
         .then(res => {
           this.$bvModal.hide("modal-center");
         });
     },
+    
     getSelectedBrand(id) {
-      console.log(id);
-
+    /*   console.log(id); */
       this.$store
         .dispatch("getVehicleModel", { params: { id: id } })
         .then(res => {
@@ -614,36 +713,19 @@ export default {
           });
         });
     }
-    /*  onSubmit(evt) {
-      evt.preventDefault();
-      this.$store.dispatch("setOrder", {
-        params: {
-          workShopID: 1,
-          orderStatusID: this.form.orderstatus
-        }
-      });
-    }, */
-   /*  toggleWeekends() {
-      this.calendarWeekends = !this.calendarWeekends; // update a property
-    }, */
-   /*  gotoPast() {
-      let calendarApi = this.$refs.fullCalendar.getApi(); // from the ref="..."
-      calendarApi.gotoDate("2000-01-01"); // call a method on the Calendar object
-    },
- */
-   
   }
-};
+}
 
 </script>
-
 <style lang='scss'>
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/timeline/main.css";
 @import "~@fullcalendar/resource-timeline/main.css";
-
 .fc-license-message {
   display: none;
+}
+.fc-resource-area.fc-widget-header {
+  width: 150px !important;
 }
 form {
   padding: 15px;
@@ -656,19 +738,21 @@ form {
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   outline: 0;
 }
-.submit_bt{
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
+.submit_bt {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
-textarea #orderDescription{
-    overflow-y: auto;
+textarea #orderDescription {
+  overflow-y: auto;
+}
+.form-group {
+  margin-bottom: 0.5rem !important;
 }
 @media screen and (max-width: 600px) {
   .form-group {
     margin-bottom: 0.3rem;
   }
-
   label {
     margin-bottom: 0.2rem;
   }
@@ -677,7 +761,7 @@ textarea #orderDescription{
   float: right;
   margin-top: 10px;
 }
-.visibility{
+.visibility {
   display: none;
 }
 .fc-divider.fc-col-resizer.fc-widget-header {
@@ -717,6 +801,7 @@ textarea #orderDescription{
   color: white;
   box-shadow: none;
 }
+
 .fc-event {
   border: none;
 }
@@ -734,7 +819,7 @@ textarea #orderDescription{
 .fc-toolbar.fc-header-toolbar {
   margin-bottom: 0.5em;
 }
-.mr-b{
+.mr-b {
   margin-bottom: 15px;
 }
 .fc-button-primary:hover {
@@ -745,16 +830,13 @@ textarea #orderDescription{
 button.visibility {
   display: none;
 }
-.fc-event-container{
+.fc-event-container {
   height: 80% !important ;
 }
 .fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
-    height: 91% !important;
+  height: 91% !important;
 }
-/* .fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
-    height: 44px !important;
-} */
-.fc-time{
+.fc-time {
   display: none;
 }
 .fc-resourceTimelineDay-button,
@@ -763,7 +845,7 @@ button.visibility {
   height: 2.2em;
   font-size: 1.2em;
 }
-.modal-footer{
+.modal-footer {
   display: none !important;
 }
 .fc-highlight {
@@ -802,15 +884,13 @@ button.visibility {
 }
 .logo {
   display: flex;
-padding: 5px;
+  padding: 5px;
 }
-
-#logout{
+#logout {
   display: flex;
   //padding: 10px;
   margin: 5px;
 }
-
 @media screen and (max-width: 600px) {
   .fc-toolbar.fc-header-toolbar {
     padding: 0;
@@ -823,6 +903,11 @@ padding: 5px;
   }
   .fc-toolbar > * > :not(:first-child) {
     margin-left: 1em;
+  }
+}
+@media screen and (min-width: 575px) {
+  .col-sm-2 .col-md-1 {
+    width: auto !important;
   }
 }
 </style>
