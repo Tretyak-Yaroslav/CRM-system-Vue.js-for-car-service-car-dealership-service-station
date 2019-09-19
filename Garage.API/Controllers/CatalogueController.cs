@@ -91,11 +91,11 @@ namespace Garage.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> GetOrderStatus(int OrderStatusID)
+        public async Task<ActionResult> GetQueryStatus(int queryStatusID)
         {
             try
             {
-                return Ok(await СatalogueService.GetOrderStatusList(OrderStatusID));
+                return Ok(await СatalogueService.GetQueryStatusList(queryStatusID));
             }
             catch (Exception e)
             {

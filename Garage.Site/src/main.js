@@ -7,7 +7,7 @@ import { TablePlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import { store } from './store'
+import { store, authstore } from './store'
 import 'vue-datetime/dist/vue-datetime.css'
 import VueI18n from 'vue-i18n'
 Vue.config.productionTip = false;
@@ -18,20 +18,50 @@ Vue.use(TablePlugin)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
-//Vue.prototype.$http = Axios;
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-//this.$store.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (currentUser) {
-  //Vue.prototype.$http.
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + currentUser.token
+  authstore.commit('auth_success', currentUser);
 }
 
+Vue.axios.defaults.headers.common.Authorization = "Bearer " + authstore.state.currentUser.token;
+Vue.axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response && error.response.status && error.response.status == 401)
+      authstore.dispatch("logout");
+    return Promise.reject(error);
+  });
 new Vue({
-  el: '#app',
   router,
+  el: '#app',
   store,
+  authstore,
   render: h => h(App),
   data: {
     showModal: false
   }
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.name != 'LoginPage') {
+    if (authstore.state.currentUser) {
+      if (!to.meta.roles) {
+        return next();
+      }
+      if (authstore.state.currentUser.role.some(x => to.meta.roles.includes(x))) {
+        return next();
+      }
+      else {
+        return next(from.path);
+      }
+    }
+    else {
+      return next({ name: 'LoginPage' })
+    }
+  }
+  else {
+    next()
+  }
+})

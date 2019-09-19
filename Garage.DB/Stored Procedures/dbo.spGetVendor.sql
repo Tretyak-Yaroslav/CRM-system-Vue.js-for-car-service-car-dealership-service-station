@@ -14,7 +14,7 @@ AS BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
     SELECT DISTINCT v.VendorID, v.VendorName
-    FROM dbo.Vendor v LEFT JOIN dbo.VehicleModel vm ON vm.VendorID = v.VendorID
+    FROM Client.Vendor v LEFT JOIN Client.VehicleModel vm ON vm.VendorID = v.VendorID
     WHERE(v.VendorID=@vendorID OR @vendorID=0)
 		AND v.PC=1
 		AND vm.VehicleModelID IS NOT NULL

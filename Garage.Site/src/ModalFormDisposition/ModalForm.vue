@@ -2,11 +2,18 @@
 <template>
   <div>
     <b-button v-b-modal.modal-center>Open Modal</b-button>
-    <b-modal id="modal-center" ref="modal" title="Опрацювання заявки :" @show="resetModal" @hidden="resetModal" @ok="handleOk">
+    <b-modal
+      id="modal-center"
+      ref="modal"
+      title="Опрацювання заявки :"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
       <div class="form-group">
         <label class="control-label">Статус</label>
-        <select class="form-control order-status" name="order[status]">
-          <option selected="selected" value="new_order">Новий</option>
+        <select class="form-control query-status" name="query[status]">
+          <option selected="selected" value="new_query">Новий</option>
           <option value="processed">Опрацьовано</option>
           <option value="verified">Підтверджено</option>
           <option value="rewrite">Скасовано</option>
@@ -15,8 +22,8 @@
       <div class="form-group">
         <label class="control-label">Мастер</label>
         <select
-          name="order[details_attributes][0][serviceman_id]"
-          id="order_details_attributes_0_serviceman_id"
+          name="query[details_attributes][0][serviceman_id]"
+          id="query_details_attributes_0_serviceman_id"
           class="form-control slot-select"
         >
           <option value label=" "></option>
@@ -25,8 +32,8 @@
       <div class="form-group">
         <label class="control-label">Слюсар</label>
         <select
-          name="order[details_attributes][0][serviceman_id]"
-          id="order_details_attributes_0_serviceman_id"
+          name="query[details_attributes][0][serviceman_id]"
+          id="query_details_attributes_0_serviceman_id"
           class="form-control slot-select"
         >
           <option value label=" "></option>
@@ -60,13 +67,8 @@
           <datetime type="datetime" v-model="datetimeto" format="yyyy-MM-dd HH:mm:ss"></datetime>
         </div>
       </div>
-      
-      <b-form-textarea
-        id="textarea-default"
-        size="lg"
-        placeholder="Коментар"
-      ></b-form-textarea>
-    
+
+      <b-form-textarea id="textarea-default" size="lg" placeholder="Коментар"></b-form-textarea>
     </b-modal>
   </div>
 </template>
@@ -131,8 +133,7 @@ export default {
 }
 input.vdatetime-input {
   padding: 5px 10px;
-width: 100% !important;
+  width: 100% !important;
   border-radius: 3px;
 }
-
 </style>

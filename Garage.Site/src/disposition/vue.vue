@@ -1,6 +1,5 @@
 <template>
-
-    <b-container class="detailtable">
+  <b-container class="detailtable">
     <!-- User Interface controls -->
     <b-row>
       <b-col md="6" class="my-1">
@@ -12,9 +11,8 @@
         </b-input-group>
       </b-col>
       <b-col md="6" class="my-1">
-
-          <b-form-group label-cols-sm="3" label="Сортувати" class="mb-0">
-              <b-input-group>
+        <b-form-group label-cols-sm="3" label="Сортувати" class="mb-0">
+          <b-input-group>
             <b-form-select v-model="sortBy" :options="sortOptions">
               <option slot="first" :value="null"></option>
             </b-form-select>
@@ -28,62 +26,45 @@
       </b-col>
     </b-row>
     <!-- Main table element -->
-    <b-table id="change"
-        show-empty
-        stacked="md"
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter"
-        @filtered="onFiltered"
+    <b-table
+      id="change"
+      show-empty
+      stacked="md"
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter"
+      @filtered="onFiltered"
     >
-            <template
-                slot="employeeID"
-                slot-scope="row"
-            >
-                {{ row.item.id }}</template>
-            <template
-                    slot="startTime"
-                    slot-scope="row"
-            >
-                 {{ row.item.time }}
-            </template>
-            <template
-                    slot="customerPhoneNumber"
-                    slot-scope="row"
-            >{{ row.item.telefone }}</template>
+      <template slot="employeeID" slot-scope="row">{{ row.item.id }}</template>
+      <template slot="startTime" slot-scope="row">{{ row.item.time }}</template>
+      <template slot="customerPhoneNumber" slot-scope="row">{{ row.item.telefone }}</template>
 
-            <template
-                    slot="employeeCreateOrderID"
-                    slot-scope="row"
-            >{{ row.item.employeeFirstName.slice(0, 17) }}</template>
-        <template
-                slot="employeeID"
-                slot-scope="row"
-        >{{ row.item.employeeCreateFirstName.slice(0, 14) }}</template>
+      <template
+        slot="employeeMasterID"
+        slot-scope="row"
+      >{{ row.item.employeeFirstName.slice(0, 17) }}</template>
+      <template
+        slot="employeeID"
+        slot-scope="row"
+      >{{ row.item.employeeMasterFirstName.slice(0, 14) }}</template>
 
-          <template slot="isActive" slot-scope="row">
-              {{ row.value ? 'Yes :)' : 'No :(' }}</template>
+      <template slot="isActive" slot-scope="row">{{ row.value ? 'Yes :)' : 'No :(' }}</template>
 
-          <template slot="actions" slot-scope="row">
-            <b-button
-              size="sm"
-              @click="row.toggleDetails"
-            >
-              {{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі
-          </b-button>
-
-          </template>
-            <template slot="row-details" slot-scope="row">
-                <b-card>
-                  <ul>
-                      <li v-for="(value, index, key) in row.item" :key="key">
-                          {{changeName(index)}} {{value}}
-                      </li>
-                  </ul>
-                </b-card>
-            </template>
+      <template slot="actions" slot-scope="row">
+        <b-button
+          size="sm"
+          @click="row.toggleDetails"
+        >{{ row.detailsShowing ? 'Приховати' : 'Показати' }} деталі</b-button>
+      </template>
+      <template slot="row-details" slot-scope="row">
+        <b-card>
+          <ul>
+            <li v-for="(value, index, key) in row.item" :key="key">{{changeName(index)}} {{value}}</li>
+          </ul>
+        </b-card>
+      </template>
     </b-table>
 
     <b-row>
@@ -97,7 +78,6 @@
       </b-col>
     </b-row>
 
-
     <!-- Info modal -->
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
       <pre>{{ infoModal.content }}</pre>
@@ -108,58 +88,52 @@
 
 <script>
 export default {
-  name:'Detailtable',
+  name: "Detailtable",
   created() {
     var items = this.$store.getters.items.reverse();
-      items
-          .map(
-              (dateFormat, index) => {
-                  let s = items[index].time;
-                  if (!(s instanceof Date)) {
-                      let orig = s;
-                      s = new Date(s);
-                      if (s == 'Invalid Date') return orig;
-                  }
-                  var dateFormat = new Intl.DateTimeFormat('us-RU', {
-                      year: 'numeric', month: 'numeric', day: 'numeric',
-                      hour: 'numeric', minute: 'numeric'
-                  }).format(s);
-                  items[index].time = dateFormat
-                return items
-              }
-          )
+    items.map((dateFormat, index) => {
+      let s = items[index].time;
+      if (!(s instanceof Date)) {
+        let orig = s;
+        s = new Date(s);
+        if (s == "Invalid Date") return orig;
+      }
+      var dateFormat = new Intl.DateTimeFormat("us-RU", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      }).format(s);
+      items[index].time = dateFormat;
+      return items;
+    });
 
-      var date1 = new Date();
-    date1.setDate(date1.getDate() -3);
-
+    var date1 = new Date();
+    date1.setDate(date1.getDate() - 3);
     var date2 = new Date();
     date2.setDate(date2.getDate() + 3);
-
-    console.log('Date1: ' + date1.toISOString().slice(0,10));
-    console.log('Date2: ' + date2.toISOString().slice(0,10));
-
     this.$store
-      .dispatch("getOrder", {
+      .dispatch("getQuery", {
         params: {
-          from: date1.toISOString().slice(0,10),
-          to: date2.toISOString().slice(0,10),
+          from: date1.toISOString().slice(0, 10),
+          to: date2.toISOString().slice(0, 10),
           workShopID: 1,
-          orderStatusID: 0,
-          notShortOrder: 0
+          queryStatusID: 0,
+          notShortQuery: 0
         }
       })
       .then(res => {
-        var orders = JSON.parse(JSON.stringify(res.data));
-        // console.log(orders);
-        this.items = orders.map(function(i) {
+        var querys = JSON.parse(JSON.stringify(res.data));
+        this.items = querys.map(function(i) {
           return {
             employeeID: i["employeeID"],
             startTime: i["createDate"],
-            orderStatusName: i["orderStatusName"],
+            queryStatusName: i["queryStatusName"],
             customerPhoneNumber: i["customerPhoneNumber"],
-            employeeCreateOrderID: {
-              employeeCreateLastName: i["employeeCreateLastName"],
-              employeeCreateFirstName: i["employeeCreateFirstName"]
+            employeeMasterID: {
+              employeeMasterLastName: i["employeeMasterLastName"],
+              employeeMasterirstName: i["employeeMasterFirstName"]
             },
             employeeID: {
               employeeFirstName: i["employeeFirstName"],
@@ -169,11 +143,10 @@ export default {
             vehicleModelName: i["vehicleModelName"],
             vehicleRegistrationNumber: i["vehicleRegistrationNumber"],
             itemName: i["itemName"],
-            orderDescription: i["orderDescription"]
+            queryDescription: i["queryDescription"]
           };
         });
       });
-
   },
   data() {
     return {
@@ -189,8 +162,7 @@ export default {
           key: "startTime",
           label: "Час запису",
           sortable: false,
-          name:"",
-          /*  sortDirection: "desc" */
+          name: ""
         },
         {
           key: "customerPhoneNumber",
@@ -199,7 +171,7 @@ export default {
           sortDirection: "desc"
         },
         {
-          key: "employeeCreateOrderID",
+          key: "employeeMasterID",
           label: "Майстер-приймальник",
           sortable: true,
           sortDirection: "desc"
@@ -224,50 +196,22 @@ export default {
         id: "info-modal",
         title: "",
         content: ""
-      },
+      }
     };
   },
   computed: {
     sortOptions() {
-        // Create an options list from our fields
-        return this.fields
+      // Create an options list from our fields
+      return this.fields
         .filter(f => f.sortable)
         .map(f => {
           return { text: f.label, value: f.key };
         });
     },
-      items () {
-          console.log(this.$store.getters.items[0].id)
-          return this.$store.getters.items
-      },
-
-    // dateFormat() {
-    //     console.log(this.items[0].time)
-    //     const { time } = this.items
-    //     console.log('time->',time)
-    //     let s = this.items[0].time
-    //
-    //     return this.items
-    //         .map(
-    //             (dateFormat, index) => {
-    //                 s = this.items[0].time;
-    //                 if (!(s instanceof Date)) {
-    //                     let orig = s;
-    //                     s = new Date(s);
-    //                     if (s == 'Invalid Date') return orig;
-    //                 }
-    //                 var dateFormat = new Intl.DateTimeFormat('us-RU', {
-    //                     year: 'numeric', month: 'numeric', day: 'numeric',
-    //                     hour: 'numeric', minute: 'numeric'
-    //                 }).format(s);
-    //                 console.log(dateFormat)
-    //             }
-    //         )
-    //
-    //     return dateFormat
-    // }
-
-},
+    items() {
+      return this.$store.getters.items;
+    }
+  },
   mounted() {
     // Set the initial number of items
     this.totalRows = this.items.length;
@@ -302,16 +246,16 @@ export default {
       if (name == "employeeFirstName") {
         return "Майстер-приймальник :";
       }
-      if (name == "employeeCreateFirstName") {
+      if (name == "employeeMasterFirstName") {
         return "Механік:";
       }
       if (name == "vehicleModelName") {
         return "Модель :";
       }
-      if (name == "orderDescription") {
+      if (name == "queryDescription") {
         return "Коментар :";
       }
-      if (name == "orderStatusName") {
+      if (name == "queryStatusName") {
         return "Статус заявки :";
       }
       if (name == "vehicleRegistrationNumber") {
@@ -324,19 +268,18 @@ export default {
         return "Послуга :";
       }
     },
-     addDays(days) {
-        var result = new Date();
-        result.setDate(result.getDate() + days);
-        return result;
-      }
+    addDays(days) {
+      var result = new Date();
+      result.setDate(result.getDate() + days);
+      return result;
+    }
   }
 };
-
 </script>
  <style lang="scss" scoped>
-     .detailtable {
-         min-width: 1180px;
-     }
+.detailtable {
+  min-width: 1180px;
+}
 @media screen and (max-width: 600px) {
   .table {
     font-size: 0.9em;

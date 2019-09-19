@@ -1,4 +1,5 @@
-const url = "http://garage.eso.local/api/order/GetOrder?from=2019-01-01&to=2020-01-01&workShopID=1";
+const url = "http://garage.eso.local/api/order/GetQuery?from=2019-01-01&to=2020-01-01&workShopID=1";
+//const url = "https://localhost:44346/api/order/GetQuery?from=2019-01-01&to=2020-01-01&workShopID=1";
 const vm = new Vue({
   el: '#app',
   data: {

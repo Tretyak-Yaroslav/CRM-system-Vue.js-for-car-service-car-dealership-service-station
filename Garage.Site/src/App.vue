@@ -1,79 +1,89 @@
 <template>
-<b-container fluid>
-      <b-row>
-        <b-col class="logo" md="1" sm="2" cols="2">
-          <img src="..\src\assets\logo_ad.png" alt="logo" />
-        </b-col>
-        <b-col md="10" sm="8" cols="7" class="d-flex justify-content-center">
-          <h2>Garage</h2>
-        </b-col>
-        <b-col md="1" sm="2" cols="3">
-          <button v-on:click="logout" id="logout" v-show="isLoggedIn" class="btn btn-primary">Вихід</button>
-        </b-col>
-      </b-row>
-  <router-view>
-  </router-view>
+  <b-container fluid>
+    <b-row>
+      <b-col class="logo" md="4" sm="6" cols="9">
+        <img src="..\src\assets\logo2.jpg" class="img-fluid" alt="logo" />
+      </b-col>
+
+      <b-col md="4" sm="4" cols="12" class="d-flex justify-content-center garage mr-15">
+        <h2>Garage</h2>
+      </b-col>
+      <b-col md="4" sm="2" cols="3" class="mr-15 right_ d-flex justify-content-end">
+        <router-link
+          id="linkshortQuery"
+          class="btn btn-primary"
+          v-show="isLoggedIn"
+          to="/shortQuery"
+          tag="button"
+        >Заявка</router-link>
+        <button v-on:click="logout" id="logout" v-show="isLoggedIn" class="btn btn-primary">Вихід</button>
+      </b-col>
+    </b-row>
+    <router-view></router-view>
   </b-container>
 </template>
 <script>
-//import { authenticationService } from "@/_services";
 import { router } from "@/_helpers";
-import axios from 'axios'; 
-import DetailsTable from '../src/TableDetails/DetailsTable';
-import { Component } from '@fullcalendar/core';
-import { store,authstore } from './store'
-export default  {
+import axios from "axios";
+import DetailsTable from "../src/TableDetails/DetailsTable";
+import { Component } from "@fullcalendar/core";
+import { store, authstore } from "./store";
+export default {
   name: "app",
   data() {
-    return {
-      //IsAuth: true
-      //currentUser: JSON.parse(localStorage.getItem('currentUser'))
-    };
+    return {};
 
-   Component({
-      components:{DetailsTable},
-    }) 
+    Component({
+      components: { DetailsTable }
+    });
   },
   computed: {
-    isLoggedIn : function(){ return authstore.getters.isLoggedIn}
+    isLoggedIn: function() {
+      return authstore.getters.isLoggedIn;
+    }
   },
-  created() {
-        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        // const t = authstore.state.currentUser;
-        // const ttt =  authstore.getters.isLoggedIn;
-        //this.$store.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser) {
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + currentUser.token
-        }
-        axios.interceptors.response.use(undefined, function (err) {
-          return new Promise(function (resolve, reject) {
-            if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
-              authstore.dispatch("logout");
-              this.$router.push('/');
-            }
-            throw err;
-      });
-    });
-
-  },
+  created() {},
   methods: {
-    logout(){
+    logout() {
       authstore.dispatch("logout");
-      this.$router.push('/');
-    },
+      this.$router.push("/");
+    }
   }
 };
 </script>
-<style lang='scss'>
+<style lang='scss' >
 .logo {
   display: flex;
-padding: 5px;
-    padding-left: 25px !important;
+  padding: 5px;
+  padding-left: 25px !important;
 }
-
-#logout{
+.right_ {
   display: flex;
-  //padding: 10px;
+  justify-content: end;
+}
+.mr-15 {
+  margin-top: 15px;
+}
+h2 {
+  font-size: 2.5rem !important ;
+}
+#linkshortQuery {
+  display: flex;
   margin: 5px;
+  height: 70%;
+  background: #4b65bd !important;
+  border: #4b65bd;
+}
+#logout {
+  display: flex;
+  margin: 5px;
+  height: 70%;
+  background: #4b65bd !important;
+  border: #4b65bd;
+}
+@media screen and (max-width: 600px) {
+  .d-flex.justify-content-center.garage {
+    display: none !important;
+  }
 }
 </style>

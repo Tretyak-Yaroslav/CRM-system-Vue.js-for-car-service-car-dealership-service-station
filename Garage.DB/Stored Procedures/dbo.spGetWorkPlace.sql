@@ -14,9 +14,9 @@ AS BEGIN
    -- DECLARE @workShopID INT=1;
 	DECLARE @DateNow DATE = GETDATE()
     SELECT wp.WorkPlaceID, wp.CalendarPluginsCode, wp.WorkPlaceName, wpt.WorkPlaceTypeID, wpt.WorkPlaceTypeName, ws.WorkShopID, ws.WorkShopName, CAST(@DateNow AS DATETIME)+ CAST(ws.DoWorkFrom AS DATETIME) DoWorkFrom, CAST(@DateNow AS DATETIME)+ CAST(ws.DoWorkTo AS DATETIME) AS DoWorkTo
-    FROM WorkShop ws
-         LEFT JOIN WorkPlace wp ON wp.WorkShopID=ws.WorkShopID
-         LEFT JOIN dbo.WorkPlaceType wpt ON wpt.WorkPlaceTypeID=wp.WorkPlaceTypeID
+    FROM Shop.WorkShop ws
+         LEFT JOIN Shop.WorkPlace wp ON wp.WorkShopID=ws.WorkShopID
+         LEFT JOIN Shop.WorkPlaceType wpt ON wpt.WorkPlaceTypeID=wp.WorkPlaceTypeID
     WHERE ws.WorkShopID=@WorkShopID;
 END;
 

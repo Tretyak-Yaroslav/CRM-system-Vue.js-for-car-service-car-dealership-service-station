@@ -25,11 +25,12 @@ namespace Garage.API.Controllers
 
         // POST /api/order/GetOrder   from=2019-01-01&to=2020-01-01&workShopID=1
         [HttpPost]
-        public async Task<ActionResult> PostOrder(DateTime from, DateTime to, int workShopID, int orderStatusID, int notShortOrder)
+        [Authorize(Roles = "Shop.Disposition")]
+        public async Task<ActionResult> PostQuery(DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery)
         {
             try
             {
-                return Ok(await OrderService.GetOrderList(from, to, workShopID, orderStatusID, notShortOrder));
+                return Ok(await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, 0));
             }
             catch (Exception e)
             {
@@ -38,12 +39,13 @@ namespace Garage.API.Controllers
         }
 
         // Get /api/order/GetOrder   from=2019-01-01&to=2020-01-01&workShopID=1
+        [Authorize(Roles = "Shop.Disposition")]
         [HttpGet]
-        public async Task<ActionResult> GetOrder(DateTime from, DateTime to, int workShopID, int orderStatusID, int notShortOrder)
+        public async Task<ActionResult> GetQuery(DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery)
         {
             try
             {
-                return Ok(await OrderService.GetOrderList(from, to, workShopID, orderStatusID, notShortOrder));
+                return Ok(await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, 0));
             }
             catch (Exception e)
             {
@@ -52,43 +54,60 @@ namespace Garage.API.Controllers
  
         }
 
-        // POST api/SetShortOrder 
-        [HttpPost]
-        public async Task<ActionResult> SetShortOrderObj([FromBody] ShortOrderModel shortOrderModel)
+        // Get /api/order/GetOrder   from=2019-01-01&to=2020-01-01&workShopID=1
+        [Authorize(Roles = "Shop.Disposition")]
+        [HttpGet]
+        public async Task<ActionResult> GetQueryOne(DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery, int queryID)
         {
             try
             {
-                return Ok(await OrderService.CreateShortOrder(shortOrderModel));
+                return Ok(await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+
+        }
+
+        // POST api/SetShortOrder 
+        //[HttpPost]
+        //public async Task<ActionResult> SetShortOrderObj([FromBody] ShortOrderModel shortOrderModel)
+        //{
+        //    try
+        //    {
+        //        return Ok(await OrderService.CreateShortOrder(shortOrderModel));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+        //    }
+        //}
+        // POST api/SetShortOrder 
+        [HttpPost]
+        public async Task<ActionResult> SetShortQuery(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string queryDescription, string vehicleRegistrationNumber, int vehicleModelID, int vendorID, int queryStatusID)
+        {
+            try
+            {
+                return Ok(await OrderService.CreateShortQuery(workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleRegistrationNumber, vehicleModelID, queryStatusID));
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
-        // POST api/SetShortOrder 
         [HttpPost]
-        public async Task<ActionResult> SetShortOrder(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string orderDescription, string vehicleRegistrationNumber, int vehicleModelID, int vendorID)
-        {
-            try
-            {
-                return Ok(await OrderService.CreateShortOrder(workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleRegistrationNumber, vehicleModelID));
-            }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
-        }
-        [HttpPost]
-        public async Task<ActionResult> SetOrder(int orderID, int workShopID, string customerFullName,
-            string customerPhoneNumber, int itemID, string orderDescription, int vehicleModelID,
+        [Authorize(Roles = "Shop.DispositionEdit")]
+        public async Task<ActionResult> SetQuery(int queryID, int workShopID, string customerFullName,
+            string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
             int vehicleModificationID,
-            string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID,
-            DateTime startTime, DateTime endTime, int orderStatusID)
+            string vehicleRegistrationNumber, int employeeID, int employeeMasterID, int workPlaceID,
+            DateTime startTime, DateTime endTime, int queryStatusID)
         {
             try
             {
-                return Ok(await OrderService.SetOrder(orderID, workShopID, customerFullName, customerPhoneNumber, itemID, orderDescription, vehicleModelID,
-                    vehicleRegistrationNumber, employeeID, employeeCreateOrderID, workPlaceID, startTime, endTime, orderStatusID));
+                return Ok(await OrderService.SetQuery(queryID, workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,
+                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID));
             }
             catch (Exception e)
             {

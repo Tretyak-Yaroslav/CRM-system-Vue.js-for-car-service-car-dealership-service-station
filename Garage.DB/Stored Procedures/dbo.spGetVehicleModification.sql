@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT vmn.VehicleModificationID,vmn.VehicleModelID,vmn.TypeName,vmn.TypeRange,vmn.Engines,vmn.KW,vmn.HP,vmn.ccmTech,vmn.Capacity,vmn.Cylinders,vmn.Valve,vmn.Fuel,vmn.EngineType,vmn.FuelPreparation,vmn.BodyType,vmn.DriveType,vmn.Tonnage
-	FROM dbo.VehicleModification vmn
+	FROM Client.VehicleModification vmn
 	WHERE (vmn.VehicleModificationID = @VehicleModificationID OR @VehicleModificationID = 0) AND (vmn.VehicleModelID = @VehicleModelID OR @VehicleModelID = 0)
 
 END

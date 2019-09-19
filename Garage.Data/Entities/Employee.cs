@@ -13,6 +13,7 @@ namespace Garage.Data.Entities
         public int EmployeePostID { get; set; }
         public string EmployeePostName { get; set; }
         public int WorkShopID { get; set; }
+        public string EmployeeColor { get; set; }
     }
     public class EmployeeUser
     {
@@ -32,9 +33,9 @@ namespace Garage.Data.Entities
 
     public class Role
     {
-        public int RoleID { get; set; }
-        public int RoleGroupID { get; set; }
+        public string RoleGroup { get; set; }
         public string RoleName { get; set; }
-
+        public string RoleDescription { get; set; }
+        public string RoleLevel { get; set; }
     }
 }

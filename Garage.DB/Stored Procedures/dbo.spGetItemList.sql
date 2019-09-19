@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 	
 	SELECT i.ItemID,i.ItemCategoryID,i.ItemName,i.ItemDescription,i.ItemPrice
-	FROM dbo.ItemList i
+	FROM Service.ItemList i
 	WHERE (i.ItemCategoryID = @itemCategoryID OR @itemCategoryID = 0)
 
 END

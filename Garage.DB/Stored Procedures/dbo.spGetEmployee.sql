@@ -14,8 +14,8 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SELECT e.EmployeeID, e.EmployeeFirstName,e.EmployeeLastName,e.EmployeePostID,ep.EmployeePostName
-	FROM dbo.Employee e LEFT JOIN dbo.EmployeePost ep ON ep.EmployeePostID = e.EmployeePostID
+	SELECT e.EmployeeID, e.EmployeeFirstName,e.EmployeeLastName,e.EmployeePostID,ep.EmployeePostName, e.EmployeeColor
+	FROM HumanResources.Employee e LEFT JOIN HumanResources.EmployeePost ep ON ep.EmployeePostID = e.EmployeePostID
 	WHERE e.WorkShopID = @workShopID AND e.EmployeePostID = @employeePostID
 
 END

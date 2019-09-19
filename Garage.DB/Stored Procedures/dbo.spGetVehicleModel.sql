@@ -13,7 +13,7 @@ AS BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
     SELECT vm.VendorID, vm.VehicleModelID, vm.VehicleModelName, vm.VehicleModelRange
-	FROM dbo.VehicleModel vm
+	FROM Client.VehicleModel vm
 	WHERE (vm.VendorID = @VendorID OR @VendorID = 0) AND ( vm.VehicleModelID = @VehicleModelID OR @VehicleModelID = 0)
 	ORDER BY vm.VehicleModelName ASC
 END

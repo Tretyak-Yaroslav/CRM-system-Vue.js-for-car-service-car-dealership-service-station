@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT e.EmployeeID, e.EmployeeFirstName,e.EmployeeLastName,e.EmployeeLogin,e.EmployeePwd,e.EmployeePhone,e.EmployeeEMail,e.EmployeeEMailConfirmed,e.EmployeeBlocked,e.EmployeeLastLogined,e.EmployeeCreatedDate,e.WorkShopID
-	FROM dbo.Employee e
+	FROM HumanResources.Employee e
 	WHERE e.WorkShopID = @workShopID AND  e.EmployeeLogin = @EmployeeLogin AND e.EmployeePwd = @EmployeePwd
 
 END

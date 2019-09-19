@@ -13,10 +13,12 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
-	SELECT r.RoleName
-	FROM dbo.UserRole ur INNER JOIN dbo.Role r ON r.RoleID = ur.RoleID
-	WHERE ur.EmploeeID = @employeeID
+	SELECT DISTINCT r2.Role AS RoleName
+	FROM HumanResources.Role r LEFT JOIN HumanResources.AppRole ar ON ar.AppRole=r.Role
+								INNER JOIN HumanResources.UserRole ur ON ur.Role = r.Role
+								INNER JOIN HumanResources.Employee e ON e.EmployeeLogin = ur.EmployeeLogin
+								LEFT JOIN HumanResources.Role r2 ON r2.Role = ISNULL(ar.Role,r.role)
+	WHERE e.EmployeeID = @employeeID
 
 END
 
