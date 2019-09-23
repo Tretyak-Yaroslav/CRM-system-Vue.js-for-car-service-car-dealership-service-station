@@ -13,6 +13,8 @@ namespace Garage.Data.Services
     {
         Task<EmployeeUser> GetEmployeeUserList(int workShopID, string employeeLogin, string employeePwd);
         Task<IEnumerable<string>> GetRoleOneFildList(int employeeID);
+        Task<EmployeeUser> GetEmployeeByEmail(string email);
+        Task SetEmployeePassword(int employeeID, string password);
     }
 
     public class UserService : IUserService
@@ -39,6 +41,26 @@ namespace Garage.Data.Services
                 {
                     return await db.QueryAsync<string>("spGetRoleOneFild", new { employeeID }, commandType: CommandType.StoredProcedure);
                 }
+            }
+        }
+
+        public async Task<EmployeeUser> GetEmployeeByEmail(string email)
+        {
+            {
+                using (IDbConnection db = new SqlConnection(connStr))
+                {
+                    var x = await db.QueryFirstOrDefaultAsync<EmployeeUser>("spGetEmployeeByEmail", new { email }, commandType: CommandType.StoredProcedure);
+                    return x;
+
+                }
+            }
+        }
+
+        public async Task SetEmployeePassword(int employeeID, string password)
+        {
+            using (IDbConnection db = new SqlConnection(connStr))
+            {
+                await db.QueryAsync("spSetEmployeePassword", new { employeeID, password }, commandType: CommandType.StoredProcedure);
             }
         }
     }

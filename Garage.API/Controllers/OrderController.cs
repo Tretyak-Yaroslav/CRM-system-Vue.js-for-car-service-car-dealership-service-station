@@ -102,12 +102,12 @@ namespace Garage.API.Controllers
             string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
             int vehicleModificationID,
             string vehicleRegistrationNumber, int employeeID, int employeeMasterID, int workPlaceID,
-            DateTime startTime, DateTime endTime, int queryStatusID)
+            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID, int customerID)
         {
             try
             {
                 return Ok(await OrderService.SetQuery(queryID, workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,
-                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID));
+                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID, vehicleID, customerID));
             }
             catch (Exception e)
             {

@@ -4,7 +4,7 @@ CREATE TABLE [Client].[Customer]
 [ParentCustomerID] [int] NULL,
 [WorkShopID] [int] NULL,
 [CustomerFullName] [nvarchar] (150) COLLATE Cyrillic_General_CI_AS NULL,
-[CustomerPhoneNumber] [nvarchar] (15) COLLATE Cyrillic_General_CI_AS NULL,
+[CustomerPhoneNumber] [nvarchar] (20) COLLATE Cyrillic_General_CI_AS NULL,
 [CustomerMail] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL
 ) ON [PRIMARY]
 GO

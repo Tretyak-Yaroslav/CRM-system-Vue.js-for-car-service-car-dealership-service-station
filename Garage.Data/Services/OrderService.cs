@@ -19,7 +19,7 @@ namespace Garage.Data.Servises
         //Task<int> CreateShortQuery(ShortQueryModel shortQueryModel);
         Task<int> CreateShortQuery(int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string queryDescription, string vehicleRegistrationNumber, int vehicleModelID, int queryStatusID);
         Task<int> SetQuery(int queryID, int workShopID, string customerFullName, string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
-            string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID, DateTime startTime, DateTime endTime, int orderStatusID);
+            string vehicleRegistrationNumber, int employeeID, int employeeCreateOrderID, int workPlaceID, DateTime startTime, DateTime endTime, int orderStatusID, int vehicleID, int customerID);
 
 
 
@@ -60,7 +60,7 @@ namespace Garage.Data.Servises
         public async Task<int> SetQuery(int queryID, int workShopID, string customerFullName,
             string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
             string vehicleRegistrationNumber, int employeeID, int employeeMasterID, int workPlaceID,
-            DateTime startTime, DateTime endTime, int queryStatusID)
+            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID , int customerID)
         {
             using (IDbConnection db = new SqlConnection(connStr))
             {

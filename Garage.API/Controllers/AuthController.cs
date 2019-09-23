@@ -10,6 +10,7 @@ using Garage.Data.Entities;
 using Garage.Data.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Garage.API.Utils;
 
 namespace Garage.API.Controllers
 {
@@ -89,6 +90,40 @@ namespace Garage.API.Controllers
                 // сериализация ответа
 
                 return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> GeneratePassword(string email)
+        {
+            try
+            {
+                var msg = "";
+                var user = await UserService.GetEmployeeByEmail(email);
+                if (user == null)
+                {
+                    msg = "User with specific email not found.";
+                    return Ok(false);
+                }
+
+                if (user.EmployeeBlocked)
+                {
+                    msg = "Your account is locked! Contact your manager.";
+                    return BadRequest(msg);
+                }
+
+                var newPassword = new Random().Next(0, 999999).ToString("D6");
+
+                await UserService.SetEmployeePassword(user.EmployeeID, newPassword);
+
+                await EmailSender.SendEmailAsync(email, "Новый пароль Автотехникс", newPassword);
+
+                return Ok(true);
             }
             catch (Exception e)
             {

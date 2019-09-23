@@ -8,9 +8,9 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 
-CREATE PROCEDURE [dbo].[spSetQuery] @queryID INT=0, @workShopID INT, @customerFullName NVARCHAR(100), @customerPhoneNumber NVARCHAR(100), @itemID INT, @queryDescription NVARCHAR(1000),
+CREATE PROCEDURE [dbo].[spSetQuery] @queryID INT=0, @workShopID INT, @customerFullName NVARCHAR(100), @customerPhoneNumber NVARCHAR(20), @itemID INT, @queryDescription NVARCHAR(1000),
 @vehicleModelID INT, @vehicleModificationID INT=NULL, @vehicleRegistrationNumber NVARCHAR(100) =NULL, @employeeID INT=NULL, @employeeMasterID INT=NULL, @workPlaceID INT=NULL, 
-@startTime DATETIME=NULL, @endTime DATETIME=NULL, @queryStatusID INT=NULL, @vendorID INT=NULL, @querySource NVARCHAR(100) = NULL
+@startTime DATETIME=NULL, @endTime DATETIME=NULL, @queryStatusID INT=1, @vendorID INT=NULL, @querySource NVARCHAR(100) = NULL, @vehicleID INT = NULL, @customerID INT = NULL
 AS BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
@@ -18,7 +18,7 @@ AS BEGIN
     BEGIN TRY
         --DECLARE	@workShopID INT = 1, @customerFullName NVARCHAR(100) = 'Вова', @customerPhoneNumber NVARCHAR(100) = '0974179250', @ServiceID INT =2,
         --													@orderDescription NVARCHAR(1000) = '????????????', @vehicleModelID INT = 1, @vehicleBrandID INT =1
-        DECLARE @vehicleID INT, @customerID INT, @createDate DATETIME, @orderCrossPeriod INT=NULL;
+        DECLARE @createDate DATETIME, @orderCrossPeriod INT=NULL;
         SELECT @createDate=GETDATE();
         SELECT @orderCrossPeriod = q.QueryID
         FROM Shop.Query q
@@ -41,33 +41,53 @@ AS BEGIN
         --	FROM dbo.WorkPlace wp
         --	WHERE wp.WorkShopID=@WorkShopID;
         --END
-        SELECT @customerID=c.CustomerID
-        FROM Client.Customer c
-        WHERE RIGHT(c.CustomerPhoneNumber, 10)=RIGHT(@customerPhoneNumber, 10);
-        IF @customerID IS NULL BEGIN
-            INSERT INTO Client.Customer(WorkShopID, CustomerFullName, CustomerPhoneNumber)
-            VALUES(@workShopID, @customerFullName, @customerPhoneNumber);
-            SELECT @customerID=@@IDENTITY;
-        END;
-        SELECT @vehicleID=v.VehicleID
-        FROM Client.Customer c
-             LEFT JOIN Client.CustomerVehicleBind cvb ON cvb.CustumerID=c.CustomerID AND @createDate BETWEEN cvb.BindFrom AND cvb.BindTo
-             LEFT JOIN Client.Vehicle v ON v.VehicleID=cvb.VehicleID
-        --LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID=v.VehicleModificationID
-        WHERE v.VehicleModelID=@vehicleModelID AND c.CustomerID=@customerID AND v.VehicleRegistrationNumber=@vehicleRegistrationNumber;
-        IF @vehicleID IS NULL BEGIN
-            --IF @vehicleModificationID IS NULL 
-            --BEGIN
-            --	SELECT TOP 1 @vehicleModificationID=vmn.VehicleModificationID
-            --	FROM dbo.VehicleModification vmn
-            --	WHERE vmn.VehicleModelID=@vehicleModelID;
-            --END
-            INSERT INTO Client.Vehicle(VehicleModelID, VehicleVinNumber, VehicleRegistrationNumber, VehicleDescription)
-            VALUES(@vehicleModelID, NULL, @vehicleRegistrationNumber, NULL);
-            SELECT @vehicleID=@@IDENTITY;
-            INSERT INTO Client.CustomerVehicleBind(CustumerID, VehicleID, BindFrom, BindTo)
-            VALUES(@customerID, @vehicleID, DATEADD(DAY, -1, @createDate), DATEADD(YEAR, 25, @createDate));
-        END;
+
+		IF ISNULL(@customerID,0) = 0
+		BEGIN
+			SELECT @customerID=c.CustomerID
+			FROM Client.Customer c
+			WHERE RIGHT(c.CustomerPhoneNumber, 10)=RIGHT(@customerPhoneNumber, 10);
+			
+			IF @customerID IS NULL BEGIN
+				INSERT INTO Client.Customer(WorkShopID, CustomerFullName, CustomerPhoneNumber)
+				VALUES(@workShopID, @customerFullName, @customerPhoneNumber);
+				SELECT @customerID=@@IDENTITY;
+			END;
+		END
+		BEGIN
+			UPDATE Client.Customer 
+			SET CustomerFullName = @customerFullName, CustomerPhoneNumber = @customerPhoneNumber
+			WHERE CustomerID = @customerID
+		END
+
+		IF ISNULL(@vehicleID,0) = 0
+		BEGIN
+			SELECT @vehicleID=v.VehicleID
+			FROM Client.Customer c
+					LEFT JOIN Client.CustomerVehicleBind cvb ON cvb.CustumerID=c.CustomerID AND @createDate BETWEEN cvb.BindFrom AND cvb.BindTo
+					LEFT JOIN Client.Vehicle v ON v.VehicleID=cvb.VehicleID
+			--LEFT JOIN dbo.VehicleModification vmn ON vmn.VehicleModificationID=v.VehicleModificationID
+			WHERE v.VehicleModelID=@vehicleModelID AND c.CustomerID=@customerID AND v.VehicleRegistrationNumber=@vehicleRegistrationNumber;
+			IF @vehicleID IS NULL BEGIN
+				--IF @vehicleModificationID IS NULL 
+				--BEGIN
+				--	SELECT TOP 1 @vehicleModificationID=vmn.VehicleModificationID
+				--	FROM dbo.VehicleModification vmn
+				--	WHERE vmn.VehicleModelID=@vehicleModelID;
+				--END
+				INSERT INTO Client.Vehicle(VehicleModelID, VehicleVinNumber, VehicleRegistrationNumber, VehicleDescription)
+				VALUES(@vehicleModelID, NULL, @vehicleRegistrationNumber, NULL);
+				SELECT @vehicleID=@@IDENTITY;
+				INSERT INTO Client.CustomerVehicleBind(CustumerID, VehicleID, BindFrom, BindTo)
+				VALUES(@customerID, @vehicleID, DATEADD(DAY, -1, @createDate), DATEADD(YEAR, 25, @createDate));
+			END
+		END
+		BEGIN
+			UPDATE Client.Vehicle
+			SET VehicleRegistrationNumber = @vehicleRegistrationNumber,VehicleModelID = @vehicleModelID
+			WHERE VehicleID = @vehicleID
+		END
+		
         IF @queryID=0 BEGIN
 			
 			INSERT Shop.Query(VehicleID, WorkShopID, StartTime, EndTime, CreateDate, QueryStatusID, EmployeeMasterID, EmployeeID, WorkPlaceID, ItemID, QuerySource, QueryDescription)

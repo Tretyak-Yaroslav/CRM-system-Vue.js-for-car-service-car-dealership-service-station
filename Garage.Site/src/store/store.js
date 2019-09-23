@@ -163,14 +163,17 @@ const posts = new Vapi({
             workPlaceID,
             startTime,
             endTime,
-            queryStatusID }) => `/Order/SetQuery?queryID=${queryID}
+            queryStatusID,
+            vehicleID,
+            customerID}) => `/Order/SetQuery?queryID=${queryID}
         &workShopID=${workShopID}&customerFullName=${customerFullName}
         &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}
         &queryDescription=${queryDescription}&vehicleModelID=${vehicleModelID}
         &vehicleModificationID=${vehicleModificationID}&vehicleRegistrationNumber=${vehicleRegistrationNumber}
         &employeeID=${employeeID}&employeeMasterID=${employeeMasterID}
         &workPlaceID=${workPlaceID}&startTime=${startTime}&endTime=${endTime}
-        &queryStatusID=${queryStatusID}`
+        &queryStatusID=${queryStatusID}&vehicleID=${vehicleID}
+        &customerID=${customerID}`
     })
     .post({
         action: "Login",
@@ -183,6 +186,11 @@ const posts = new Vapi({
         property: "shortquery",
         path: ({ from, to, workShopID, queryStatusID, notShortQuery, queryID }) => `Order/PostQuery?from=${from}&to=${to}&workShopID=
         ${workShopID}&queryStatusID=${queryStatusID}&notShortQuery=${notShortQuery} &queryID=${queryID}`
+    })
+    .post({
+        action: "GeneratePassword",
+        property: "Email",
+        path: ({ email }) => `/Auth/GeneratePassword?email=${email}`
     })
     .getStore()
 

@@ -381,7 +381,9 @@ export default {
         vendorNameChange: "",
         vehicleModelNameChange: "",
         vehicleRegistrationNumberChange: "",
-        id: ""
+        id: "",
+        vehicleID: "",
+        customerID: ""
       },
 
       items: [
@@ -586,6 +588,8 @@ export default {
               this.form.endTimeChange = queryData[i].endTime;
               this.form.queryStatusName = queryData[i].queryStatusID;
               this.form.vendorNameChange = queryData[i].vendorID;
+              this.form.customerID = queryData[i].customerID;
+              this.form.vehicleID = queryData[i].vehicleID
             }
           }
         });
@@ -607,15 +611,16 @@ export default {
             queryDescription: this.form.queryDescriptionChange,
             vehicleModelID: this.form.vehicleModelNameChange,
             vehicleModificationID: this.form.vehicleModelNameChange,
-            vehicleRegistrationNumber: this.form
-              .vehicleRegistrationNumberChange,
+            vehicleRegistrationNumber: this.form.vehicleRegistrationNumberChange,
             employeeID: this.form.mechanicChange,
             employeeMasterID: this.form.masterChange,
             workPlaceID: this.form.workplaceChange,
             startTime: this.form.startTimeChange,
             endTime: this.form.endTimeChange,
             queryStatusID: this.form.queryStatusName,
-            vendorID: this.form.vendorName
+            vendorID: this.form.vendorName,
+            customerID: this.form.customerID,
+            vehicleID: this.form.vehicleID
           }
         })
         .then(res => {
@@ -653,7 +658,8 @@ export default {
             startTime: this.form.startTime,
             endTime: this.form.endTime,
             queryStatusID: 2,
-            vehicleID: this.form.vendorName
+            vehicleID: 0,
+            customerID: 0,
           }
         })
         .then(res => {

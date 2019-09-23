@@ -16,7 +16,7 @@
                 placeholder="Password"
                 v-model="password"
               />
-              <a href="#">Забув логин/пароль</a>
+              <a href="#" v-b-modal="'modal-resetpass'">Забув логин/пароль</a>
             </div>
             <div class="col-12 d-flex justify-content-end">
               <button type="submit" class="btn btn-primary mr-15">ВХІД</button>
@@ -25,6 +25,15 @@
         </form>
       </div>
     </b-row>
+    <b-modal id="modal-resetpass" ref="resetpass-modal" centered title="Створення нового пароля">
+       <form @submit.prevent="onSubmitResetPass" >
+          <b-form-input required placeholder="Введіть адресу email" v-model="resetemail"/> 
+          <b-button v-if="!passwordreseted" type="submit" class=" btn btn-primary  mr-15" >Вiдправити новий пароль</b-button>
+          <div v-if="emailerror"><b>Вказаного email не знайдено</b></div>
+          <div v-if="!emailerror && passwordreseted"><b>Новий пароль вiдправлено</b></div>
+
+        </form>
+  </b-modal>
   </b-container>
 </template>
 <script>
@@ -41,7 +50,10 @@ export default {
       submitted: false,
       loading: false,
       returnUrl: "",
-      error: ""
+      error: "",
+      resetemail: '',
+      passwordreseted: false,
+      emailerror: false,
     };
   },
   validations: {
@@ -90,7 +102,34 @@ export default {
             reject(error);
           });
       });
-    }
+    },
+     onSubmitResetPass (){
+           return new Promise ((resolve,reject) => {
+            this.$store
+              .dispatch("GeneratePassword", {
+                params: {
+                email: this.resetemail
+                }                
+              }).then(res => {
+                console.log(res.data);
+              var validEmail = JSON.parse(JSON.stringify(res.data));
+              
+              if (!validEmail) {
+                       this.emailerror = true;
+                       resolve(res)
+              }
+              else {
+                    this.passwordreseted = true;
+                    this.emailerror = false;
+                    resolve(res)
+                } 
+              }).catch(error =>{
+                    this.$refs['resetpass-modal'].hide();
+                    this.error = "Щось пішло не так!";
+                    reject(error)
+              })
+          });
+        }
   }
 };
 </script>

@@ -31,6 +31,9 @@
         @dateClick="handleDateClick"
         @select="handleSelect"
       />
+      <ul class="list-inline" style="margin-top:10px">
+        <li  class="list-inline-item" v-bind:style="{background: item.color, padding: 5 +'px'}" v-for="item in masters" v-bind:key="item.id">{{item.text}} </li>
+      </ul>
       <b-button v-b-modal.modal-center class="visibility">Open Modal</b-button>
       <b-modal id="modal-center" ref="modal" title="Заявка: НОВА">
         <div class="row">
@@ -58,7 +61,7 @@
               />
             </div>
           </div>
-          <div class="col-6 if-available left">
+          <div class="col-12 ">
             <label class="control-label">Дата:</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.DateTime"></b-form-input>
           </div>
@@ -66,6 +69,7 @@
             <label class="control-label">Початок роботи</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.startTime"></b-form-input>
           </div>
+          
           <div class="col-6 if-available right">
             <label class="control-label">Закінчення роботи</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.endTime"></b-form-input>
@@ -290,7 +294,8 @@ export default {
         this.masters = vendorsData.map(function(i) {
           return {
             text: i["employeeFirstName"] + " " + i["employeeLastName"],
-            value: i["employeeID"]
+            value: i["employeeID"],
+            color: i["employeeColor"]
           };
         });
       });
@@ -334,31 +339,7 @@ export default {
         };
       });
     });
-
-    this.$store
-      .dispatch("getQuery", {
-        params: {
-          from: date1.toISOString().slice(0, 10),
-          to: date2.toISOString().slice(0, 10),
-          workShopID: 1,
-          queryStatusID: 0,
-          notShortQuery: 0
-        }
-      })
-      .then(res => {
-        var eventsData = JSON.parse(JSON.stringify(res.data));
-        this.events = eventsData.map(function(i) {
-          return {
-            id: i["queryID"],
-            resourceId: i["workPlaceID"],
-            title: i["vehicleRegistrationNumber"],
-            date: i["startTime"],
-            end: i["endTime"],
-            borderColor: i["queryStatusColor"],
-            backgroundColor: i["employeeMasterColor"]
-          };
-        });
-      });
+    this.getEvents();
   },
   components: {
     FullCalendar,
@@ -388,6 +369,7 @@ export default {
         workplace: "",
         startTime: "",
         endTime: "",
+        time:"",
         vehicleModelName: "",
         vehicleRegistrationNumber: "",
         vendorName: "",
@@ -405,7 +387,9 @@ export default {
         vehicleModelNameChange: "",
         vehicleRegistrationNumberChange: "",
         id: "",
-        DateTime: ""
+        DateTime: "",
+        vehicleID: "",
+        customerID: ""
       },
       calendarPlugins: [
         resourceTimelinePlugin,
@@ -493,7 +477,7 @@ export default {
     },
     handleSelect(arg) {
       this.form.startTime = arg.startStr;
-      this.form.DateTime = arg.startStr;
+    
       var handleStart = new Date(this.form.startTime);
       this.form.endTime = arg.endStr;
       var formated_handleStart =
@@ -503,17 +487,6 @@ export default {
         (handleStart.getMinutes() < 10 ? "0" : "") +
         handleStart.getMinutes();
       this.form.startTime = formated_handleStart;
-
-      var formatted_dateTime =
-        (handleStart.getDate() < 10 ? "0" : "") +
-        handleStart.getDate() +
-        ":" +
-        (handleStart.getMonth() < 10 ? "0" : "") +
-        handleStart.getMonth() +
-        ":" +
-        handleStart.getFullYear();
-      this.form.DateTime = formatted_dateTime;
-
       var handleEnd = new Date(this.form.endTime);
       var formated_handleEnd =
         (handleEnd.getHours() < 10 ? "0" : "") +
@@ -527,44 +500,39 @@ export default {
 
     handleDateClick(arg) {
       this.form.startTime = arg.dateStr;
-      var startDate = new Date(this.form.startTime);
-       var endDate = new Date(this.form.startTime); 
+      var dateTime = new Date(this.form.startTime);
+      var endDate = new Date(this.form.startTime);
       endDate.setMinutes(endDate.getMinutes() + 60);
       var formatted_date1 =
-        (startDate.getHours() < 10 ? "0" : "") +
-        startDate.getHours() +
+        (dateTime.getHours() < 10 ? "0" : "") +
+        dateTime.getHours() +
         ":" +
-        (startDate.getMinutes() < 10 ? "0" : "") +
-        startDate.getMinutes();
+        (dateTime.getMinutes() < 10 ? "0" : "") +
+        dateTime.getMinutes();
+    
+    this.form.startTime = formatted_date1;
+    
+    var formatted_dateTime =
+       dateTime.getFullYear() +
+        "-" +
+        ((dateTime.getMonth() + 1 )< 10 ? "0" : "")  +
+        (dateTime.getMonth() + 1) +
+        "-" +
+        (dateTime.getDate() < 10 ? "0" : "") +
+        dateTime.getDate() 
+        ;
+    this.form.DateTime = formatted_dateTime;  
+       console.log(formatted_dateTime);
+var date = formatted_dateTime ;
+var time = formatted_date1;
 
-      this.form.startTime = formatted_date1;
+var dateTime = moment(date + time, 'YYYY-MM-DDTHH:mm:ss');
+console.log(dateTime);
+console.log(dateTime.format('YYYY-MM-DDTHH:mm:ss'));
+var timeEnd =  new Date(this.form.startTime);
+timeEnd = dateTime.format('YYYY-MM-DDTHH:mm:ss');
+console.log(this.form.startTime);
 
-      var formatted_dateTime =
-        (startDate.getDate() < 10 ? "0" : "") +
-        startDate.getDate() +
-        ":" +
-        (startDate.getMonth() < 10 ? "0" : "") +
-        startDate.getMonth() +
-        ":" +
-        startDate.getFullYear();
-      this.form.DateTime = formatted_dateTime;
-       this.form.startTime =  function(){
-     datetime : moment().format()(
-        formatted_dateTime.getUTCFullYear(),
-        formatted_dateTime.getUTCMonth(),
-        formatted_dateTime.getUTCDate(),
-        formatted_date1.getUTCHours(),
-        formatted_date1.getUTCMinutes(),
-        formatted_date1.getUTCSeconds()
-      );
-       console.log(datetime)
-        return{
-        startTime:i["datetime"]
-      }
-      console.log(datetime)
-      } 
-       /* var datetime = new Date(this.form.startTime);
- */
       var formatted_date =
         (endDate.getHours() < 10 ? "0" : "") +
         endDate.getHours() +
@@ -600,15 +568,9 @@ export default {
               this.currentQuery = this.queryNumbers[i];
               this.form.id = id;
               this.form.itemCategoryChange = this.queryNumbers[i].itemID;
-              this.form.customerFullNameChange = this.queryNumbers[
-                i
-              ].customerFullName;
-              this.form.customerPhoneNumberChange = this.queryNumbers[
-                i
-              ].customerPhoneNumber;
-              this.form.queryDescriptionChange = this.queryNumbers[
-                i
-              ].queryDescription;
+              this.form.customerFullNameChange = this.queryNumbers[i].customerFullName;
+              this.form.customerPhoneNumberChange = this.queryNumbers[i].customerPhoneNumber;
+              this.form.queryDescriptionChange = this.queryNumbers[i].queryDescription;
               this.form.workplaceChange = this.queryNumbers[i].workPlaceID;
               this.form.masterChange = this.queryNumbers[i].employeeMasterID;
               var handleStart = new Date(this.queryNumbers[i].startTime);
@@ -632,12 +594,10 @@ export default {
               this.form.mechanicChange = this.queryNumbers[i].employeeID;
               this.form.queryStatusName = this.queryNumbers[i].queryStatusID;
               this.form.vendorNameChange = this.queryNumbers[i].vendorID;
-              this.form.vehicleModelNameChange = this.queryNumbers[
-                i
-              ].vehicleModelID;
-              this.form.vehicleRegistrationNumberChange = this.queryNumbers[
-                i
-              ].vehicleRegistrationNumber;
+              this.form.vehicleModelNameChange = this.queryNumbers[i].vehicleModelID;
+              this.form.vehicleRegistrationNumberChange = this.queryNumbers[i].vehicleRegistrationNumber;
+              this.form.customerID = this.queryNumbers[i].customerID;
+              this.form.vehicleID = this.queryNumbers[i].vehicleID;
             }
           }
           this.queryNumber = queryData.map(function(i) {
@@ -654,6 +614,7 @@ export default {
         if (this.queryNumbers[i].queryID == this.form.id) {
         }
       }
+      
       this.$store
         .dispatch("setQuery", {
           params: {
@@ -665,19 +626,21 @@ export default {
             queryDescription: this.form.queryDescriptionChange,
             vehicleModelID: this.form.vehicleModelNameChange,
             vehicleModificationID: this.form.vehicleModelNameChange,
-            vehicleRegistrationNumber: this.form
-              .vehicleRegistrationNumberChange,
+            vehicleRegistrationNumber: this.form.vehicleRegistrationNumberChange,
             employeeID: this.form.mechanicChange,
             employeeMasterID: this.form.masterChange,
             workPlaceID: this.form.workplaceChange,
             startTime: this.form.startTimeChange,
             endTime: this.form.endTimeChange,
             queryStatusID: this.form.queryStatusName,
-            vendorID: this.form.vendorNameChange
+            vendorID: this.form.vendorNameChange,
+            customerID: this.form.customerID,
+            vehicleID: this.form.vehicleID
           }
         })
         .then(res => {
           this.$bvModal.hide("modal-editing");
+          this.getEvents();
         });
     },
     changeWorkPlace(id) {
@@ -712,12 +675,14 @@ export default {
             startTime: this.form.startTime,
             endTime: this.form.endTime,
             queryStatusID: 2,
-            vendorID: this.form.vendorName,
-            startTime: this.form.DateTime
+            //vendorID: this.form.vendorName
+            customerID: 0,
+            vehicleID: 0
           }
         })
         .then(res => {
           this.$bvModal.hide("modal-center");
+          this.getEvents();
         });
     },
     getSelectedBrand(id) {
@@ -732,6 +697,38 @@ export default {
             };
           });
         });
+    },
+    getEvents(){
+
+          var date1 = new Date();
+    date1.setDate(date1.getDate() - 3);
+    var date2 = new Date();
+    date2.setDate(date2.getDate() + 3);
+
+          this.$store
+      .dispatch("getQuery", {
+        params: {
+          from: date1.toISOString().slice(0, 10),
+          to: date2.toISOString().slice(0, 10),
+          workShopID: 1,
+          queryStatusID: 0,
+          notShortQuery: 0
+        }
+      })
+      .then(res => {
+        var eventsData = JSON.parse(JSON.stringify(res.data));
+        this.events = eventsData.map(function(i) {
+          return {
+            id: i["queryID"],
+            resourceId: i["workPlaceID"],
+            title: i["vehicleRegistrationNumber"],
+            date: i["startTime"],
+            end: i["endTime"],
+            borderColor: i["queryStatusColor"],
+            backgroundColor: i["employeeMasterColor"]
+          };
+        });
+      });
     }
   }
 };
