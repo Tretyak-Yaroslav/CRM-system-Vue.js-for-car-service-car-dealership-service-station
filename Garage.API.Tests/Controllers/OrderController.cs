@@ -48,5 +48,35 @@ namespace Garage.API.Tests
             // Assert
             Assert.Equal(200, result.StatusCode);
         }
+
+
+        [Theory]
+        [InlineData(1, 1, "test", "test", 1, "testRegNumber", 1, 1, "test",1,1,1,1,1,1)]
+        public async void SetQuery(
+            int queryID, 
+            int workShopID, 
+            string customerFullName,
+            string customerPhoneNumber,
+            int itemID, 
+            string queryDescription, 
+            int vehicleModelID,
+            int vehicleModificationID,
+            string vehicleRegistrationNumber, 
+            int employeeID, 
+            int employeeMasterID, 
+            int workPlaceID,
+          //  DateTime startTime,
+          //  DateTime endTime, 
+            int queryStatusID,
+            int vehicleID, 
+            int customerID)
+
+        {
+            // Act
+            var result = await controller.SetQuery(queryID,workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,vehicleModificationID,vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, new DateTime(2019, 9, 9), new DateTime(2019, 9, 9), queryStatusID, vehicleID, customerID) as OkObjectResult;
+
+            // Assert
+            Assert.Equal(200, result.StatusCode);
+        }
     }
 }

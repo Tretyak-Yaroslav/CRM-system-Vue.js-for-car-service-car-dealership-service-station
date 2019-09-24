@@ -2,6 +2,7 @@
   <Disposition>
     <div style="margin:0px 10px;">
       <FullCalendar
+        ref="fullcalendar"
         :plugins="calendarPlugins"
         defaultView="resourceTimelineDay"
         resourceLabelText=" "
@@ -25,12 +26,18 @@
         :events="events"
         :allDay="true"
         :eventClick="true"
+        :eventRender="eventRender"
         minTime="09:00:00"
         maxTime="21:00:00"
         @eventClick="eventClick"
         @dateClick="handleDateClick"
         @select="handleSelect"
       />
+        <b-popover ref="refpopover" :target="tooltip.target" :key="tooltip.key" triggers="hover" placement="bottom" >
+            <div v-html="tooltip.content"> </div>
+        </b-popover> 
+      <div id="forempty"> </div>
+
       <ul class="list-inline" style="margin-top:10px">
         <li  class="list-inline-item" v-bind:style="{background: item.color, padding: 5 +'px'}" v-for="item in masters" v-bind:key="item.id">{{item.text}} </li>
       </ul>
@@ -61,7 +68,7 @@
               />
             </div>
           </div>
-          <div class="col-12 ">
+          <div class="col-6 if-available left">
             <label class="control-label">Дата:</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.DateTime"></b-form-input>
           </div>
@@ -69,7 +76,10 @@
             <label class="control-label">Початок роботи</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.startTime"></b-form-input>
           </div>
-          
+           <div class="col-6 if-available left">
+            <label class="control-label">Початок роботи</label>
+            <b-form-input id="time" type="datetime" class="mr-b" v-model="form.time"></b-form-input>
+          </div>
           <div class="col-6 if-available right">
             <label class="control-label">Закінчення роботи</label>
             <b-form-input id="time" type="datetime" class="mr-b" v-model="form.endTime"></b-form-input>
@@ -238,6 +248,7 @@
         ></b-form-textarea>
         <b-button class="mt-3" variant="outline-success" block @click="changeQuery">Зберегти зміни</b-button>
       </b-modal>
+
       <DetailsTable></DetailsTable>
     </div>
   </Disposition>
@@ -412,7 +423,8 @@ export default {
       itemCategorys: [],
       querys: [],
       queryNumbers: [],
-      currentQuery: []
+      currentQuery: [],
+      tooltip: {target:'forempty', content : '', key : 0}
     };
   },
   handleSelect(arg) {
@@ -438,6 +450,18 @@ export default {
     this.$bvModal.show("modal-center");
   },
   methods: {
+    mouseEnterEvent(elid, event){
+       this.tooltip.target = elid;
+       this.tooltip.content = 
+       
+      '<b>' + event.extendedProps.vendorName + ' ' + event.extendedProps.vehicleModelName +'</b>' + '<br>'+
+       '<font color="gray">' +event.extendedProps.employeeLastName + ' ' + event.extendedProps.employeeFirstName + '</font><br>' +
+       event.extendedProps.itemName + '<br>' +
+       event.extendedProps.queryDescription;
+
+       if(this.$refs.refpopover.target != this.tooltip.target)
+        this.tooltip.key++;
+    },
     logout() {
       localStorage.removeItem("currentUser");
       delete axios.defaults.headers.common["Authorization"];
@@ -500,19 +524,19 @@ export default {
 
     handleDateClick(arg) {
       this.form.startTime = arg.dateStr;
-      var dateTime = new Date(this.form.startTime);
+      var startDate = new Date(this.form.startTime);
       var endDate = new Date(this.form.startTime);
       endDate.setMinutes(endDate.getMinutes() + 60);
       var formatted_date1 =
-        (dateTime.getHours() < 10 ? "0" : "") +
-        dateTime.getHours() +
+        (startDate.getHours() < 10 ? "0" : "") +
+        startDate.getHours() +
         ":" +
-        (dateTime.getMinutes() < 10 ? "0" : "") +
-        dateTime.getMinutes();
-    
-    this.form.startTime = formatted_date1;
-    
-    var formatted_dateTime =
+        (startDate.getMinutes() < 10 ? "0" : "") +
+        startDate.getMinutes();
+          this.form.startTime = formatted_date1;
+    /*   this.form.time = formatted_date1;
+
+      var formatted_dateTime =
        dateTime.getFullYear() +
         "-" +
         ((dateTime.getMonth() + 1 )< 10 ? "0" : "")  +
@@ -521,17 +545,122 @@ export default {
         (dateTime.getDate() < 10 ? "0" : "") +
         dateTime.getDate() 
         ;
-    this.form.DateTime = formatted_dateTime;  
-       console.log(formatted_dateTime);
+      this.form.DateTime = formatted_dateTime;
+
 var date = formatted_dateTime ;
 var time = formatted_date1;
 
-var dateTime = moment(date + time, 'YYYY-MM-DDTHH:mm:ss');
-console.log(dateTime);
-console.log(dateTime.format('YYYY-MM-DDTHH:mm:ss'));
-var timeEnd =  new Date(this.form.startTime);
-timeEnd = dateTime.format('YYYY-MM-DDTHH:mm:ss');
-console.log(this.form.startTime);
+var dateTime = moment(date + ' ' + time, 'YYYY-MM-DDTHH:mm:ssZ');
+
+console.log(dateTime.format('YYYY-MM-DDTHH:mm:ssZ'))    */   
+/* momet(dateTime).format();
+console.log(dateTime); */
+       /* this.form.startTime =  function(datetime){
+       
+        formatted_dateTime.getUTCFullYear(),
+        formatted_dateTime.getUTCMonth(),
+        formatted_dateTime.getUTCDate(),
+        formatted_date1.getUTCHours(),
+        formatted_date1.getUTCMinutes(),
+        formatted_date1.getUTCSeconds()
+      
+       console.log(datetime)
+        return{
+        startTime:i["datetime"]
+      }
+      console.log(datetime)
+      }  */
+       /* var datetime = new Date(this.form.startTime);
+ */
+/* var date = new Date(this.form.startTime); 
+var now_utc =  Date.UTC(formatted_dateTime.getUTCFullYear(), formatted_dateTime.getUTCMonth(), formatted_dateTime.getUTCDate(),
+ formatted_date1.getUTCHours(), formatted_date1.getUTCMinutes(), formatted_date1.getUTCSeconds());
+
+ return new Date(now_utc);
+ console.log(now_utc);
+ */
+/*  Date.prototype.toISOString = function(newdate) {
+      return formatted_dateTime.getUTCFullYear()
+        + '-' + pad( formatted_dateTime.getUTCMonth() + 1 )
+        + '-' + pad( formatted_dateTime.getUTCDate() )
+        + 'T' + pad( formatted_date1.getUTCHours() )
+        + ':' + pad( formatted_date1.getUTCMinutes() )
+        + ':' + pad( formatted_date1.getUTCSeconds() )
+        + '.' + String( (formatted_date1.getUTCMilliseconds()/1000).toFixed(3) ).slice( 2, 5 )
+        + 'Z';
+    };
+    console.log(newdate); */
+ /*     Date.prototype.toISOString = function(newdate) {
+      return this.getUTCFullYear()
+        + '-' + formatted_dateTime( this.getUTCMonth() + 1 )
+        + '-' + formatted_dateTime( this.getUTCDate() )
+        + 'T' + formatted_dateTime( this.getUTCHours() )
+        + ':' + formatted_date1( this.getUTCMinutes() )
+        + ':' + formatted_date1( this.getUTCSeconds() )
+        + '.' + String( (this.getUTCMilliseconds()/1000).toFixed(3) ).slice( 2, 5 )
+        + 'Z';
+    };
+     console.log(newdate); */
+/* let initialdate = '2016-10-01';
+let start_time = '19:04:10';
+let enddate = '2016-10-01';
+let end_time = '19:04:20';
+
+let datetimeA = moment(initialdate + " " + start_time);
+let datetimeB = moment(enddate + " " + end_time);
+
+console.log(datetimeA.format());
+console.log(datetimeB.format());
+
+let datetimeC = datetimeB.diff(datetimeA, 'seconds');
+ */
+/* console.log(datetimeC);     
+var date = moment(  startDate.getUTCFullYear()
+        + '-' + startDate.getUTCMonth()
+        + '-' + startDate.getUTCDate() 
+        + 'T' + startDate.getUTCHours() 
+        + ':' + startDate.getUTCMinutes() 
+        + ':' + startDate.getUTCSeconds());
+var data = date._i;
+console.log(data);
+this.date = new Date();
+var event = new Date(data);
+
+console.log(event.toUTCString());
+var jsonDate = event.toJSON();
+
+var data = new Date(this.form.startTime); */
+// expected output: 1975-08-19T23:15:30.000Z
+/* console.log(new Date(jsonDate).toUTCString());
+ */// expected output: Tue, 19 Aug 1975 23:15:30 GMT
+
+/* var date = new Date();
+date.toISOString(); 
+console.log(date); */
+/* function myFunction() {
+  var d = Date.parse(date._i);
+ console.log(d);
+} */
+/*  (data.Now.ToString("dd'/'M'/'yyyy"))
+ format: "dd/MM/yyyy"
+moment.utc(data).format('LTS');
+
+
+moment(String(data)).format("YYYY-MM-DDTHH:mm:ss");  */
+/* function (timechange){
+var time =new Date (DateTimeConcat);
+time.setUTCHours(0);
+var output = timechange.toISOString(time, {zulu: true}) ;
+    output += timechange.toISOString(time, {selector: 'date'});
+    output += timechange.fromISOString("2008-10-17T00:00:00Z").toGMTString()
+} */
+/* moment(String( DateTimeConcat)).format();
+console.log(DateTimeConcat);  */
+/* var time =new Date (DateTimeConcat);
+console.log(time.toISOString());
+console.log(DateTimeConcat); 
+var isoDate = new Date('DateTimeConcat').toISOString();
+console.log(isoDate); */
 
       var formatted_date =
         (endDate.getHours() < 10 ? "0" : "") +
@@ -542,7 +671,10 @@ console.log(this.form.startTime);
       this.form.endTime = formatted_date;
       this.$bvModal.show("modal-center");
     },
-    renderEvent(arg) {},
+    eventRender(arg) {
+      var elid = arg.el.id = 'event'+arg.event.id;
+      arg.el.addEventListener("mouseenter",(evt) =>  this.mouseEnterEvent(elid, arg.event));
+    },
     eventClick(arg) {
       var id = arg.event._def.publicId;
       var date1 = new Date();
@@ -607,6 +739,8 @@ console.log(this.form.startTime);
           });
         });
       this.$bvModal.show("modal-editing");
+      this.tooltip.key++;
+      this.tooltip.target = 'forempty';
     },
 
     changeQuery(evt) {
@@ -614,7 +748,6 @@ console.log(this.form.startTime);
         if (this.queryNumbers[i].queryID == this.form.id) {
         }
       }
-      
       this.$store
         .dispatch("setQuery", {
           params: {
@@ -725,7 +858,13 @@ console.log(this.form.startTime);
             date: i["startTime"],
             end: i["endTime"],
             borderColor: i["queryStatusColor"],
-            backgroundColor: i["employeeMasterColor"]
+            backgroundColor: i["employeeMasterColor"],
+            vendorName: i["vendorName"], //for tooltip
+            vehicleModelName: i["vehicleModelName"], // for tooltip
+            employeeLastName: i["employeeLastName"], // for tooltip
+            employeeFirstName: i["employeeFirstName"],// for tooltip
+            itemName: i["itemName"],// for tooltip
+            queryDescription: i["queryDescription"],// for tooltip
           };
         });
       });

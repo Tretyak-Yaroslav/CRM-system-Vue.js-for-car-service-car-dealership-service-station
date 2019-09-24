@@ -8,6 +8,7 @@ using Garage.Data.Entities;
 using Garage.Data.Models;
 using Garage.Data.Servises;
 using Microsoft.AspNetCore.Authorization;
+using Garage.API.Utils;
 
 namespace Garage.API.Controllers
 {
@@ -114,5 +115,21 @@ namespace Garage.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+        [HttpPost]
+        [Authorize(Roles = "Shop.DispositionEdit")]
+        public async Task<ActionResult> ExportQueryToFile (DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery, int queryID)
+            {
+                try
+                {
+                var queri = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
+                
+                    return Ok(ExportOfData.Export("c:\\ExportCSV", queri));
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                }
+            }
+
     }
 }

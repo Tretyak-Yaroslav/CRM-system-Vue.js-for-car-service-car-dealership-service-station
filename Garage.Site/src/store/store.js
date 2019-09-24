@@ -2,7 +2,6 @@
 import Vue from "vue"
 import Vapi from "vuex-rest-api"
 import { router } from '../_helpers'
-
 import axios from 'axios';
 
 Vue.use(Vuex)
@@ -73,8 +72,6 @@ export const authstore = new Vuex.Store({
         authStatus: state => state.status
     },
 })
-
-
 const posts = new Vapi({
     baseURL: "http://garage.eso.local:80/api",
     //baseURL: "https://localhost:44346/api",
@@ -144,8 +141,6 @@ const posts = new Vapi({
             ${workShopID}&queryStatusID=${queryStatusID}
             &notShortQuery=${notShortQuery}`
     })
-
-
     .post({
         action: "setQuery",
         property: "setQuery",

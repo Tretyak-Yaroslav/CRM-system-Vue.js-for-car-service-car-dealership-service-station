@@ -1,16 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { store } from '@/store';
 import LoginPage from '@/login/LoginPage';
 import ShortQueryForm from '@/UserFormPage/ShortQueryForm';
 import Detailtable from '@/TableDetails/DetailsTable';
 import Disposition from '@/disposition/DispositionPage';
 import ModalForm from '@/ModalFormDisposition/ModalForm';
-
-
-
-
-
+import OrderOutfit from '@/components/OrderOutfit/OrderOutfit';
+ 
 Vue.use(Router);
 export const router = new Router({
     mode: 'history',
@@ -20,7 +16,12 @@ export const router = new Router({
             name: 'LoginPage',
             component: LoginPage 
         },
-      
+        { 
+            path: '/outfit', 
+            name: 'OrderOutfit',
+            component: OrderOutfit
+        },
+    
         { 
             path: '/table', 
             name:'Detailtable',
@@ -29,6 +30,7 @@ export const router = new Router({
                 roles: ["Shop.Disposition"]
               }
         },
+       
         { 
             path: '/modal', 
             component: ModalForm, 
@@ -41,12 +43,7 @@ export const router = new Router({
             path: '/shortQuery', 
             name:'shortQuery',
             component: ShortQueryForm
-            //, 
-            // meta: {
-            //     roles: ["User", "Admin"]
-            //   }
-
-        },
+        },   
         {
             path: '/disposition',
             name:'disposition',
@@ -58,35 +55,3 @@ export const router = new Router({
         { path: '*', redirect: '/' }
     ]
 });
-// router.beforeEach((to, from, next) => {
-//     if(to.name !='LoginPage')
-//     {
-//         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-//         var IsAccess = false;
-//         if (currentUser) {
-//             if (!to.meta.roles) {
-//                     return next()
-//             }           
-//             currentUser.role.forEach(function(element)
-//             {                
-//                 if (to.meta.roles.includes(element)) {
-//                     IsAccess  = true;
-//                     return next();
-//                 }
-//             });
-//             if(IsAccess){
-//                 return next();
-//             }
-//             else{
-//                 next(from.path);
-//             }
-//         }
-//         else {
-//             return next({name: 'LoginPage'})
-//         }
-//     }
-//     else{
-//         next()
-//     }
-//     //next(from.path)
-// })
