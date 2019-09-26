@@ -25,17 +25,11 @@
 <script>
 import { router } from "@/_helpers";
 import axios from "axios";
-import DetailsTable from "../src/TableDetails/DetailsTable";
-import { Component } from "@fullcalendar/core";
 import { store, authstore } from "./store";
 export default {
   name: "app",
   data() {
     return {};
-
-    Component({
-      components: { DetailsTable }
-    });
   },
   computed: {
     isLoggedIn: function() {

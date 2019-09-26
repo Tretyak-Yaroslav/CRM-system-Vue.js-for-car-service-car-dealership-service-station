@@ -73,8 +73,8 @@ export const authstore = new Vuex.Store({
     },
 })
 const posts = new Vapi({
-    baseURL: "http://garage.eso.local:80/api",
-    //baseURL: "https://localhost:44346/api",
+    //baseURL: "http://garage.eso.local:80/api",
+    baseURL: "https://localhost:44346/api",
     state: {
         posts: []
     }
@@ -160,7 +160,8 @@ const posts = new Vapi({
             endTime,
             queryStatusID,
             vehicleID,
-            customerID}) => `/Order/SetQuery?queryID=${queryID}
+            customerID,
+            isDeleted}) => `/Order/SetQuery?queryID=${queryID}
         &workShopID=${workShopID}&customerFullName=${customerFullName}
         &customerPhoneNumber=${customerPhoneNumber}&itemID=${itemID}
         &queryDescription=${queryDescription}&vehicleModelID=${vehicleModelID}
@@ -168,7 +169,7 @@ const posts = new Vapi({
         &employeeID=${employeeID}&employeeMasterID=${employeeMasterID}
         &workPlaceID=${workPlaceID}&startTime=${startTime}&endTime=${endTime}
         &queryStatusID=${queryStatusID}&vehicleID=${vehicleID}
-        &customerID=${customerID}`
+        &customerID=${customerID}&isDeleted=${isDeleted}`
     })
     .post({
         action: "Login",
@@ -186,6 +187,12 @@ const posts = new Vapi({
         action: "GeneratePassword",
         property: "Email",
         path: ({ email }) => `/Auth/GeneratePassword?email=${email}`
+    })
+    .post({
+        action: "ExportQueryToFile",
+        property: "ExportQueryToFile",
+        path: ({ from, to, workShopID, queryStatusID, notShortQuery, queryID }) => `/Order/ExportQueryToFile?from=${from}&to=${to}&workShopID=
+            ${workShopID}&queryStatusID=${queryStatusID}&notShortQuery=${notShortQuery}&queryID=${queryID}`
     })
     .getStore()
 

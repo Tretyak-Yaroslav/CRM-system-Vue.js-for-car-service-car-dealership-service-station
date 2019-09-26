@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Garage.Data.Entities;
-using Garage.Data.Models;
 using Garage.Data.Servises;
 using Microsoft.AspNetCore.Authorization;
 using Garage.API.Utils;
@@ -103,12 +99,12 @@ namespace Garage.API.Controllers
             string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
             int vehicleModificationID,
             string vehicleRegistrationNumber, int employeeID, int employeeMasterID, int workPlaceID,
-            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID, int customerID)
+            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID, int customerID, bool isDeleted)
         {
             try
             {
                 return Ok(await OrderService.SetQuery(queryID, workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,
-                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID, vehicleID, customerID));
+                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID, vehicleID, customerID, isDeleted));
             }
             catch (Exception e)
             {
@@ -121,9 +117,9 @@ namespace Garage.API.Controllers
             {
                 try
                 {
-                var queri = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
-                
-                    return Ok(ExportOfData.Export("c:\\ExportCSV", queri));
+                    var queri = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
+
+                    return Ok(ExportOfData.Export(Startup.AppSettings.ExportCsvPath, queri));
                 }
                 catch (Exception e)
                 {

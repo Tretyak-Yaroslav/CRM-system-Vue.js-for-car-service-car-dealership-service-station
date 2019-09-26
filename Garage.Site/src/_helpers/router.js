@@ -2,9 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import LoginPage from '@/login/LoginPage';
 import ShortQueryForm from '@/UserFormPage/ShortQueryForm';
-import Detailtable from '@/TableDetails/DetailsTable';
-import Disposition from '@/disposition/DispositionPage';
-import ModalForm from '@/ModalFormDisposition/ModalForm';
+import Detailtable from '@/components/TableDetails/DetailsTable';
+import Disposition from '@/components/Disposition/DispositionPage';
 import OrderOutfit from '@/components/OrderOutfit/OrderOutfit';
  
 Vue.use(Router);
@@ -26,14 +25,6 @@ export const router = new Router({
             path: '/table', 
             name:'Detailtable',
             component: Detailtable,
-            meta: {
-                roles: ["Shop.Disposition"]
-              }
-        },
-       
-        { 
-            path: '/modal', 
-            component: ModalForm, 
             meta: {
                 roles: ["Shop.Disposition"]
               }

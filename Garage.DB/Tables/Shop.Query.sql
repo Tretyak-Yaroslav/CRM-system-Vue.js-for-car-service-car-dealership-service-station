@@ -12,7 +12,8 @@ CREATE TABLE [Shop].[Query]
 [WorkPlaceID] [int] NULL,
 [ItemID] [int] NULL,
 [QuerySource] [nvarchar] (100) COLLATE Cyrillic_General_CI_AS NULL,
-[QueryDescription] [nvarchar] (max) COLLATE Cyrillic_General_CI_AS NULL
+[QueryDescription] [nvarchar] (max) COLLATE Cyrillic_General_CI_AS NULL,
+[IsDeleted] [bit] NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [Shop].[Query] ADD CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED  ([QueryID]) ON [PRIMARY]

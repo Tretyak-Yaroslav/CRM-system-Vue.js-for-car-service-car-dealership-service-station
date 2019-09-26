@@ -53,6 +53,8 @@ namespace Garage.API
                     };
                 });
 
+            AppSettings.ExportCsvPath = Configuration.GetSection("ExportCsv").Value;
+
             string connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddTransient<IСatalogueService, IСatalogueService>(provider => new СatalogueService(connString));
             services.AddTransient<IOrderService, OrderService>(provider => new OrderService(connString));
@@ -68,7 +70,6 @@ namespace Garage.API
             });
 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "wwwroot"; });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,6 +122,11 @@ namespace Garage.API
             {
                 return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
             }
+        }
+
+        public static class AppSettings
+        {
+            public static string ExportCsvPath { get; set; }
         }
 
     }

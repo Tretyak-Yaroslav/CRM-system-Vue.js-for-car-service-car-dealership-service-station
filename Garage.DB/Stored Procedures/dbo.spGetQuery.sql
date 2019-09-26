@@ -16,7 +16,7 @@ BEGIN
 
 			--DECLARE  @from DATETIME = '20190101', @to DATETIME = '20200101' , @stationID INT = 1
 
-			SELECT q.QueryID, q.StartTime,q.EndTime,q.QueryStatusID, q.QueryDescription, q.CreateDate, qs.QueryStatusName, qs.QueryStatusColor, e.EmployeeID, e.EmployeeLastName,e.EmployeeFirstName, e.EmployeeColor,
+			SELECT q.QueryID, q.StartTime,q.EndTime,q.QueryStatusID, q.QueryDescription, q.CreateDate, q.IsDeleted, qs.QueryStatusName, qs.QueryStatusColor, e.EmployeeID, e.EmployeeLastName,e.EmployeeFirstName, e.EmployeeColor,
 			q.EmployeeMasterID, ee.EmployeeLastName AS EmployeeMasterLastName, ee.EmployeeFirstName AS EmployeeMasterFirstName, ee.EmployeeColor AS EmployeeMasterColor, ep.EmployeePostName, 
 			v.VehicleID, v.VehicleRegistrationNumber,v.VehicleVinNumber,
 			vm.VehicleModelID, vm.VehicleModelName, vm.VehicleModelRange, vr.VendorID,vr.VendorName,
@@ -37,8 +37,10 @@ BEGIN
 			WHERE ((CAST(q.CreateDate AS DATE) BETWEEN @from AND @to AND q.StartTime IS NULL) OR CAST(q.StartTime AS DATE) BETWEEN @from AND @to)
 			AND (q.QueryID = @QueryID OR  @QueryID = 0)
 			AND q.WorkShopID =  @WorkShopID 
-					AND (qs.QueryStatusID = @QueryStatusID OR @QueryStatusID = 0 )
-					 AND (qs.QueryStatusID != @notShortQuery)
+			AND (qs.QueryStatusID = @QueryStatusID OR @QueryStatusID = 0 )
+			AND (qs.QueryStatusID != @notShortQuery)
+			AND (q.IsDeleted IS NULL OR q.IsDeleted != 1 )
+			
 END
 --EXEC dbo.[spGetQuery] '2019-07-01 14:29:00','2020-08-30 14:29:00',1,0,1
 GO

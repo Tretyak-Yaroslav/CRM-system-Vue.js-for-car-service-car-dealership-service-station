@@ -24,17 +24,22 @@ namespace Garage.API.Utils
                 // Initialization.  
                 StringBuilder stringBuilder = new StringBuilder();
 
-                //var header = typeof(Query).GetProperties();
-
                 // Saving Column header.  
-                stringBuilder.Append(string.Join(",", typeof(Query).GetProperties().Select(name => name.Name).ToList()) + "\n");
+                stringBuilder.Append(string.Join(";", typeof(Query).GetProperties().Select(name => name.Name).ToList()) + "\n");
 
                 // Saving rows.  
-                //lists.ForEach(row => stringBuilder.Append(string.Join(",", row) + "\n"));
+                foreach (Query item in lists)
+                {
+                    stringBuilder.Append(string.Join(";", typeof(Query).GetProperties().Select(name => name.GetValue(item)).ToList()) + "\n");
+                }
+
+                // Getting id.
+                int id = lists.Select(item => item.ItemID).FirstOrDefault();
 
                 // Initialization.  
                 string fileContent = stringBuilder.ToString();
-                sw = new StreamWriter(new FileStream(destFilePath+"\\"+DateTime.Now.ToString().Replace(" ","").Replace(".", "").Replace(":", "") + ".csv", FileMode.Create, FileAccess.Write));
+                string fileName = destFilePath + "\\" + id + "_" + DateTime.Now.ToString().Replace(" ", "").Replace(".", "").Replace(":", "").Replace("/", "") + ".csv";
+                sw = new StreamWriter(new FileStream(fileName, FileMode.Create, FileAccess.Write), Encoding.UTF8);
 
                 // Saving.  
                 sw.Write(fileContent);

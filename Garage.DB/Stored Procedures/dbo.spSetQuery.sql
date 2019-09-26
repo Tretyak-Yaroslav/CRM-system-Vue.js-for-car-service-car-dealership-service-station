@@ -10,7 +10,7 @@ GO
 
 CREATE PROCEDURE [dbo].[spSetQuery] @queryID INT=0, @workShopID INT, @customerFullName NVARCHAR(100), @customerPhoneNumber NVARCHAR(20), @itemID INT, @queryDescription NVARCHAR(1000),
 @vehicleModelID INT, @vehicleModificationID INT=NULL, @vehicleRegistrationNumber NVARCHAR(100) =NULL, @employeeID INT=NULL, @employeeMasterID INT=NULL, @workPlaceID INT=NULL, 
-@startTime DATETIME=NULL, @endTime DATETIME=NULL, @queryStatusID INT=1, @vendorID INT=NULL, @querySource NVARCHAR(100) = NULL, @vehicleID INT = NULL, @customerID INT = NULL
+@startTime DATETIME=NULL, @endTime DATETIME=NULL, @queryStatusID INT=1, @vendorID INT=NULL, @querySource NVARCHAR(100) = NULL, @vehicleID INT = NULL, @customerID INT = NULL, @IsDeleted BIT = NULL
 AS BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
@@ -18,15 +18,22 @@ AS BEGIN
     BEGIN TRY
         --DECLARE	@workShopID INT = 1, @customerFullName NVARCHAR(100) = 'Вова', @customerPhoneNumber NVARCHAR(100) = '0974179250', @ServiceID INT =2,
         --													@orderDescription NVARCHAR(1000) = '????????????', @vehicleModelID INT = 1, @vehicleBrandID INT =1
-        DECLARE @createDate DATETIME, @orderCrossPeriod INT=NULL;
+
+		 
+        DECLARE @createDate DATETIME, @orderCrossPeriod INT= 0;
         SELECT @createDate=GETDATE();
-        SELECT @orderCrossPeriod = q.QueryID
+
+        SELECT TOP(1) @orderCrossPeriod = q.QueryID
         FROM Shop.Query q
-        WHERE ((q.StartTime > @startTime AND q.StartTime < @endTime) OR (q.EndTime > @startTime AND q.EndTime < @endTime) OR (q.StartTime = @startTime AND q.EndTime = @endTime))
-				AND q.QueryID !=@queryID
-					AND q.WorkShopID=@workShopID AND q.WorkPlaceID=@workPlaceID
+        WHERE ((q.StartTime > @startTime AND q.StartTime < @endTime) 
+		OR (q.EndTime > @startTime AND q.EndTime < @endTime) 
+		OR (q.StartTime = @startTime AND q.EndTime = @endTime)
+		OR (q.StartTime = @startTime AND q.EndTime > @endTime)) AND 
+		q.WorkShopID = @workShopID AND q.WorkPlaceID = @workPlaceID AND q.QueryID <> @queryID
         ORDER BY q.StartTime DESC;
-        IF(@orderCrossPeriod IS NOT NULL)BEGIN
+
+        IF(@orderCrossPeriod > 0)	
+		BEGIN
             DECLARE @str NVARCHAR(100);
             SELECT @str=CONCAT('Вибраний період пересікається із заявкою:  ', CAST(@orderCrossPeriod AS NVARCHAR(100)));
             RAISERROR(@str, 16, 1);
@@ -102,7 +109,7 @@ AS BEGIN
         ELSE BEGIN
 			UPDATE Shop.Query
 			SET VehicleID=@vehicleID, StartTime=@startTime, EndTime=@endTime, QueryStatusID=@queryStatusID, EmployeeMasterID=@employeeMasterID, QueryDescription=@queryDescription,
-				ItemID=@itemID, EmployeeID=@employeeID, WorkPlaceID=@workPlaceID
+				ItemID=@itemID, EmployeeID=@employeeID, WorkPlaceID=@workPlaceID, IsDeleted=@IsDeleted
 			WHERE QueryID = @queryID
 			
             --UPDATE dbo.[Order]

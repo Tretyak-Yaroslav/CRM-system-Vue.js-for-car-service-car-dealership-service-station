@@ -1,0 +1,219 @@
+<TableGoods>
+  <div class="container-fluid mt-4">
+    <div class="table-responsive">
+      <table class="table table-bordered mt-4">
+        <thead class="thead-light">
+          <tr>
+            <th width="1">#</th>
+            <th>Артикул</th>
+            <th>Номенклатура</th>
+            <th>Количество</th>
+            <th>Количество остаток</th>
+            <th>Количество перемещение</th>
+            <th>К.</th>
+            <th>Ед.</th>
+            <th>Цена</th>
+            <th>Сума без скидки</th>
+            <th>% Руч.ск.</th>
+            <th>% Авт.ск.</th>
+            <th>Сумма</th>
+            <th>% НДС</th>
+            <th>Сумма НДС</th>
+            <th>Склад</th>
+            <th>Всего</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(items, index2) in itemss" :key="index2">
+            <td>{{ index2 + 1 }}</td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.code }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.code"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.name }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.name"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.description }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.description"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.qty }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  type="number"
+                  v-model.number="items.qty"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.unit2 }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  v-model="items.unit2"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.price }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  type="number"
+                  v-model.number="items.price"
+                />
+              </span>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">{{ items.discount }}</span>
+              <span v-if="editindex2 === index2">
+                <input
+                  class="form-control form-control-sm"
+                  type="number"
+                  v-model.number="items.discount"
+                />
+              </span>
+            </td>
+            <td>
+              <div class="text-right">{{ subtotal2(items) | money2 }}</div>
+            </td>
+            <td>
+              <span v-if="editindex2 !== index2">
+                <button
+                  @click="edit(items, index2)"
+                  class="btn btn-sm btn-outline-secondary mr-2"
+                >
+                  Редактировать
+                </button>
+              </span>
+              <span v-else>
+                <button
+                  class="btn btn-sm btn-outline-secondary mr-2"
+                  @click="save(items)"
+                >
+                  Сохранить
+                </button>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-12 text-right my-3">
+      <button
+        v-show="!editindex2"
+        @click="add2"
+        class="btn btn-sm btn-secondary"
+      >
+        Добавить элемент
+      </button>
+      <button
+        @click="remove(items, index2)"
+        class="btn btn-sm btn-outline-secondary mr-2"
+      >
+        Удалить
+      </button>
+    </div>
+    <div class="col-md-12 border">
+      <b-form-group label-cols-lg="4" label="Комментарий :">
+        <b-form-textarea
+          id="textarea"
+          v-model="text"
+          rows="3"
+          max-rows="6"
+        ></b-form-textarea>
+      </b-form-group>
+    </div>
+  </div>
+</TableGoods>

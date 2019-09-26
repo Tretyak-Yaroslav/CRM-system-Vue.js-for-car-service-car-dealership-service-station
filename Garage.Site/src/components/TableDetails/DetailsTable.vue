@@ -58,6 +58,7 @@
         <template slot="isActive" slot-scope="row">{{ row.value ? 'Yes :)' : 'No :(' }}</template>
         <template slot="actions" slot-scope="row">
           <b-button size="sm" @click="info(row.item,$event.target)" class="mr-1">Обробити</b-button>
+          <b-button size="sm" @click="exportQueryCSV(row.item,$event.target)" class="mr-1">Завантажити заявку</b-button>
         </template>
         <template slot="row-details" slot-scope="row">
           <b-card>
@@ -551,6 +552,49 @@ export default {
       });
   },
   methods: {
+      exportQueryCSV(item, queryID) {
+      var date1 = new Date();
+      date1.setDate(date1.getDate() - 3);
+      var date2 = new Date();
+      date2.setDate(date2.getDate() + 3);
+      this.$store
+        .dispatch("ExportQueryToFile", {
+          params: {
+            from: date1.toISOString().slice(0, 10),
+            to: date2.toISOString().slice(0, 10),
+            workShopID: 1,
+            queryStatusID: 0,
+            notShortQuery: 0,
+            queryID: item.queryID
+          }
+        })
+        .then(res => {
+            var queryData = JSON.parse(JSON.stringify(res.data));
+            if (res.status == 200) {
+                alert("Заявка успішно завантажена");
+            }
+            else {
+                alert("Помилка! Заявка не завантажена")
+            }
+          //  for (var i = 0; i < queryData.length; i++) {
+          //    if (queryData[i].queryID == item.queryID) {
+          //           let csvContent = "data:text/csv;charset=utf-8,";
+          //           // csvContent += [
+          //           //   Object.keys(queryData[0]).join(";"),
+          //           //   ...queryData.map(item => Object.values(item).join(";"))
+          //           // ].join("\n").replace(/(^\[)|(\]$)/gm, "");
+          //           //Object.keys(queryData[i]).join(";")
+          //           csvContent +=  Object.values(queryData[i]).join(";");//.replace(/(^\[)|(\]$)/gm, "");
+          //           const data = encodeURI(csvContent);
+          //           const link = document.createElement("a");
+          //           link.setAttribute("href", csvContent);
+          //           link.setAttribute("target", "_blank");
+          //           link.setAttribute("download", "export.csv");
+          //           link.click();
+          //    }
+          //  }
+        });
+    },
     info(item, queryID) {
       var date1 = new Date();
       date1.setDate(date1.getDate() - 3);

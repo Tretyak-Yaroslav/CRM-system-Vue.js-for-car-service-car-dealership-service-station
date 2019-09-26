@@ -1,293 +1,378 @@
-<order>
-  <div>
-    <b-tabs content-class="mt-2" justified>
-      <b-tab title="Шапка документа" active>
-        <div class="container-fluid">
-          <div class="row border">
-            <div class="col-md-4">
-              <b-form-group label-cols-lg="3" label="Номер :">
-                <b-form-input></b-form-input>
-              </b-form-group>
-            </div>
-            <div class="col-md-4">
-              <b-form-group label-cols-lg="2" label="от :">
-                <b-form-input id="date" type="date"></b-form-input>
-              </b-form-group>
-            </div>
-            <div class="col-md-4">
-              <b-form-group label-cols-lg="3" label="Статус :">
-                <b-form-select
-                  v-model="selected"
-                  :options="options"
-                ></b-form-select>
-              </b-form-group>
-            </div>
-            <div class="col-md-4">
-              <b-form-group
-                id="fieldset-horizontal"
-                label-cols-lg="6"
-                label="Вид оплаты :"
-                label-for="input-horizontal"
-              >
-                <b-form-select
-                  v-model="selected"
-                  :options="options"
-                ></b-form-select>
-              </b-form-group>
-            </div>
-            <div class="col-md-4">
-              <b-form-group
-                id="fieldset-horizontal"
-                label-cols-lg="3"
-                label="Склад :"
-                label-for="input-horizontal"
-              >
-                <b-form-select
-                  v-model="selected"
-                  :options="options"
-                ></b-form-select>
-              </b-form-group>
-            </div>
-            <div class="col-md-4">
-              <b-form-group
-                id="fieldset-horizontal"
-                label-cols-lg="7"
-                label="Вид заказа наряда :"
-                label-for="input-horizontal"
-              >
-                <b-form-select
-                  v-model="selected"
-                  :options="options"
-                ></b-form-select>
-              </b-form-group>
-            </div>
+<div>
+  <b-tabs content-class="mt-2" justified>
+    <b-tab title="Шапка документа" active>
+      <div class="container-fluid">
+        <div class="row border">
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="3" label="Номер :">
+              <b-form-input></b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="2" label="от :">
+              <b-form-input id="date" type="date"></b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="3" label="Статус :">
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group
+              id="fieldset-horizontal"
+              label-cols-lg="6"
+              label="Вид оплаты :"
+              label-for="input-horizontal"
+            >
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group
+              id="fieldset-horizontal"
+              label-cols-lg="3"
+              label="Склад :"
+              label-for="input-horizontal"
+            >
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group
+              id="fieldset-horizontal"
+              label-cols-lg="7"
+              label="Вид заказа наряда :"
+              label-for="input-horizontal"
+            >
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
           </div>
         </div>
-        <div class="container-fluid">
-          <div class="row border">
-            <div class="col-md-4">
-              <b-form-group label-cols-lg="5" label="Виконавець :">
+      </div>
+      <div class="container-fluid">
+        <div class="row border">
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="5" label="Виконавець :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="5" label="Контрагент :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="5" label="Договор контр :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="5" label="Плательщик :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="5" label="Договор плат :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="5" label="Телефон :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <div class="col-md-12 border">
+              <span id="order">Отвественное лицо заказчика</span>
+              <b-form-group label-cols-lg="5" label="ФИО :">
                 <b-form-input> </b-form-input>
               </b-form-group>
-              <b-form-group label-cols-lg="5" label="Контрагент :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="5" label="Договор контр :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="5" label="Плательщик :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="5" label="Договор плат :">
+              <b-form-group label-cols-lg="5" label="Должность :">
                 <b-form-input> </b-form-input>
               </b-form-group>
               <b-form-group label-cols-lg="5" label="Телефон :">
                 <b-form-input> </b-form-input>
               </b-form-group>
-              <div class="col-md-12 border">
-                <span>Отвественное лицо заказчика</span>
-                <b-form-group label-cols-lg="5" label="ФИО :">
-                  <b-form-input> </b-form-input>
-                </b-form-group>
-                <b-form-group label-cols-lg="5" label="Должность :">
-                  <b-form-input> </b-form-input>
-                </b-form-group>
-                <b-form-group label-cols-lg="5" label="Телефон :">
-                  <b-form-input> </b-form-input>
-                </b-form-group>
-              </div>
             </div>
-            <div class="col-md-8 border">
-              <b-form-group label-cols-lg="6" label="Транспортное Средство :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group
-                label-cols-lg="4"
-                class="col-md-6 floaft"
-                label="Марка :"
-              >
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="4" class="col-md-6" label="Модель :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group
-                label-cols-lg="4"
-                class="col-md-6 floaft"
-                label="Вин номер :"
-              >
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="4" class="col-md-6 " label="Шасси :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group
-                label-cols-lg="6"
-                class="col-md-12 "
-                label="Регистрационный номер :"
-              >
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group
-                label-cols-lg="4"
-                class="col-md-6  floaft"
-                label="Год выпуска :"
-              >
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="4" class="col-md-6" label="Пробег :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group
-                label-cols-lg="4"
-                class="col-md-12"
-                label="Свидетельство :"
-              >
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="4" label="Путевой лист :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-group label-cols-lg="4" label="Доверенность ДТС :">
-                <b-form-input> </b-form-input>
-              </b-form-group>
-              <b-form-checkbox>Прицеп контрагента</b-form-checkbox>
-            </div>
-            <div class="col-md-12 border">
-              <b-form-group label-cols-lg="4" label="Комментарий :">
-                <b-form-textarea
-                  id="textarea"
-                  v-model="text"
-                  rows="3"
-                  max-rows="6"
-                ></b-form-textarea>
-              </b-form-group>
-            </div>
+          </div>
+          <div class="col-md-8 border">
+            <b-form-group label-cols-lg="6" label="Транспортное Средство :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group
+              label-cols-lg="4"
+              class="col-md-6 floaft"
+              label="Марка :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="4" class="col-md-6" label="Модель :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group
+              label-cols-lg="4"
+              class="col-md-6 floaft"
+              label="Вин номер :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="4" class="col-md-6 " label="Шасси :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group
+              label-cols-lg="6"
+              class="col-md-12 "
+              label="Регистрационный номер :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group
+              label-cols-lg="4"
+              class="col-md-6  floaft"
+              label="Год выпуска :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="4" class="col-md-6" label="Пробег :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group
+              label-cols-lg="4"
+              class="col-md-12"
+              label="Свидетельство :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="4" label="Путевой лист :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-group label-cols-lg="4" label="Доверенность ДТС :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+            <b-form-checkbox>Прицеп контрагента</b-form-checkbox>
+          </div>
+          <div class="col-md-12 border">
+            <b-form-group label-cols-lg="4" label="Комментарий :">
+              <b-form-textarea
+                id="textarea"
+                v-model="text"
+                rows="3"
+                max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
           </div>
         </div>
-      </b-tab>
-      <b-tab title="Роботи">
+      </div>
+    </b-tab>
+    <b-tab title="Роботи">
 
-        <div class="container-fluid mt-4">
-        
-          <table class="table table-bordered mt-4">
-            <thead class="thead-light">
-              <tr>
-                <th width="1">#</th>
-                <th width="auto">Статус работы</th>
-                <th width="auto">Время Выпол.</th>
-                <th width="auto">Номенклатура</th>
-                <th width="auto">Содержание усдуг доп.</th>
-                <th width="auto">Количество</th>
-                <th width="auto">Количество</th>
-                <th width="auto">Цена</th>
-                <th width="auto">% Руч.ск.</th>
-                <th width="auto">%Авт.</th>
-                <th width="auto">Сумма</th>
-                <th width="auto">%НДС</th>
-                <th width="auto">Сума НДС</th>
-                <th width="auto">Всього</th>
-           
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in items" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.status }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" v-model="item.status">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.time }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" v-model="item.time">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.servise }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" v-model="item.servise">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.text }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="text" v-model.number="item.text">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.number }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model="item.number">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.number2 }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.number2">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.price }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.price">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.discount }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.discount">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.discount2 }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.discount2">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.suma }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.suma">
-                  </span>
-                </td>
+      <div class="container-fluid mt-4">
+        <div class="table-responsive">
+        <table class="table table-bordered mt-4">
+          <thead class="thead-light">
+            <tr>
+              <th width="1">#</th>
+              <th width="auto">Статус работы</th>
+              <th width="auto">Время Выпол.</th>
+              <th width="auto">Номенклатура</th>
+              <th width="auto">Содержание усдуг доп.</th>
+              <th width="auto">Количество</th>
+              <th width="auto">Количество</th>
+              <th width="auto">Цена</th>
+              <th width="auto">% Руч.ск.</th>
+              <th width="auto">%Авт.</th>
+              <th width="auto">Сумма</th>
+              <th width="auto">%НДС</th>
+              <th width="auto">Сумма НДС</th>
+              <th width="auto">Всього</th>
+               <th width="auto"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in items" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.status }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    v-model="item.status"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.time }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    v-model="item.time"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.servise }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    v-model="item.servise"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.text }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="text"
+                    v-model.number="item.text"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.number }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model="item.number"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.number2 }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.number2"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.price }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.price"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.discount }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.discount"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.discount2 }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.discount2"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.suma }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.suma"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.procent }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.procent"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.sumaprice }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.sumaprice"
+                  />
+                </span>
+              </td>
+              <td>
+                <span v-if="editIndex !== index">{{ item.everything }}</span>
+                <span v-if="editIndex === index">
+                  <input
+                    class="form-control form-control-sm"
+                    type="number"
+                    v-model.number="item.everything"
+                  />
+                </span>
+              </td>
                  <td>
-                  <span v-if="editIndex !== index">{{ item.procent }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.procent">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.sumaprice }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.sumaprice">
-                  </span>
-                </td>
-                <td>
-                  <span v-if="editIndex !== index">{{ item.everything }}</span>
-                  <span v-if="editIndex === index">
-                    <input class="form-control form-control-sm" type="number" v-model.number="item.everything">
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-         
-          <div class="col-3 offset-9 text-right my-3">
-            <button v-show="!editIndex" @click="add" class="btn btn-sm btn-secondary">Добавить элемент</button>
+            <span v-if="editIndex !== index">
+              <button @click="edit(item, index)" class="btn btn-sm btn-outline-secondary mr-2">Редактировать</button>
+<!--               <button @click="remove(item, index)" class="btn btn-sm btn-outline-secondary mr-2">Remove</button>
+ -->            </span>
+           <span v-else>
+<!--               <button class="btn btn-sm btn-outline-secondary mr-2" @click="cancel(item)">Cancel</button>
+ -->              <button class="btn btn-sm btn-outline-secondary mr-2" @click="save(item)">Сохранить</button>
+            </span>
+           </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+
+        <div class="col-12 text-right my-3">
+          <button
+            v-show="!editIndex"
+            @click="add"
+            class="btn btn-sm btn-secondary"
+          >
+            Добавить элемент
+          </button>
           <span v-if="editIndex !== index">
-            <button @click="edit(item, index)" class="btn btn-sm btn-outline-secondary mr-2">Редактировать</button>
-            <button @click="remove(item, index)" class="btn btn-sm btn-outline-secondary mr-2">Удалить</button>
+            <!-- <button
+              @click="edit(item, index)"
+              class="btn btn-sm btn-outline-secondary mr-2"
+            >
+              Редактировать
+            </button>  -->
+            <button
+              @click="remove(item, index)"
+              class="btn btn-sm btn-outline-secondary mr-2"
+            >
+              Удалить
+            </button>
           </span>
           <span v-else>
-            <button class="btn btn-sm btn-outline-secondary mr-2" @click="cancel(item)">Отмена</button>
-            <button class="btn btn-sm btn-outline-secondary mr-2" @click="save(item)">Сохранить</button>
+            <button
+              class="btn btn-sm btn-outline-secondary mr-2"
+              @click="cancel(item)"
+            >
+              Отмена
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary mr-2"
+              @click="save(item)"
+            >
+              Сохранить
+            </button>
           </span>
-          </div>
-        
-<!--           <div class="col-3 offset-9">
+        </div>
+
+        <!--         <div class="col-3 offset-9">
         
             <div class="input-group input-group-sm mb-3">
               <div class="input-group-prepend">
@@ -313,38 +398,217 @@
               <input class="form-control form-control-sm text-right" disabled :value="this.total | money">
             </div>
         
-          </div> -->
-        
-        </div>
-<div class="container-fluid">
-  <div class="row border">
-    <div class="col-md-4">
-      <b-form-group label-cols-lg="5" label="ФИО :">
-        <b-form-input> </b-form-input>
-      </b-form-group>
+          </div>  -->
       </div>
-    <div class="col-md-4">
-      <b-form-group label-cols-lg="5" label="Категория :">
-        <b-form-input> </b-form-input>
-      </b-form-group>
-    </div>
-    <div class="col-md-4">
-      <b-form-group label-cols-lg="5" label="Процент занятости :">
-        <b-form-input> </b-form-input>
-      </b-form-group>
-    </div>
-  </div> 
+      <div class="container-fluid">
+        <div class="row border">
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="5" label="ФИО :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="5" label="Категория :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-md-4">
+            <b-form-group label-cols-lg="5" label="Процент занятости :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+      </div>
+    </b-tab>
+    <b-tab title="Товари">
+      <TableGoods></TableGoods>
+    </b-tab>
+    <b-tab title="Печать">
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-6 ">
+            <span >Необходимо заменить (Заявленные работы)</span>
+            <b-form-group>
+              <b-form-textarea
+                id="textarea"
+                v-model="text"
+                rows="3"
+                max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
+            <span>Отказ от устранения дефектов</span>
+            <b-form-group>
+              <b-form-textarea
+                id="textarea"
+                v-model="text"
+                rows="3"
+                max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
+            <span>Состояние ДТС</span>
+            <b-form-group>
+              <b-form-textarea
+                id="textarea"
+                v-model="text"
+                rows="3"
+                max-rows="6"
+              ></b-form-textarea>
+            </b-form-group>
+          </div>
+          <div class="col-6 border">
+            <span>Довереность</span>
+            <div class="container ">
+              <div class="row d-flex justify-content-between">
+                <b-form-group
+                  label-cols-lg="4"
+                  class="col-md-6"
+                  label="Серия :"
+                >
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <b-form-group
+                  label-cols-lg="4"
+                  class="col-md-6"
+                  label="Номер :"
+                >
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <b-form-group label-cols-lg="2" class="col-md-12" label="от :">
+                  <b-form-input id="date" type="date"></b-form-input>
+                </b-form-group>
+              </div>
+            </div>
+            <b-form-group label-cols-lg="3" label="Выдана от :">
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
+            <b-form-group label-cols-lg="3" label="Получил :">
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+            </b-form-group>
+            <span>Разное</span>
+            <b-form-group
+              label-cols-lg="4"
+              class="col-md-12"
+              label="Место составления документа :"
+            >
+              <b-form-input> </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 border">
+        <b-form-group label-cols-lg="4" label="Комментарий :">
+          <b-form-textarea
+            id="textarea"
+            v-model="text"
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
+        </b-form-group>
+      </div>
+    </b-tab>
+    <b-tab title="Доповнення">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12 border">
+            <div class="row ">
+              <div class="col-md-5">
+                <b-form-group label-cols-lg="4" label="Отвественный :">
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+              </div>
+              <div class="col-md-5">
+                <b-form-group label-cols-lg="3" label="КПП :">
+                  <b-form-select
+                    v-model="selected"
+                    :options="options"
+                  ></b-form-select>
+                </b-form-group>
+              </div>
+              <div class="col-md-2 ">
+                <b-button size="sm">Создать разрешение</b-button>
+              </div>
+              <div class="col-md-12">
+                <b-form-group
+                  label-cols-lg="3"
+                  class="center"
+                  label="Тип цен :"
+                >
+                  <b-form-select
+                    v-model="selected"
+                    :options="options"
+                  ></b-form-select>
+                </b-form-group>
+
+                <b-form-group
+                  label-cols-lg="3"
+                  class="center"
+                  label="Счет БУ :"
+                >
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <b-form-group label-cols-lg="3" class="center" label="Акт БУ :">
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <b-form-group
+                  label-cols-lg="3"
+                  class="center"
+                  label="Счет УУ :"
+                >
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <b-form-group label-cols-lg="3" class="center" label="Акт УУ :">
+                  <b-form-input> </b-form-input>
+                </b-form-group>
+                <div class="row d-flex justify-content-around">
+                  <b-form-checkbox 
+                    >Учитывать НДС</b-form-checkbox
+                  >
+                  <b-form-checkbox 
+                    >Сумма включает НДС</b-form-checkbox
+                  >
+                  <b-form-checkbox>Документы получены</b-form-checkbox>
+                  <b-form-checkbox>Авторасчет НДС</b-form-checkbox>
+                  
+                </div>
+<div class="row mt-4">
+            <div class="col-md-4">
+              <b-form-group label-cols-lg="6" class="center" label="Валюта документа :">
+                <b-form-input> </b-form-input>
+              </b-form-group>
+            </div>
+            <div class="col-md-4">
+              <b-form-group label-cols-lg="5" class="center" label="Курс валюты :">
+                <b-form-input> </b-form-input>
+              </b-form-group>
+            </div>
+            <div class="col-md-4">
+              <b-form-group label-cols-lg="6" class="center" label="Кратность валюты :">
+                <b-form-input> </b-form-input>
+              </b-form-group>
+            </div>
+            <div class="col-md-12">
+                <b-form-select v-model="selected" :options="options"></b-form-select>
+                </b-form-group>
+
+            </div>
 </div>
-      </p></b-tab>
-      <b-tab title="Товари"
-        ><p>I'm the tab with the very, very long title</p></b-tab
-      >
-      <b-tab title="Печать"
-        ><p>I'm the tab with the very, very long title</p></b-tab
-      >
-      <b-tab title="Доповнення"
-        ><p>I'm the tab with the very, very long title</p></b-tab
-      >
-    </b-tabs>
-  </div>
-</order>
+      
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mt-5">
+            <b-form-group label-cols-lg="6" class="center" label="Последний изменил :">
+              <b-form-input> </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+      </div>
+    </b-tab>
+  </b-tabs>
+</div>
