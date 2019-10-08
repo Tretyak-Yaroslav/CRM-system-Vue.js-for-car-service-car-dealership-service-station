@@ -1,15 +1,20 @@
 <template src="./DispositionPage.html"/>
 <script charset="utf-8">
-import FullCalendar from "@fullcalendar/vue";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import MaskedInput from "vue-masked-input";
+import Vue from 'vue'
 import axios from "axios";
+import Calendar from "@/components/Calendar/Calendar";
 import DetailsTable from "@/components/TableDetails/DetailsTable";
+import QueryModal from "@/components/QueryModal/QueryModal";
 import moment from "moment";
+
 export default {
   created() {
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (this.currentUser) {
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + this.currentUser.token;
+    }
+
     this.$store.dispatch("getWorkPlace", { params: { id: 1 } }).then(res => {
       var workplaceData = JSON.parse(JSON.stringify(res.data));
        this.workplaces = workplaceData.map(function(i) {
@@ -39,7 +44,7 @@ export default {
         };
       });
     });
-    this.$store.dispatch("getVendor", { params: { id: 0 } }).then(res => {
+    this.$store.dispatch("getVendor", { params: { id: 0, isVisible: true } }).then(res => {
       var vendorsData = JSON.parse(JSON.stringify(res.data));
       this.vendors = vendorsData.map(function(i) {
         return {
@@ -53,56 +58,23 @@ export default {
     this.getEvents();
   },
   components: {
-    FullCalendar,
-    MaskedInput,
+    Calendar,
     DetailsTable
   },
   data() {
     return {
-      modal:{
-        title: '',
-        currentmodal: String
-      }
-      ,
-      form: {   
-        id: Number,
-        customerID: Number,
-        customerFullName: String,
-        customerPhoneNumber: String,
-        startTime: String,
-        endTime: String,
-        startDateTime: String,
-        vehicleID: Number,
-        vendorID: Number,
-        vehicleModelID: Number,
-        vehicleRegistrationNumber: String,
-        workplaceID: Number,
-        itemID: Number,
-        masterID: Number,
-        mechanicID: Number,
-        queryDescription: String,
-        queryStatusID: Number,
-      },
-      calendarPlugins: [
-        resourceTimelinePlugin,
-        timeGridPlugin,
-        interactionPlugin
-      ],
       workplaces: Array,
-      employes: Array,
       queryStatuses: Array,
-      vehicleModels: Array,
       vendors: Array,
       itemCategories: Array,
       masters: Array,
       mechanics: Array,
-      requestStatus: Array,
       events: Array,
-      tooltip: {target:'forempty', content : '', key : 0},
-      showDismissibleAlert: false,
-      eventModalAlert: String
+      tableitems: Array,
+      currentUser : Object
     };
   },
+
   computed:{
     date1: function(){
      var date1 = new Date();
@@ -114,165 +86,15 @@ export default {
      date2.setDate(date2.getDate() + 3);
     return date2.toISOString().slice(0, 10);
     },
-     cStartDateTime: function(){
-        return moment(this.form.startDateTime, "YYYY-MM-DD").format("YYYY-MM-DD") ;
-    },
-     cStartTime: function(){
-        return moment(this.form.startTime, "HH:mm").format("HH:mm");
-    },
-     cEndTime: function(){
-        return moment(this.form.endTime, "HH:mm").format("HH:mm");
-    }
   },
 
   methods: {
-    updateStartTime(){
-     var startTime = this.cStartDateTime+' '+this.cStartTime;
-     return moment(startTime,"YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss");
-    }
-    ,
-    updateEndTime(){
-      var endTime = this.cStartDateTime+' '+this.cEndTime;
-      return moment(endTime,"YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss");
-    },
-
-    stringToDateTime(value){
-        this.form.startDateTime = value;
-        this.form.startTime = this.cStartTime;
-        this.form.endTime = this.cEndTime;
-    },
-    stringToStartTime(value){
-        this.form.startDateTime = this.cStartDateTime; 
-        this.form.startTime = value; 
-        this.form.endTime = this.cEndTime;
-    },
-    stringToEndTime(value){
-        this.form.startDateTime = this.cStartDateTime; 
-        this.form.startTime = this.cStartTime;
-        this.form.endTime = value; 
-    },
-
-    mouseEnterEvent(elid, event){
-       this.tooltip.target = elid;
-       this.tooltip.content = 
-       
-      '<b>' + event.extendedProps.vendorName + ' ' + event.extendedProps.vehicleModelName +'</b>' + '<br>'+
-       '<font color="gray">' +event.extendedProps.employeeLastName + ' ' + event.extendedProps.employeeFirstName + '</font><br>' +
-       event.extendedProps.itemName + '<br>' +
-       event.extendedProps.queryDescription;
-
-       if(this.$refs.refpopover.target != this.tooltip.target)
-       this.tooltip.key++;
-    },
     logout() {
       localStorage.removeItem("currentUser");
       delete axios.defaults.headers.common["Authorization"];
       this.$router.push("/");
     },
-      eventRender(arg) {
-      var elid = arg.el.id = 'event'+arg.event.id;
-      arg.el.addEventListener("mouseenter",(evt) =>  this.mouseEnterEvent(elid, arg.event));
-    },
 
-    handleSelect(arg) {
-      this.form = {}; 
-      this.form.startDateTime = new Date(arg.start.setHours(arg.start.getHours() - 3))
-      this.form.startTime =new Date(arg.start);
-      this.form.endTime = new Date(arg.end.setHours(arg.end.getHours() - 3));
-      this.form.workplaceID = arg.resource.id;
-      this.modal.currentmodal = 'modal-create';
-      this.modal.title = 'Заявка: НОВА'     
-      this.$bvModal.show(this.modal.currentmodal);
-    },
-
-    eventClick(arg) {
-    this.form = {};
-    this.modal.currentmodal = 'modal-edit';
-    this.modal.title = 'Редагування заявки';
- 
-    var id = arg.event._def.publicId;
-     this.$store
-        .dispatch("postQuery", {
-          params: {
-            from: this.date1,
-            to: this.date2,
-            workShopID: 1,
-            queryStatusID: 0,
-            notShortQuery: 0,
-            queryID: id
-          }
-        })
-        .then(res => {
-          var data = JSON.parse(JSON.stringify(res.data));
-
-          for (var i = 0; i < data.length; i++) {
-       
-            if (data[i].queryID == id) {
-              this.form.id = id;
-              this.form.itemID = data[i].itemID;
-              this.form.customerFullName = data[i].customerFullName;
-              this.form.customerPhoneNumber = data[i].customerPhoneNumber;
-              this.$set(this.form, 'startDateTime', new Date(data[i].startTime));
-              this.$set(this.form, 'startTime', new Date(data[i].startTime));
-              this.$set(this.form, 'endTime', new Date(data[i].endTime));
-              this.form.vendorID = data[i].vendorID;
-              this.form.vendorText = data[i].vendorName;
-              this.form.vehicleModelID = data[i].vehicleModelID;
-              this.form.vehicleID = data[i].vehicleID;
-              this.form.vehicleModelText = data[i].vehicleModelName;
-              this.form.vehicleRegistrationNumber = data[i].vehicleRegistrationNumber;
-              this.form.workplaceID = data[i].workPlaceID;
-              this.form.masterID = data[i].employeeMasterID;
-              this.form.mechanicID = data[i].employeeID;
-              this.form.queryStatusID = data[i].queryStatusID;
-              this.form.queryDescription = data[i].queryDescription;
-              this.form.customerID = data[i].customerID;
-            }
-          }
-        });
-
-      this.$bvModal.show(this.modal.currentmodal);
-
-      this.tooltip.key++;
-      this.tooltip.target = 'forempty';
-    },
-    saveQuery(isNew, isDeleted) {
-      this.$store
-        .dispatch("setQuery", {
-          params: {
-            queryID: isNew? 0 : this.form.id,
-            workShopID: 1,
-            customerFullName: this.form.customerFullName,
-            customerPhoneNumber: this.form.customerPhoneNumber,
-            startTime: this.updateStartTime(),
-            endTime: this.updateEndTime(),
-            vehicleID: isNew? 0 : this.form.vehicleID,
-            vendorID: this.form.vendorID,
-            vehicleModelID:  this.form.vehicleModelID,
-            vehicleModificationID: isNew ? 1 : this.form.vehicleModelID,
-            vehicleRegistrationNumber: this.form.vehicleRegistrationNumber,
-            workPlaceID: this.form.workplaceID,
-            itemID: this.form.itemID,
-            queryDescription: this.form.queryDescription,
-            employeeID: this.form.mechanicID,
-            employeeMasterID: this.form.masterID,
-            queryStatusID: isNew ? 2 : this.form.queryStatusID,
-            customerID: isNew ? 0 : this.form.customerID,
-            isDeleted: isDeleted ? true : false
-          }
-        })
-        .then(res => {
-           console.log(res);
-          this.$bvModal.hide(this.modal.currentmodal);
-          this.getEvents();
-        }).catch((error) => {
-           this.eventModalAlert = error.response.data;
-           this.showDismissibleAlert=true;
-           setTimeout(() => this.showDismissibleAlert = false, 2000);
-        
-      console.log(error.response.data)    });
- 
-    },
     getEvents(){
           this.$store
       .dispatch("getQuery", {
@@ -295,16 +117,70 @@ export default {
             end: i["endTime"],
             borderColor: i["queryStatusColor"],
             backgroundColor: i["employeeMasterColor"],
-            vendorName: i["vendorName"], //for tooltip
-            vehicleModelName: i["vehicleModelName"], // for tooltip
-            employeeLastName: i["employeeLastName"], // for tooltip
-            employeeFirstName: i["employeeFirstName"],// for tooltip
-            itemName: i["itemName"],// for tooltip
-            queryDescription: i["queryDescription"],// for tooltip
+            queryObject: {
+                    queryID: i["queryID"],
+                    customerID: i["customerID"],
+                    customerFullName: i["customerFullName"],
+                    customerPhoneNumber: i["customerPhoneNumber"],
+                    startTime: i["startTime"],
+                    endTime: i["endTime"],
+                    vehicleID: i["vehicleID"],
+                    vendorID: i["vendorID"],
+                    vehicleModelID: i["vehicleModelID"],
+                    vehicleRegistrationNumber: i["vehicleRegistrationNumber"],
+                    workPlaceID: i["workPlaceID"],
+                    itemID: i["itemID"],
+                    employeeMasterID: i["employeeMasterID"],
+                    employeeID: i["employeeID"],
+                    queryDescription: i["queryDescription"],
+                    queryStatusID: i["queryStatusID"],
+                    vendorName: i["vendorName"], //for tooltip
+                    vehicleModelName: i["vehicleModelName"], // for tooltip
+                    employeeLastName: i["employeeLastName"], // for tooltip
+                    employeeFirstName: i["employeeFirstName"],// for tooltip
+                    itemName: i["itemName"],// for tooltip
+            },
           };
         });
+        this.createTableItems(eventsData);
+
       });
     },
+
+    saveQuery(query, isDeleted, callback, errorcallback){
+      this.$store
+        .dispatch("setQuery", {
+          params: {
+            queryID: query.queryID,
+            workShopID: 1,
+            customerFullName: query.customerFullName,
+            customerPhoneNumber: query.customerPhoneNumber,
+            startTime: query.startTime,
+            endTime: query.endTime,
+            vehicleID: query.vehicleID,
+            vendorID: query.vendorID,
+            vehicleModelID:  query.vehicleModelID,
+            vehicleModificationID: query.vehicleModelID,
+            vehicleRegistrationNumber: query.vehicleRegistrationNumber,
+            workPlaceID: query.workPlaceID,
+            itemID: query.itemID,
+            queryDescription: query.queryDescription,
+            employeeID: query.employeeID == null ? 0 : query.employeeID,
+            employeeMasterID: query.employeeMasterID,
+            queryStatusID:  query.queryStatusID,
+            customerID: query.customerID,
+            isDeleted: isDeleted ? true : false
+          }
+        })
+        .then(res => {
+          callback();       
+          this.getEvents();
+        }).catch((error) => {
+            console.log(error);
+          errorcallback(error);
+           });
+    },
+
     getEmployees(postID){
      return this.$store
       .dispatch("getEmployees", {
@@ -333,19 +209,45 @@ export default {
         }
       });
     },
-     getSelectedBrand(id) {
-      this.$store
-        .dispatch("getVehicleModel", { params: { id: id } })
-        .then(res => {
-          var vendorsData = JSON.parse(JSON.stringify(res.data));
-          this.vehicleModels = vendorsData.map(function(i) {
-            return {
-              id: i["vehicleModelID"],
-              text: i["vehicleModelName"]
-            };
-          });
+    createModalInstance(arg){
+      var ModalClass = Vue.extend(QueryModal)
+
+      var instance = new ModalClass({propsData: {
+        parent: this,
+        queryStatuses: this.queryStatuses, 
+        workplaces: this.workplaces, 
+        itemCategories: this.itemCategories,
+        masters: this.masters, 
+        mechanics: this.mechanics,
+        vendors: this.vendors,}})
+
+        instance.$mount()
+
+        this.$refs.modalcontainer.appendChild(instance.$el)
+        instance.openModal(arg, this.date1, this.date2, this.currentUser);
+  },
+    createTableItems(eventsData){    
+    this.tableitems = eventsData.map(function(i) {
+          return {
+            queryObject: i,
+            queryID: i["queryID"],
+            DateTime: moment(String(i["startTime"])).format("L"),
+            queryStatusName: i["queryStatusName"],
+            variant: i["queryStatusColor"],
+            customerPhoneNumber: i["customerPhoneNumber"],
+            startTime: moment(String(i["startTime"])).format("LT") +' - '+moment(String(i["endTime"])).format("LT"),
+          /*  employeeID: {
+              employeeFirstName: i["employeeFirstName"],
+              employeeLastName: i["employeeLastName"]
+            }, */
+            modelAndMakeCar:  i["vendorName"] +' '+i["vehicleModelName"],
+            vehicleRegistrationNumber: i["vehicleRegistrationNumber"],
+            employeeMaster: i["employeeMasterLastName"] + ' ' + i["employeeMasterFirstName"],
+            itemName: i["itemName"],
+            queryDescription: i["queryDescription"]
+          };
         });
-    },
+  }
   }
 };
 </script>
@@ -354,5 +256,4 @@ export default {
 @import "~@fullcalendar/timeline/main.css";
 @import "~@fullcalendar/resource-timeline/main.css";
 @import "DispositionPage.scss";
-
 </style>

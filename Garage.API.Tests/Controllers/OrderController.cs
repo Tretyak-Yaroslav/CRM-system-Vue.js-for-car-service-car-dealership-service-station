@@ -51,7 +51,7 @@ namespace Garage.API.Tests
 
 
         [Theory]
-        [InlineData(1, 1, "test", "test", 1, "testRegNumber", 1, 1, "test",1,1,1,1,1,1)]
+        [InlineData(1, 1, "test", "test", 1, "testRegNumber", 1, 1, "test",1,1,1,1,1,1,false)]
         public async void SetQuery(
             int queryID, 
             int workShopID, 
@@ -69,11 +69,12 @@ namespace Garage.API.Tests
           //  DateTime endTime, 
             int queryStatusID,
             int vehicleID, 
-            int customerID)
+            int customerID,
+            bool isDeleted)
 
         {
             // Act
-            var result = await controller.SetQuery(queryID,workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,vehicleModificationID,vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, new DateTime(2019, 9, 9), new DateTime(2019, 9, 9), queryStatusID, vehicleID, customerID) as OkObjectResult;
+            var result = await controller.SetQuery(queryID,workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,vehicleModificationID,vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, new DateTime(2019, 9, 9), new DateTime(2019, 9, 9), queryStatusID, vehicleID, customerID, isDeleted) as OkObjectResult;
 
             // Assert
             Assert.Equal(200, result.StatusCode);

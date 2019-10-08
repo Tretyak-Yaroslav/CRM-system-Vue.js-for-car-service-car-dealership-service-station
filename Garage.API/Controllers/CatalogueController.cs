@@ -43,11 +43,11 @@ namespace Garage.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> GetVendor(int vendorID)
+        public async Task<ActionResult> GetVendor(int vendorID, bool isVisible)
         {
             try
             {
-                return Ok(await СatalogueService.GetVendorList(vendorID));
+                return Ok(await СatalogueService.GetVendorList(vendorID, isVisible));
             }
             catch (Exception e)
             {

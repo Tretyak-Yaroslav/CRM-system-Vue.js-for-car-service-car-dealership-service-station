@@ -17,7 +17,7 @@ namespace Garage.Data.Servises
         Task<IEnumerable<Employee>> GetEmployees(int workShopID, int employeePostID);
         Task<IEnumerable<VehicleModel>> GetVehicleModelList(int vendorID, int vehicleModelID);
         Task<IEnumerable<WorkPlace>> GetWorkPlaceList(int workShopID);
-        Task<IEnumerable<Vendor>> GetVendorList(int vendorID);
+        Task<IEnumerable<Vendor>> GetVendorList(int vendorID, bool isVisible);
         Task<IEnumerable<VehicleModification>> GetVehicleModificationList(int vehicleModificationID,int vehicleModelID);
         Task<IEnumerable<ItemList>> GetItemList(int itemCategoryID);
         Task<IEnumerable<QueryStatus>> GetQueryStatusList(int queryStatusID);
@@ -58,15 +58,16 @@ namespace Garage.Data.Servises
                 }
             }
         }
-        public async Task<IEnumerable<Vendor>> GetVendorList(int vendorID)
+        public async Task<IEnumerable<Vendor>> GetVendorList(int vendorID, bool isVisible)
         {
             {
                 using (IDbConnection db = new SqlConnection(connStr))
                 {
-                    return await db.QueryAsync<Vendor>("spGetVendor", new { vendorID }, commandType: CommandType.StoredProcedure);
+                    return await db.QueryAsync<Vendor>("spGetVendor", new { vendorID, isVisible }, commandType: CommandType.StoredProcedure);
                 }
             }
         }
+
         public async Task<IEnumerable<VehicleModification>> GetVehicleModificationList(int vehicleModificationID, int vehicleModelID)
         {
             {

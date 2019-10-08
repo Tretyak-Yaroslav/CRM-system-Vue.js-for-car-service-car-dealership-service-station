@@ -13,7 +13,8 @@ export const router = new Router({
         { 
             path: '/', 
             name: 'LoginPage',
-            component: LoginPage 
+            component: LoginPage ,
+            meta: { title: 'Garage' }
         },
         { 
             path: '/outfit', 
@@ -40,6 +41,7 @@ export const router = new Router({
             name:'disposition',
             component: Disposition,
             meta: {
+                title: 'Garage: Диспозиція',
                 roles: ["Shop.Disposition"]
               }
         },

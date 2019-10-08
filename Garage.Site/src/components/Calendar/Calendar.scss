@@ -1,0 +1,176 @@
+.fc-license-message {
+  display: none;
+}
+.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
+  border: 2px solid;
+}
+.fc-resource-area.fc-widget-header {
+  width: 150px !important;
+}
+.fc-cell-content {
+  text-align: center;
+}
+
+.fc-divider.fc-col-resizer.fc-widget-header {
+  height: auto;
+}
+.fc-scroller {
+  height: auto !important;
+}
+.fc-timeline .fc-cell-text {
+  color: rgb(117, 116, 116);
+  padding-right: 2px;
+  font-size: 0.9em;
+}
+.fc-button-primary {
+  color: #fff;
+  background-color: #42b983 !important;
+  border-color: #42b983 !important;
+}
+.fc-center {
+  text-align: center;
+}
+.fc-button-primary:focus {
+  border-bottom-width: 2px;
+  background: hsla(0, 0%, 100%, 0.15);
+  color: white;
+  box-shadow: none;
+}
+
+.fc-button-primary:not(:disabled):active:focus,
+.fc-button-primary:not(:disabled).fc-button-active:focus {
+  box-shadow: none;
+}
+.fc-toolbar.fc-header-toolbar {
+  height: 50px;
+  padding: 0 15px;
+}
+.fc-resourceTimelineDay-button {
+  margin-right: 1px;
+}
+.fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0.5em;
+}
+
+.fc-button-primary:hover {
+  border: 1px solid white !important;
+  -webkit-transition: 0.1s;
+  transition: 0.1s;
+}
+.fc-event-container {
+  height: 27.8594px !important;
+}
+.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
+  height: 75% !important;
+}
+.fc-time {
+  display: none;
+}
+.fc-resourceTimelineDay-button,
+.fc-resourceTimelineWeek-button {
+  padding: 0.3em 1em;
+  height: 2.2em;
+  font-size: 1.2em;
+}
+.fc-highlight {
+  background: #038eaa;
+  opacity: 0.3;
+}
+.fc-center {
+  display: flex;
+  justify-content: center;
+}
+.fc-toolbar.fc-header-toolbar .fc-center h2 {
+  font-size: 1.4em;
+  line-height: 1.3;
+  font-weight: 400;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.fc-toolbar.fc-header-toolbar {
+  background-color: #42b983;
+}
+.fc-timeline-event.fc-h-event.fc-event.fc-start.fc-end.fc-draggable {
+  height: 33px;
+}
+.fc-time {
+  position: relative;
+}
+.fc-title {
+  font-weight: bold;
+}
+.fc-event .fc-content {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.fc-title {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 3% auto auto auto;
+}
+
+.fc-button-primary:focus {
+  box-shadow: none;
+}
+
+.fc-toolbar.fc-header-toolbar .fc-center h2 {
+  font-size: 1.4em !important;
+}
+@media screen and (max-width: 600px) {
+  .fc-toolbar.fc-header-toolbar {
+    padding: 0;
+  }
+  body .fc {
+    font-size: 0.7em;
+  }
+  .fc-toolbar.fc-header-toolbar {
+    height: 60px;
+  }
+  .fc-toolbar > * > :not(:first-child) {
+    margin-left: 1em;
+  }
+}
+
+.fc-time-area.fc-widget-content .fc-scroller-clip .fc-scroller {
+  overflow-y: hidden !important;
+}
+
+.fc-timeline-event.fc-not-start .fc-content:before,
+.fc-timeline-event.fc-not-end .fc-content::after {
+  height: 2px;
+  position: absolute;
+  display: block;
+}
+.fc-title {
+  margin: 5px;
+}
+
+.fc-timeline-event.fc-not-start .fc-content:before,
+.fc-timeline-event.fc-end .fc-content:after {
+  content: "\27A4";
+  position: absolute;
+  width: 10px;
+  right: 3px;
+
+  top: 33%;
+  text-align: right;
+  color: black;
+  margin-top: -5px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  opacity: 1;
+}
+.fc-timeline-event.fc-not-start .fc-content:before,
+.fc-timeline-event.fc-not-end .fc-content:after {
+  display: none;
+}
+.fc-resizer {
+  position: absolute;
+  right: 0;
+}

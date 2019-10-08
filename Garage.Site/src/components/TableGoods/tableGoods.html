@@ -176,6 +176,12 @@
                 >
                   Редактировать
                 </button>
+                <button
+                  @click="remove(items, index2)"
+                  class="btn btn-sm btn-outline-secondary mr-2"
+                >
+                  Удалить
+                </button>
               </span>
               <span v-else>
                 <button
@@ -197,12 +203,6 @@
         class="btn btn-sm btn-secondary"
       >
         Добавить элемент
-      </button>
-      <button
-        @click="remove(items, index2)"
-        class="btn btn-sm btn-outline-secondary mr-2"
-      >
-        Удалить
       </button>
     </div>
     <div class="col-md-12 border">

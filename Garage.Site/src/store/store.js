@@ -73,8 +73,8 @@ export const authstore = new Vuex.Store({
     },
 })
 const posts = new Vapi({
-    //baseURL: "http://garage.eso.local:80/api",
-    baseURL: "https://localhost:44346/api",
+     baseURL: "http://garage.eso.local:80/api",
+   // baseURL: "https://localhost:44346/api",
     state: {
         posts: []
     }
@@ -127,7 +127,7 @@ const posts = new Vapi({
     .post({
         action: "getVendor",
         property: "vendor",
-        path: ({ id }) => `/Catalogue/GetVendor?vendorID=${id}`
+        path: ({ id, isVisible}) => `/Catalogue/GetVendor?vendorID=${id}&isVisible=${isVisible}`
     })
     .post({
         action: "getItem",

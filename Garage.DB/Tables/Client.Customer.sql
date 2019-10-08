@@ -5,7 +5,13 @@ CREATE TABLE [Client].[Customer]
 [WorkShopID] [int] NULL,
 [CustomerFullName] [nvarchar] (150) COLLATE Cyrillic_General_CI_AS NULL,
 [CustomerPhoneNumber] [nvarchar] (20) COLLATE Cyrillic_General_CI_AS NULL,
-[CustomerMail] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL
+[CustomerMail] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL,
+[ExternalCode] [int] NULL,
+[CustomerShortName] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL,
+[IndividualOrEntityPerson] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL,
+[INN] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL,
+[CodeEDRPOU] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL,
+[EntityPersonNumber] [nvarchar] (50) COLLATE Cyrillic_General_CI_AS NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [Client].[Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED  ([CustomerID]) ON [PRIMARY]

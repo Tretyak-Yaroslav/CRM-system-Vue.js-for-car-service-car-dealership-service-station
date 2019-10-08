@@ -20,7 +20,7 @@ AS BEGIN
         --													@orderDescription NVARCHAR(1000) = '????????????', @vehicleModelID INT = 1, @vehicleBrandID INT =1
 
 		 
-        DECLARE @createDate DATETIME, @orderCrossPeriod INT= 0;
+        DECLARE @createDate DATETIME, @orderCrossPeriod INT= 0, @modificationDate DATETIME;
         SELECT @createDate=GETDATE();
 
         SELECT TOP(1) @orderCrossPeriod = q.QueryID
@@ -29,13 +29,13 @@ AS BEGIN
 		OR (q.EndTime > @startTime AND q.EndTime < @endTime) 
 		OR (q.StartTime = @startTime AND q.EndTime = @endTime)
 		OR (q.StartTime = @startTime AND q.EndTime > @endTime)) AND 
-		q.WorkShopID = @workShopID AND q.WorkPlaceID = @workPlaceID AND q.QueryID <> @queryID
+		q.WorkShopID = @workShopID AND q.WorkPlaceID = @workPlaceID AND q.QueryID <> @queryID AND q.IsDeleted <> 1
         ORDER BY q.StartTime DESC;
 
         IF(@orderCrossPeriod > 0)	
 		BEGIN
             DECLARE @str NVARCHAR(100);
-            SELECT @str=CONCAT('Вибраний період пересікається із заявкою:  ', CAST(@orderCrossPeriod AS NVARCHAR(100)));
+            SELECT @str=CONCAT('Помилка! Вибраний період пересікається із заявкою:  ', CAST(@orderCrossPeriod AS NVARCHAR(100)));
             RAISERROR(@str, 16, 1);
         END;
 
@@ -106,10 +106,11 @@ AS BEGIN
             --INSERT INTO dbo.OrderDetail(OrderID, ItemID, UoM, Quantity, EmployeeID, WorkPlaceID)
             --VALUES(@queryID, @itemID, NULL, NULL, @employeeID, @workPlaceID);
         END;
-        ELSE BEGIN
+        ELSE BEGIN			
+			SELECT @modificationDate=GETDATE();
 			UPDATE Shop.Query
 			SET VehicleID=@vehicleID, StartTime=@startTime, EndTime=@endTime, QueryStatusID=@queryStatusID, EmployeeMasterID=@employeeMasterID, QueryDescription=@queryDescription,
-				ItemID=@itemID, EmployeeID=@employeeID, WorkPlaceID=@workPlaceID, IsDeleted=@IsDeleted
+				ItemID=@itemID, EmployeeID=@employeeID, WorkPlaceID=@workPlaceID, IsDeleted=@IsDeleted, ModificationDate=@modificationDate
 			WHERE QueryID = @queryID
 			
             --UPDATE dbo.[Order]

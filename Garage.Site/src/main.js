@@ -2,19 +2,18 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import App from './App.vue'
 import { router } from './_helpers'
-import BootstrapVue from 'bootstrap-vue'
-import { TablePlugin } from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { store, authstore } from './store'
 import 'vue-datetime/dist/vue-datetime.css'
+import BootstrapVue from 'bootstrap-vue'
 import VueI18n from 'vue-i18n'
+
 Vue.config.productionTip = false;
 Vue.use(VueI18n)
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
-Vue.use(TablePlugin)
+
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
@@ -33,6 +32,22 @@ Vue.axios.interceptors.response.use(
       authstore.dispatch("logout");
     return Promise.reject(error);
   });
+
+  Vue.mixin({
+      methods: {
+        getUserNameLabel: function () {
+          var user = JSON.parse(localStorage.getItem("currentUser"));
+          if (user != null)
+          try {
+            return user.employeeFirstName + " " + user.employeeLastName;
+          } catch (e) {
+            console.log(e);
+          }
+          return '';
+        }
+      }
+  });
+
 new Vue({
   router,
   el: '#app',
@@ -45,6 +60,7 @@ new Vue({
 });
 
 router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
   if (to.name != 'LoginPage') {
     if (authstore.state.currentUser) {
       if (!to.meta.roles) {
@@ -65,3 +81,5 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+

@@ -8,6 +8,7 @@ using System.Text;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Garage.API.Utils
 {
@@ -18,11 +19,13 @@ namespace Garage.API.Utils
             // Initilization  
             bool isSuccess = false;
             StreamWriter sw = null;
+            Regex rgx = new Regex("[#,]");
 
             try
             {
                 // Initialization.  
                 StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilderForRows = new StringBuilder();
 
                 // Saving Column header.  
                 stringBuilder.Append(string.Join(";", typeof(Query).GetProperties().Select(name => name.Name).ToList()) + "\n");
@@ -30,8 +33,12 @@ namespace Garage.API.Utils
                 // Saving rows.  
                 foreach (Query item in lists)
                 {
-                    stringBuilder.Append(string.Join(";", typeof(Query).GetProperties().Select(name => name.GetValue(item)).ToList()) + "\n");
+                    stringBuilderForRows.Append(string.Join(";", typeof(Query).GetProperties().Select(name => name.GetValue(item)).ToList()) + "\n");
                 }
+
+                //Delete specific symbols
+                string cleanRowValues = rgx.Replace(stringBuilderForRows.ToString(), "");
+                stringBuilder.Append(string.Join(";", cleanRowValues));
 
                 // Getting id.
                 int id = lists.Select(item => item.ItemID).FirstOrDefault();

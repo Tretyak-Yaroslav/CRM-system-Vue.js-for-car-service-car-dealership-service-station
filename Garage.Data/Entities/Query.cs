@@ -10,6 +10,7 @@ namespace Garage.Data.Entities
         public int QueryStatusID { get; set; }
         public string QueryDescription { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime ModificationDate { get; set; }
         public string QueryStatusName { get; set; }
         public string QueryStatusColor { get; set; }
         public int EmployeeID { get; set; }

@@ -117,9 +117,9 @@ namespace Garage.API.Controllers
             {
                 try
                 {
-                    var queri = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
+                    var query = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
 
-                    return Ok(ExportOfData.Export(Startup.AppSettings.ExportCsvPath, queri));
+                    return Ok(ExportOfData.Export(Startup.AppSettings.ExportCsvPath, query));
                 }
                 catch (Exception e)
                 {

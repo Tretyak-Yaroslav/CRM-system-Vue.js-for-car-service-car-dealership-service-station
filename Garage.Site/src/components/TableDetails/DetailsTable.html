@@ -1,0 +1,63 @@
+<DetailsTable>
+    <b-container fluid  id="Detailtable">
+      <b-row>
+        <b-col md="6" class="my-1">
+          <b-input-group>
+            <b-form-input v-model="filter" placeholder="Введіть для пошуку"></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">Очистити</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-col>
+        <b-col md="6" class="my-1">
+          <b-form-group label-cols-sm="3" label="Сортувати" class="mb-0">
+            <b-input-group>
+              <b-form-select v-model="sortBy" :options="sortOptions">
+                <option slot="first" :value="null"></option>
+              </b-form-select>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-table
+      id="detailstable"
+      striped hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        :sort-direction="sortDirection"
+        >
+        <template v-slot:cell(actions)="row">
+            <b-button size="sm" @click="loadForm(row.item.queryID)" class="mr-1">Обробити</b-button>
+            <b-button size="sm" @click="exportQueryCSV(row.item.queryID)" class="mr-1">Завантажити заявку в 1C</b-button>
+            <b-button size="sm" @click="saveQuery(row.item.queryObject, true)"> <span aria-hidden="true">&#10060;</span></b-button>
+          </template>
+          <template slot="row-details" slot-scope="row">
+          <b-card>
+            <ul>
+              <li v-for="(value, key) in row.item" :key="key">{{changeName(key)}} {{value }}</li>
+            </ul>
+          </b-card>
+        </template> 
+      </b-table>
+
+      <b-row>
+        <b-col md="12" class="my-1 d-flex justify-content-end">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="items.length"
+            :per-page="perPage"
+            class="my-0"
+          ></b-pagination>
+          <b-form-group class="mb-0 ml-2">
+            <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-row>
+    </b-container>
+  </DetailsTable>

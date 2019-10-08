@@ -37,11 +37,11 @@ namespace Garage.API.Tests
         }
 
         [Theory]
-        [InlineData(1)]
-        public async void GetVendor(int vendorID)
+        [InlineData(1, true)]
+        public async void GetVendor(int vendorID, bool isVisible)
         {
             // Act
-            var result = await controller.GetVendor(vendorID) as OkObjectResult;
+            var result = await controller.GetVendor(vendorID, isVisible) as OkObjectResult;
 
             // Assert
             Assert.Equal(200, result.StatusCode);

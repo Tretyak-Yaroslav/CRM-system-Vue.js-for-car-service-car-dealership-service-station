@@ -2,10 +2,10 @@
   <b-container class="bv-example-row bv-example-row-flex-cols">
     <b-row align-v="center">
       <div class="login col-md-8 offset-md-3">
-        <div v-if="loading" class="container-loading">
+        <!-- <div v-if="loading" class="container-loading">
           <img src="/loading.gif" alt="Loading Icon" class="loader-img" />
-        </div>
-        <p class="errorMsg">{{ error }}</p>
+        </div>-->
+
         <form @submit.prevent="onSubmit">
           <b-row>
             <div class="col-12">
@@ -16,6 +16,7 @@
                 placeholder="Password"
                 v-model="password"
               />
+              <p class="errorMsg">{{ error }}</p>
               <a href="#" v-b-modal="'modal-resetpass'">Забув логин/пароль</a>
             </div>
             <div class="col-12 d-flex justify-content-end">
@@ -26,14 +27,21 @@
       </div>
     </b-row>
     <b-modal id="modal-resetpass" ref="resetpass-modal" centered title="Створення нового пароля">
-       <form @submit.prevent="onSubmitResetPass" >
-          <b-form-input required placeholder="Введіть адресу email" v-model="resetemail"/> 
-          <b-button v-if="!passwordreseted" type="submit" class=" btn btn-primary  mr-15" >Вiдправити новий пароль</b-button>
-          <div v-if="emailerror"><b>Вказаного email не знайдено</b></div>
-          <div v-if="!emailerror && passwordreseted"><b>Новий пароль вiдправлено</b></div>
-
-        </form>
-  </b-modal>
+      <form @submit.prevent="onSubmitResetPass">
+        <b-form-input required placeholder="Введіть адресу email" v-model="resetemail" />
+        <b-button
+          v-if="!passwordreseted"
+          type="submit"
+          class="btn btn-primary mr-15"
+        >Вiдправити новий пароль</b-button>
+        <div v-if="emailerror">
+          <b>Вказаного email не знайдено</b>
+        </div>
+        <div v-if="!emailerror && passwordreseted">
+          <b>Новий пароль вiдправлено</b>
+        </div>
+      </form>
+    </b-modal>
   </b-container>
 </template>
 <script>
@@ -51,16 +59,19 @@ export default {
       loading: false,
       returnUrl: "",
       error: "",
-      resetemail: '',
+      resetemail: "",
       passwordreseted: false,
-      emailerror: false,
+      emailerror: false
     };
   },
   validations: {
     username: { required },
     password: { required }
   },
-  created() {},
+  beforeCreate() {
+    if(authstore.getters.isLoggedIn)
+       this.$router.push("/disposition");
+  },
   methods: {
     onSubmit() {
       return new Promise((resolve, reject) => {
@@ -84,21 +95,13 @@ export default {
               this.loading = false;
               this.$router.push("/disposition");
               resolve(res);
-            } else {
-              this.loading = false;
-              localStorage.removeItem("currentUser");
-              delete axios.defaults.headers.common["Authorization"];
-              this.error = "Щось пішло не так!";
-              authstore.commit("auth_error", error);
-              reject(error);
-              return new error();
             }
           })
           .catch(error => {
             this.loading = false;
             authstore.commit("auth_error", error);
             localStorage.removeItem("currentUser");
-            this.error = "Щось пішло не так!";
+            this.error = "Ви ввели некоректні дані!";
             reject(error);
           });
       });
@@ -111,9 +114,7 @@ export default {
                 email: this.resetemail
                 }                
               }).then(res => {
-                console.log(res.data);
-              var validEmail = JSON.parse(JSON.stringify(res.data));
-              
+              var validEmail = JSON.parse(JSON.stringify(res.data)); 
               if (!validEmail) {
                        this.emailerror = true;
                        resolve(res)
@@ -129,7 +130,8 @@ export default {
                     reject(error)
               })
           });
-        }
+      
+    }
   }
 };
 </script>
@@ -139,6 +141,11 @@ form {
 }
 form[data-v-65282689] {
   max-width: 550px;
+}
+.errorMsg {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: red;
 }
 .btn-primary {
   background: #4b65bd !important;
