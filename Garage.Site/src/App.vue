@@ -37,9 +37,12 @@ export default {
       return authstore.getters.isLoggedIn;
     }
   },
-  created() {},
+  created() {
+    document.title = process.env.VUE_APP_TITLE
+  },
   methods: {
     logout() {
+
       authstore.dispatch("logout");
       this.$router.push("/");
     }

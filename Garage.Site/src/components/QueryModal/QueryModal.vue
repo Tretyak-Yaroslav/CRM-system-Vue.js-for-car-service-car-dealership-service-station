@@ -1,8 +1,9 @@
 <template src="./QueryModal.html"/>
 <script charset="utf-8">
 import moment from "moment";
-import MaskedInput from "vue-masked-input";
-import Multiselect from 'vue-multiselect'
+import Multiselect from 'vue-multiselect';
+import CustomerModal from "@/components/CustomerModal/CustomerModal";
+import VehicleModal from "@/components/VehicleModal/VehicleModal";
 
 export default {
    props: {
@@ -15,43 +16,48 @@ export default {
     vendors: null,
     },
     components:{
-        MaskedInput,
-        Multiselect
+        Multiselect,
+        CustomerModal,
+        VehicleModal
     },
     data(){
         return{
     form: {
-        modaltitle: '',
-        queryID: Number,
+        ID: Number,
+        workShopID: 1,
+        workPlaceID: null,
+        vehicleID: null,
         customerID: Number,
-        customerFullName: null,
-        customerPhoneNumber: null,
         startTime: Object,
         endTime: Object,
-        startDateTime: Object,
-        vehicleID: null,
-        vendorID: null,
-        vehicleModelID: null,
-        vehicleRegistrationNumber: null,
-        workPlaceID: null,
         itemID: 0,
         employeeMasterID: null,
         employeeID: null,
-        queryDescription: '',
-        queryStatusID: null,
-
+        description: '',
+        isDeleted: null,
+        statusID: null,
+        startDateTime: Object,
+        modaltitle: '',
         //for new input //
         vendor: Object,
         model: Object,
         item : Object,
-        employee : Object
+        employee : Object,
+        customer: {id : null},
+        vehicle: {id : null},
+    
       },
-        vehicleModels: [],
+        customers : [],
+        vehicles : [],
         showDismissibleAlert: false,
         eventModalAlert: String,
+        isNewCustomer: null,
+        isNewVehicle: null,
+        isLoadingCustomer: false,
+        isLoadingVehicle: false,
+        key: 0,
         }
     },
-    
     computed:{
     cStartDateTime: function(){
         return moment(this.form.startDateTime, "YYYY-MM-DD").format("YYYY-MM-DD") ;
@@ -61,21 +67,15 @@ export default {
     },
      cEndTime: function(){
         return moment(this.form.endTime, "HH:mm").format("HH:mm");
-    },
+    }
+   
     },
 
     methods :{
-    validateRegNumber(event){
-      if( (event.keyCode < 49 || event.code.includes("Digit") || event.code.includes("Numpad") ) || event.ctrlKey )
-        return;
-        event.preventDefault();
-        var symFromCode = event.code.substring(3)
-        if (symFromCode.length == 1) {
-         var k = symFromCode.toUpperCase();
-         var p = new RegExp("[A-Z0-9]");
-        if (p.test(k))
-          event.target.value += k;
-        }
+  formatedPhone(p){
+    if(p != null && p.length === 10)
+      return p.replace(/(\d{3})(\d{3})(\d{4})/g, '$1 $2 $3');
+      else return p;
     },
    validateName(event){
        var k = event.key;
@@ -125,113 +125,150 @@ export default {
              this.form.endTime = new Date(arg.end.setHours(arg.end.getHours() - 3));
              this.form.workPlaceID = parseInt(arg.resource.id, 10);
              this.form.employeeMasterID = currentUser.employeeID;
-             this.form.queryStatusID = 2;
-             this.form.queryID = 0;
+             this.form.statusID = 2;
+             this.form.ID = 0;
              this.form.vehicleID = 0;
              this.form.vehicleModificationID = 1;
              this.form.customerID = 0
-
              this.form.modaltitle = 'Створення нової заявки';
         }
               this.$bvModal.show('modalQuery');
     },
-    loadForm: function(id,date1,date2) {
-            this.parent.$store.dispatch("postQuery", {
+    loadForm: function(queryID,date1,date2) {
+            this.parent.$store.dispatch("getQuery", {
             params: {
             from: date1,
             to: date2,
             workShopID: 1,
-            queryStatusID: 0,
+            statusID: 0,
             notShortQuery: 0,
-            queryID: id
+            ID: queryID
           }
         })
         .then(res => {
-       
           var data = JSON.parse(JSON.stringify(res.data));
-          
           for (var i = 0; i < data.length; i++) {
-       
-            if (data[i].queryID == id) {
-
-              this.getSelectedBrand(null,data[i].vendorID);
-              this.$set(this.form, 'modaltitle', 'Редагування заявки №' + data[i].queryID);
-              this.form.queryID = id;
-              this.form.itemID = data[i].itemID;
-              this.form.customerFullName = data[i].customerFullName;
-              this.form.customerPhoneNumber = data[i].customerPhoneNumber;
+            if (data[i].id == queryID) {
+              console.log(data[i]);
+              this.form = data[i];
+              this.form.vehicle = {id : data[i].vehicleID, modelName : data[i].vehicleModelName, vendorName: data[i].vendorName, registrationNumber: data[i].vehicleRegistrationNumber }
+              this.form.customer = {id : data[i].customerID, fullName : data[i].customerFullName, phoneNumber: data[i].customerPhoneNumber, phoneCountryCode: data[i].phoneCountryCode  }
+              this.form.employee = data[i].employeeID !== 0 ? {id : data[i].employeeID, text : data[i].employeeLastName + ' ' + data[i].employeeFirstName} : {}
+              this.form.item = {id : data[i].itemID, text : data[i].itemName}
               this.$set(this.form, 'startDateTime', new Date(data[i].startTime));
               this.$set(this.form, 'startTime', new Date(data[i].startTime));
               this.$set(this.form, 'endTime', new Date(data[i].endTime));
-              this.form.vendor = {id :data[i].vendorID, text : data[i].vendorName}
-              this.form.model = {id :data[i].vehicleModelID, text : data[i].vehicleModelName}
-              this.form.item = {id : data[i].itemID, text : data[i].itemName}
-              this.form.employee = data[i].employeeID !== 0 ? {id : data[i].employeeID, text : data[i].employeeLastName + ' ' + data[i].employeeFirstName} : {}
-              this.form.vehicleID = data[i].vehicleID;
-              this.form.vehicleRegistrationNumber = data[i].vehicleRegistrationNumber;
-              this.form.workPlaceID = data[i].workPlaceID;
-              this.form.employeeMasterID = data[i].employeeMasterID;
-              this.form.employeeID= data[i].employeeID;
-              this.form.queryStatusID = data[i].queryStatusID;
-              this.form.queryDescription = data[i].queryDescription;
-              this.form.customerID = data[i].customerID;
+              this.$set(this.form, 'modaltitle', 'Редагування заявки №' + data[i].id);
             }
           }
         });
    },
 
-
     saveForm(isDeleted) {
       var copyForm = JSON.parse(JSON.stringify(this.form));
+
           copyForm.startTime = this.updateStartTime();
           copyForm.endTime =  this.updateEndTime();
-          copyForm.vendorID =  this.getId(this.form.vendor);
-          copyForm.vehicleRegistrationNumber = this.form.vehicleRegistrationNumber.toUpperCase();
-  //
-          
-          copyForm.vehicleModelID = this.vehicleModels[0].id //without ModelName
-         // copyForm.vehicleModelID = this.getId(this.form.model) ; НЕ УДАЛЯТЬ 
+          copyForm.vehicleID =  this.form.vehicle.id;
+          copyForm.customerID =  this.form.customer.id;
+          copyForm.employeeID = this.form.employee.id;
+          copyForm.isDeleted = isDeleted;
 
         //  copyForm.itemID =  this.getId(this.form.item); НЕ УДАЛЯТЬ 
-          copyForm.employeeID = this.getId(this.form.employee);
+         
 
           if( this.form.queryDescription == null || this.form.queryDescription.length < 1 )
             copyForm.queryDescription = '';
 
-          this.parent.saveQuery(copyForm, isDeleted, 
+          this.parent.saveQuery(copyForm,
           () => {
              this.$bvModal.hide('modalQuery') },
           (error) =>{
             console.log(error);
              this.eventModalAlert = error.response.data;
              this.showDismissibleAlert=true;
-            
              });
     },
-    
-     getSelectedBrand(item, i) {
-      
-      var id = i != null ? i: item.id;
-      this.parent.$store
-        .dispatch("getVehicleModel", { params: { id: id } })
-        .then(res => {
-          this.form.vehicleModelID = null;
-          
-          var vendorsData = JSON.parse(JSON.stringify(res.data));
-          this.vehicleModels = vendorsData.map(function(i) {
-            return {
-              id: i["vehicleModelID"],
-              text: i["vehicleModelName"]
-            };
-          });
-        });
+    openCustomerModal(isNew){
+      this.isNewCustomer = isNew;
+      if(!this.isNewCustomer) {
+      this.$refs.customerModal.loadForm(this.form.customer.id);
+      }
+      else {
+          this.$refs.customerModal.createForm();
+      }
+      this.$bvModal.show('modalCustomer');
     },
-    getId(item){
-      return item.id;
+
+    openVehicleModal(isNew){
+      this.isNewVehicle= isNew;
+      if(!this.isNewVehicle) {
+      this.$refs.vehicleModal.loadForm(this.form.vehicle.id);
+      }
+      else {
+        this.$refs.vehicleModal.createForm();
+      }
+      this.$bvModal.show('modalVehicle');
     },
-    
+
+    asyncSearchCustomer(searchChars){
+           if(searchChars.length < 1){ 
+          return;}
+      this.isLoadingCustomer = true;
+      this.parent.$store.dispatch("getCustomer", { params: { id: 0, searchChars : searchChars } }).then(res => {
+     this.customers = JSON.parse(JSON.stringify(res.data));
+      this.isLoadingCustomer = false;
+    });
+    },
+
+    updateCustomerSelect(i){
+      this.$set(this.form, 'customer', i);
+      this.setCustomerVehicle(i.id);
+    },
+     updateVehicleSelect(i){
+       this.$set(this.form, 'vehicle', i);
+       this.setVehicleCustomer(i.id);
+    },
+     asyncSearchVehicle(searchChars){      
+      this.isLoadingVehicle = true;
+      this.parent.$store.dispatch("getVehicle", { params: { id: 0, searchChars : searchChars } }).then(res => {
+      this.vehicles = JSON.parse(JSON.stringify(res.data));
+      this.isLoadingVehicle = false;
+    });
+    },
+    updateCustomer(customer){
+       this.$set(this.form, 'customer', customer);
+       this.$set(this.form, 'customerID', customer.id);
+       this.key++;
+     },
+    updateVehicle(vehicle){
+       this.$set(this.form, 'vehicle', vehicle);
+       this.$set(this.form, 'vehicleID', vehicle.id);
+       this.key++;
+     },
+
+     setCustomerVehicle(customerID){
+     this.parent.$store.dispatch("getVehiclesByCustomer", { params: { customerID} }).then(res => {
+     var vehiclesByCustomer = JSON.parse(JSON.stringify(res.data));
+      if(vehiclesByCustomer.length > 0){
+        this.form.vehicle = vehiclesByCustomer[0];
+        this.form.vehicleID = vehiclesByCustomer[0].id;
+      }
+      this.key++;
+    });
+     },
+     setVehicleCustomer(vehicleID){
+     this.parent.$store.dispatch("getCustomersByVehicle", { params: { vehicleID} }).then(res => {
+     var customersByVehicle = JSON.parse(JSON.stringify(res.data));
+      if(customersByVehicle.length > 0){
+        console.log(customersByVehicle);
+        this.form.customer= customersByVehicle[0];
+        this.form.customerID = customersByVehicle[0].id;
+      }
+      this.key++;
+    });
+     }
     }
-    
 }
 </script>
 

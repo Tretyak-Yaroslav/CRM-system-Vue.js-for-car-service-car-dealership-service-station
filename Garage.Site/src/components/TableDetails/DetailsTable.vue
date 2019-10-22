@@ -14,14 +14,14 @@ export default {
     return {
     fields: [
         {
-          key: "queryID",
+          key: "id",
           label: "Номер",
           sortable: true,
           sortDirection: "desc"
         },
         {
-          key: "queryStatusName",
-          variant: "queryStatusColor",
+          key: "statusName",
+          variant: "statusColor",
           label: "Статус",
           sortable: true,
           sortDirection: "desc"
@@ -84,10 +84,10 @@ export default {
   },
   sortItems() {
     return this.items.sort((a, b) => {
-      if (+a.queryID > +b.queryID) {
+      if (+a.D > +b.id) {
         return -1;
       }
-      if (+a.queryID < +b.queryID) {
+      if (+a.id < +b.id) {
         return 1;
       }
       return 0;
@@ -99,7 +99,7 @@ export default {
     item.endTime = moment(item.endTime).format("YYYY-MM-DD HH:mm:ss");
     item.startTime = moment(item.startTime).format("YYYY-MM-DD HH:mm:ss");
 console.log(item);
-  if (confirm('Бажаєте видалити заявку '+item.queryID+'?')) {
+  if (confirm('Бажаєте видалити заявку '+item.id+'?')) {
           this.$parent.saveQuery(item, false, isDeleted, 
           () => { },
           (error) =>{ })
@@ -118,7 +118,7 @@ console.log(item);
             workShopID: 1,
             queryStatusID: 0,
             notShortQuery: 0,
-            queryID: id
+            id: id
           }
         })
         .then(res => {

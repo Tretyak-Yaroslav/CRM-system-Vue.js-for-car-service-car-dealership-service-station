@@ -1,0 +1,63 @@
+<VehicleModal>
+    <b-modal id="modalVehicle" ref="modalVehicle" :key="0" hide-footer="true">
+        <template v-slot:modal-title>
+            <span v-if="!isNew">Редагувати авто</span>
+            <span v-if="isNew">Додати авто</span>
+        </template>
+
+        <div class="row">
+                <div class="col-6">
+            <b-form-group label="Марка:">
+                <multiselect :show-labels="false" placeholder="" :allowEmpty="false" v-model="form.vendor" :options="vendors" label="text"
+                    track-by="id" @select="getSelectedBrand">
+                </multiselect>
+            </b-form-group>
+        </div>
+        <div class="col-6">
+            <b-form-group label="Модель:">
+                <multiselect :show-labels="false"  :value="form.model" :allowEmpty="false"  @input="updateModel"  :options="vehicleModels" label="text"   track-by="id" :key="key"
+                     placeholder=""></multiselect>
+            </b-form-group>
+           </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-6">
+                <b-form-group id="vehicleRegistrationNumber">
+                    <label class="control-label">Реєстраційний номер</label>
+                    <b-form-input style="text-transform:uppercase" v-model="form.registrationNumber"
+                        @keydown="validateRegNumber" required></b-form-input>
+                </b-form-group>
+            </div>
+            <div class="col-6">
+                    <div class="form-group">
+                        <label class="control-label">VIN:</label>
+                        <b-form-input spellcheck="false" style="text-transform:uppercase" maxlength="17" :value="form.vinNumber" @input="checkVin" :state="stateVin" required></b-form-input>
+                    </div>
+             </div>
+        </div>
+
+
+        <div class="row">
+                <div class="col-12">
+                  <b-form-textarea v-model="form.description" placeholder="Коментар">
+                  </b-form-textarea>
+                </div>
+              </div>
+    
+
+        <template v-if="isNew">
+            <b-button class="mt-3" variant="outline-success" block @click="saveForm(false)">Зберегти</b-button>
+        </template>
+        <template v-if="!isNew">
+            <b-button class="mt-3" variant="outline-success" block @click="saveForm(false)">Зберегти зміни</b-button>
+        </template>
+        <!-- <template v-if="!isNew"><b-button class="mt-3" variant="outline-danger" block @click="$bvModal.show('delete-customer-modal')">Видалити</b-button></template>-->
+    </b-modal>
+
+    <b-modal id="delete-vehicle-modal" title='Видалити запис авто?'>
+        <b-button class="mt-3" variant="outline-danger" block
+            @click="saveForm(true),$bvModal.hide('delete-vehicle-modal')">Так
+        </b-button>
+    </b-modal>
+</VehicleModal>

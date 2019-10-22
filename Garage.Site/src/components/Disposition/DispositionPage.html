@@ -1,13 +1,15 @@
-<!doctype html>
-<html lang="en">
 <Disposition>
     <div style="margin:0px 10px;">
-      <calendar :events="events" :workplaces="workplaces"></calendar>
+
+      <calendar-grid v-if="isgrid" :events="events" :workplaces="workplaces"></calendar-grid>
+      <calendar v-if="!isgrid" :events="events" :workplaces="workplaces"></calendar>  
+
       <ul class="list-inline" style="margin-top:10px">
-        <li  class="list-inline-item" v-bind:style="{background: item.color, padding: 5 +'px'}" v-for="item in masters" v-bind:key="item.id">{{item.text}} </li>
+        <li  class="list-inline-item" v-bind:style="{background: item.color, padding: 5 +'px'}" v-if="item.color" v-for="item in masters" v-bind:key="item.id">{{item.text}} </li>
       </ul>
+
+      <b-button variant="outline-primary" @click="changeView">Змінити вигляд</b-button>
       <div ref="modalcontainer"></div>
-     <!--  <DetailsTable :items="tableitems" ></DetailsTable>-->
+      <!-- <DetailsTable :items="tableitems" ></DetailsTable>-->
     </div>
   </Disposition>
-  </html>

@@ -53,12 +53,13 @@ namespace Garage.API
                     };
                 });
 
-            AppSettings.ExportCsvPath = Configuration.GetSection("ExportCsv").Value;
-
             string connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddTransient<IСatalogueService, IСatalogueService>(provider => new СatalogueService(connString));
             services.AddTransient<IOrderService, OrderService>(provider => new OrderService(connString));
             services.AddTransient<IUserService, UserService>(provider => new UserService(connString));
+
+            AppSettings.ExportCsvPath = Configuration.GetSection("ExportCsv").Value;
+            AppSettings.connString = connString;
 
             services.AddCors();
 
@@ -127,6 +128,8 @@ namespace Garage.API
         public static class AppSettings
         {
             public static string ExportCsvPath { get; set; }
+
+            public static string connString { get; set; }
         }
 
     }

@@ -54,6 +54,62 @@ namespace Garage.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> GetCustomer(int ID, string searchChars)
+        {
+            if (searchChars == null) searchChars = String.Empty;
+            try
+            {
+                return Ok(await СatalogueService.GetCustomerList(ID, searchChars));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetCustomersByVehicle(int vehicleID)
+        {
+            try
+            {
+                return Ok(await СatalogueService.GetCustomersByVehicle(vehicleID));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetVehicle(int ID, string searchChars)
+        {
+            if (searchChars == null) searchChars = String.Empty;
+            try
+            {
+                return Ok(await СatalogueService.GetVehicleList(ID, searchChars));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetVehiclesByCustomer(int customerID)
+        {
+            try
+            {
+                return Ok(await СatalogueService.GetVehiclesByCustomer(customerID));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> GetVehicleModification(int vehicleModificationID, int vehicleModelID)
         {

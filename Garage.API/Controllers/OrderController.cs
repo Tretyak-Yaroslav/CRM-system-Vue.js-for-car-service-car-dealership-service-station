@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Garage.Data.Servises;
 using Microsoft.AspNetCore.Authorization;
 using Garage.API.Utils;
+using Garage.Data.Entities;
 
 namespace Garage.API.Controllers
 {
@@ -38,11 +39,11 @@ namespace Garage.API.Controllers
         // Get /api/order/GetOrder   from=2019-01-01&to=2020-01-01&workShopID=1
         [Authorize(Roles = "Shop.Disposition")]
         [HttpGet]
-        public async Task<ActionResult> GetQuery(DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery)
+        public async Task<ActionResult> GetQuery(DateTime from, DateTime to, int workShopID, int statusID, int notShortQuery)
         {
             try
             {
-                return Ok(await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, 0));
+                return Ok(await OrderService.GetQueryList(from, to, workShopID, statusID, notShortQuery, 0));
             }
             catch (Exception e)
             {
@@ -93,39 +94,58 @@ namespace Garage.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+        /*
+         * int queryID, int workShopID, int itemID, string queryDescription,
+           int employeeID, int employeeMasterID, int workPlaceID,
+            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID, int customerID, bool isDeleted
+         
+             
+             */
         [HttpPost]
         [Authorize(Roles = "Shop.DispositionEdit")]
-        public async Task<ActionResult> SetQuery(int queryID, int workShopID, string customerFullName,
-            string customerPhoneNumber, int itemID, string queryDescription, int vehicleModelID,
-            int vehicleModificationID,
-            string vehicleRegistrationNumber, int employeeID, int employeeMasterID, int workPlaceID,
-            DateTime startTime, DateTime endTime, int queryStatusID, int vehicleID, int customerID, bool isDeleted)
+        public async Task<ActionResult> SetQuery([FromBody] Query query)
         {
             try
             {
-                return Ok(await OrderService.SetQuery(queryID, workShopID, customerFullName, customerPhoneNumber, itemID, queryDescription, vehicleModelID,
-                    vehicleRegistrationNumber, employeeID, employeeMasterID, workPlaceID, startTime, endTime, queryStatusID, vehicleID, customerID, isDeleted));
+                return Ok(await OrderService.SetQuery(query));
             }
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "Shop.DispositionEdit")]
-        public async Task<ActionResult> ExportQueryToFile (DateTime from, DateTime to, int workShopID, int queryStatusID, int notShortQuery, int queryID)
+        public async Task<ActionResult> SetCustomer([FromBody] Customer customer)
+        {
+            try
             {
-                try
-                {
-                    var query = await OrderService.GetQueryList(from, to, workShopID, queryStatusID, notShortQuery, queryID);
-
-                    return Ok(ExportOfData.Export(Startup.AppSettings.ExportCsvPath, query));
-                }
-                catch (Exception e)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-                }
+                return Ok(await OrderService.SetCustomer(customer));
             }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Shop.DispositionEdit")]
+        public async Task<ActionResult> SetVehicle ([FromBody]Vehicle vehicle)
+        {
+            try
+            {
+                return Ok(await OrderService.SetVehicle(vehicle));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+    
+
+    
 
     }
 }

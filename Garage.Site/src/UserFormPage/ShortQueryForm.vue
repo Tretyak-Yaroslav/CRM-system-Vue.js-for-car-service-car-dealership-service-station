@@ -84,7 +84,6 @@
 
 
 <script>
-import MaskedInput from "vue-text-mask";
 export default {
   created() {
     this.$store.dispatch("getVendor", { params: { id: 0 } }).then(res => {
@@ -124,7 +123,6 @@ export default {
     };
   },
 components: {
-    MaskedInput
   },
   methods: {
     onSubmit(evt) {
